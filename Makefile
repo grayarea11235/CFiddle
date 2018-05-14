@@ -1,20 +1,31 @@
-CC=gcc -c
-CFLAGS=`pkg-config --cflags gtk+-3.0`
-LDFLAGS=`pkg-config --cflags --libs gtk+-2.0`
+CC=gcc
+CFLAGS=-c `pkg-config --cflags gtk+-3.0`
+LDFLAGS=`pkg-config --cflags --libs gtk+-3.0`
 
-all: hello_gtk_notify
+all: hello_gtk_notify gtk_simple_app gtk_simple_app_with_btn
 
 clean:
-	@echo "TODO"
+	@echo "Cleaning..."
+	rm -f *.o
+	rm -f ./hello_gtk_notify
+	rm -f ./gtk_simple_app
+	rm -f ./gtk_simple_app_with_btn
+	@echo "Cleaned"
 
 hello_gtk_notify: hello_gtk_notify.o
-	gcc hello_gtk_notify.o -ohello_gtk_notify $(LDFLAGS) -lnotify
+	$(CC) hello_gtk_notify.o -o hello_gtk_notify $(LDFLAGS) -lnotify
 
 hello_gtk_notify.o:
-	gcc $(CFLAGS) -c hello_gtk_notify.c #-lnotify
+	$(CC) $(CFLAGS) hello_gtk_notify.c $(LDFLAGS)
 
+gtk_simple_app: gtk_simple_app.o
+	$(CC) gtk_simple_app.o -o gtk_simple_app $(LDFLAGS)
 
-#gtk_simple_app: gtk_simple_app.o
-#	$(CC) 
+gtk_simple_app.o: gtk_simple_app.c
+	$(CC) $(CFLAGS) gtk_simple_app.c $(LDFLAGS) 
 
-#gtk_simple_app.o: gtk_simple_app.c
+gtk_simple_app_with_btn: gtk_simple_app_with_btn.o
+	$(CC) gtk_simple_app_with_btn.o -o gtk_simple_app_with_btn $(LDFLAGS)
+
+gtk_simple_app_with_btn.o: gtk_simple_app_with_btn.c
+	$(CC) $(CFLAGS) gtk_simple_app_with_btn.c $(LDFLAGS)
