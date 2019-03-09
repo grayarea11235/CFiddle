@@ -15,7 +15,7 @@ clean:
 hello_gtk_notify: hello_gtk_notify.o
 	$(CC) hello_gtk_notify.o -o hello_gtk_notify $(LDFLAGS) -lnotify
 
-hello_gtk_notify.o:
+hello_gtk_notify.o: hello_gtk_notify.c
 	$(CC) $(CFLAGS) hello_gtk_notify.c $(LDFLAGS)
 
 gtk_simple_app: gtk_simple_app.o
