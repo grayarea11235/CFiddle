@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-c `pkg-config --cflags gtk+-3.0`
 LDFLAGS=`pkg-config --cflags --libs gtk+-3.0`
 
-all: hello_gtk_notify gtk_simple_app gtk_simple_app_with_btn
+all: hello_gtk_notify gtk_simple_app gtk_simple_app_with_btn simp_client
 
 clean:
 	@echo "Cleaning..."
@@ -29,3 +29,9 @@ gtk_simple_app_with_btn: gtk_simple_app_with_btn.o
 
 gtk_simple_app_with_btn.o: gtk_simple_app_with_btn.c
 	$(CC) $(CFLAGS) gtk_simple_app_with_btn.c $(LDFLAGS)
+
+simp_client: simp_client.o
+	$(CC) simp_client.o -o simp_client $(LDFLAGS)
+
+simp_client.o: simp_client.c
+	$(CC) $(CFLAGS) simp_client.c
