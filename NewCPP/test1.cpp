@@ -1,8 +1,10 @@
 // Testing of new C++ features take 1
 //
-// An example simple object
+// An example simple object with vsarious constructors and how they work
+//
 
 #include <new>
+#include <iostream>
 
 class Calc
 {
@@ -13,7 +15,6 @@ public:
   
   int add(int x, int y);
 };
-
 
 int Calc::add(int x, int y)
 {

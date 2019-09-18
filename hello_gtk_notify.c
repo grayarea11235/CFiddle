@@ -3,7 +3,7 @@
 
 
 void print_usage(char *name) {
-  printf("%s <title> <message>\n", name);
+  printf("Usage : %s <title> <message>\n", name);
 }
 
 int main(int argc, char *argv[]) {
@@ -13,8 +13,6 @@ int main(int argc, char *argv[]) {
   }
 
   notify_init("Hello world!");
-
-  
   
   //  NotifyNotification * Hello = notify_notification_new("Hello world", "This is an example notification.", "dialog-information");
   NotifyNotification * Hello = notify_notification_new(argv[1], argv[2], "dialog-information");
