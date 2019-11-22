@@ -1,0 +1,9 @@
+CC=gcc -c
+
+
+
+
+all: test1
+
+test1.o: test1.cpp
+	$(CC) test1.cpp

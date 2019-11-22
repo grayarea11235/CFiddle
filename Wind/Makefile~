@@ -1,0 +1,5 @@
+wind.dll: dllmain.o
+	gcc -shared -o wind.dll dllmain.o
+
+dllmain.o: dllmain.cpp
+	gcc -c dllmain.c 
