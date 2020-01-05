@@ -1,0 +1,1 @@
+$env:Path += ";C:\MingGW\bin"
