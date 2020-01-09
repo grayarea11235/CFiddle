@@ -19,7 +19,7 @@ typedef struct _list_t
 list_t *create_list();
 int get_count(list_t *list);
 void add_to_list(list_t *list, void *data, int size);
-list_item_t *get_list_index(list_t *list, int index);
+list_item_t *get_list_index(list_t *list, int index)d;
 void destroy_list(list_t *list);
 
 #endif

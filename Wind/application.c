@@ -4,6 +4,7 @@
 
 //void add_form_to_application(application_t *app, form_t *form)
 
+
 application_t *create_application(HINSTANCE hInstance,
                                   HINSTANCE hPrevInstance,
                                   PSTR szCmdLine,
