@@ -7,6 +7,7 @@
 #define CT_BUTTON 1
 #define CT_CHECKBOX 2
 
+
 typedef struct _event_t
 {
 
@@ -18,7 +19,6 @@ typedef struct _point_t
   int x;
   int y;
 } point_t;
-
 
 typedef struct _mouse_button_status_t
 {
@@ -48,6 +48,14 @@ typedef struct _mouse_move_event_t
 } mouse_move_event_t;
 
 
+
+#define CONTROL_COMMON int type; \
+  int id; \
+  char *name; \  
+  short x; \
+  short y; \
+  short width; \
+  short height; \
 
 
 typedef struct _form_t

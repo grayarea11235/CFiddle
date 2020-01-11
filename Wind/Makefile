@@ -28,3 +28,10 @@ cleanwin:
 	rm testwin.exe
 	rm *.o
 
+# windbg
+windbg: windbg.o
+	gcc win_dbg.o --machine-windows -o windbg.exe
+
+windbg.o: windbg.c
+	gcc -c windbg.c
+
