@@ -38,36 +38,25 @@ typedef struct _mouse_click_event_t
 typedef struct _mouse_move_event_t
 {
   point_t pnt;
-  unsigned short lbtn : 1;
-  unsigned short rbtn : 1;
-  unsigned short mbtn : 1;
-  unsigned short ctrl : 1;
-  unsigned short shft : 1;
+  mouse_button_status_t btn;
   unsigned short xbtn1 : 1;
   unsigned short xbtn2 : 1;
 } mouse_move_event_t;
 
 
 
-#define CONTROL_COMMON int type; \
-  int id; \
-  char *name; \  
-  short x; \
-  short y; \
-  short width; \
-  short height; \
+#define CONTROL_COMMON int type;\
+  int id;\
+  char *name;\  
+  short x;\
+  short y;\
+  short width;\
+  short height;\
 
 
 typedef struct _form_t
 {
-  int type;
-  int id;
-  char *name;
-  short x;
-  short y;
-  short width;
-  short height;
-  
+  CONTROL_COMMON
 
   // Win32 specific data
   WNDCLASS wndclass;
@@ -100,13 +89,7 @@ typedef struct _application_t
 
 typedef struct _button_t
 {
-  int type;
-  int id;
-  char *name;
-  short x;
-  short y;
-  short width;
-  short height;
+  CONTROL_COMMON
   
   // Win32 specific data
   WNDCLASS wndclass;
@@ -146,11 +129,8 @@ typedef struct _control_t
 
 typedef struct _create_data_t
 {
-  char *name;
-  short x;
-  short y;
-  short width;
-  short height;
+  CONTROL_COMMON
+
   HWND parent;
   application_t *app;
 } create_data_t;

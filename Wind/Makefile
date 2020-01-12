@@ -1,3 +1,5 @@
+
+
 wind.dll: dllmain.o
 	gcc -shared -o wind.dll dllmain.o
 
@@ -6,8 +8,13 @@ dllmain.o: dllmain.cpp wind.h
 
 
 # Wind
-testwin.exe: main.o log.o linked_list.o application.o button.o
+wind: main.o log.o linked_list.o application.o button.o
 	gcc main.o log.o linked_list.o application.o button.o -lgdi32 -lcomctl32 -W --machine-windows -o testwin.exe
+
+cleanwind:
+	rm testwin.exe
+	rm *.o
+
 
 main.o: main.c
 	gcc -c main.c
@@ -24,9 +31,6 @@ application.o: application.c application.h
 button.o: button.c
 	gcc -c button.c
 
-cleanwin:
-	rm testwin.exe
-	rm *.o
 
 # windbg
 windbg: windbg.o

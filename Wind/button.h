@@ -3,9 +3,18 @@
 
 #include "wind.h"
 
-button_t *create_button(HINSTANCE hInst, HWND hwnd, const char *name);
+typedef struct _button_t
+{
+  CONTROL_COMMON
+  
+  // Win32 specific data
+  WNDCLASS wndclass;
+  HWND hwnd;
+  
+} button_t;
 
-//bool create_button(button_t *btn);
 
+//button_t *create_button(HINSTANCE hInst, HWND hwnd, const char *name);
+button_t *create_button(create_data_t *data);
 
 #endif

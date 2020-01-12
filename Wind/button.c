@@ -3,36 +3,37 @@
 #include "wind.h"
 #include "button.h"
 
-button_t *create_button1(create_data_t *data)
+button_t *create_button(create_data_t *data)
 {
   button_t *new_btn = malloc(sizeof(button_t));
   HWND hwndButton;
 
-  /*
+//  new_btn->
+
   
   hwndButton = CreateWindow(TEXT("button"),
-                            TEXT("Test Button"),
+                            TEXT(data->name),
                             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
                             data->x, // X
                             data->y, // Y
                             data->width, // Width
                             data->height, // Height
-                            hwnd,
+                            data->parent,
                             NULL, // Menu
-                            hInst,
+                            data->app->hInstance,
                             NULL);
-  */
+
   return new_btn;
 }
 
-
+/*
 button_t *create_button(HINSTANCE hInst, HWND hwnd, const char *name)
 {
   button_t *new_btn = malloc(sizeof(button_t));
   HWND hwndButton;
   
   hwndButton = CreateWindow(TEXT("button"),
-                            TEXT("Test Button"),
+                            TEXT("Some Button"),
                             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
                             10, // X
                             10, // Y
@@ -45,3 +46,4 @@ button_t *create_button(HINSTANCE hInst, HWND hwnd, const char *name)
 
   return new_btn;
 }
+*/

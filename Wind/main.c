@@ -41,23 +41,23 @@ mouse_move_event_t *create_mouse_move_evt(WPARAM wParam, LPARAM lParam)
   
   if (wParam & MK_CONTROL)
   {
-    mme->ctrl = 1;
+    mme->btn.ctrl = 1;
   }
   if (wParam & MK_LBUTTON)
   {
-    mme->lbtn = 1;
+    mme->btn.lbtn = 1;
   }
   if (wParam & MK_MBUTTON)
   {
-    mme->mbtn = 1;
+    mme->btn.mbtn = 1;
   }
   if (wParam & MK_RBUTTON)
   {
-    mme->rbtn = 1;
+    mme->btn.rbtn = 1;
   }
   if (wParam & MK_SHIFT)
   {
-    mme->shft = 1;
+    mme->btn.shft = 1;
   }
   if (wParam & MK_XBUTTON1)
   {
@@ -273,9 +273,31 @@ int WINAPI WinMain(HINSTANCE hInstance,
   
   app->form_list = form_list;
 
-  create_button(hInstance, form->hwnd, "TestButton");
+//  create_button(hInstance, form->hwnd, "TestButton");
   
   c_logf(LOG_INFO, "list count = %d\n", get_count(form_list));
+
+  create_data_t create_data;
+
+  create_data.name = "Button 1";
+  create_data.x = 10;
+  create_data.y = 50;
+  create_data.width = 100;
+  create_data.height = 25;
+  create_data.parent = form->hwnd;
+  create_data.app = app;
+
+  button_t *btn2 = create_button(&create_data);
+
+  create_data.name = "Button 2";
+  create_data.x = 10;
+  create_data.y = 80;
+  create_data.width = 100;
+  create_data.height = 25;
+  create_data.parent = form->hwnd;
+  create_data.app = app;
+
+  button_t *btn3 = create_button(&create_data);
   
   int ret = wind_run();
   
