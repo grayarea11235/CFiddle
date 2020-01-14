@@ -1,4 +1,9 @@
 #include <windows.h>
+#include <atlbase.h>
+#include <atlstr.h>
+
+#include <time.h>
+#include <stdio.h>
 
 #define TIMEOUT_WIN_DEBUG 100
 
@@ -17,9 +22,13 @@ struct mutex_info
   struct dbwin_buffer *m_pDBBuffer;
 };
 
-DWORD deinit_mutex(struct mutext_info *m_info)
+DWORD deinit_mutex(struct mutext_info *m_info);
+
+
+DWORD deinit_mutex(struct mutext_info *m_i)
 {
-  if (m_info->DBWinMutex != NULL)
+  
+  if (m_i->DBWinMutex != NULL)
   {
     CloseHandle(m_info->DBWinMutex);
     m_info->DBWinMutex = NULL;
