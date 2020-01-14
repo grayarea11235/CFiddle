@@ -8,5 +8,7 @@ application_t *create_application(HINSTANCE hInstance,
                                   PSTR szCmdLine,
                                   int iCmdShow);
 
+form_t *get_form_from_hwnd(HWND hwnd);
+mouse_move_event_t *create_mouse_move_evt(WPARAM wParam, LPARAM lParam);
 
 #endif

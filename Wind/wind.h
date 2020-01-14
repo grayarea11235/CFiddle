@@ -1,7 +1,40 @@
 #ifndef WIND_H
 #define WIND_H
 
+#include <stdint.h>
+
 #include "linked_list.h"
+
+// Colors
+
+#define COL_AQUA       0xFFFF00 	
+#define COL_BLACK      0x000000 	
+#define COL_BLUE       0xFF0000 	
+#define COL_CREAM      0xF0FBFF 	
+#define COL_DKGRAY     0x808080 	
+#define COL_FUCHSIA    0xFF00FF 	
+#define COL_GRAY       0x808080 	
+#define COL_GREEN      0x008000 	
+#define COL_LIME       0x00FF00 	
+#define COL_LTGRAY     0xC0C0C0 	
+#define COL_MAROON     0x000080 	
+#define COL_MEDGRAY    0xA4A0A0 	
+#define COL_MONEYGREEN 0xC0DCC0 	
+#define COL_NAVY       0x800000 	
+#define COL_OLIVE      0x008080 	
+#define COL_PURPLE     0x800080 	
+#define COL_RED        0x0000FF 	
+#define COL_SILVER     0xC0C0C0 	
+#define COL_SKYBLUE    0xF0CAA6 	
+#define COL_TEAL       0x808000 	
+#define COL_WHITE      0xFFFFFF 	
+#define COL_YELLOW     0x00FFFF 	
+
+typedef struct _color_t
+{
+  uint32_t color;
+} color_t;
+
 
 #define CT_FORM 0
 #define CT_BUTTON 1
@@ -86,16 +119,6 @@ typedef struct _application_t
   // list of forms here
   list_t *form_list;
 } application_t;
-
-typedef struct _button_t
-{
-  CONTROL_COMMON
-  
-  // Win32 specific data
-  WNDCLASS wndclass;
-  HWND hwnd;
-  
-} button_t;
 
 typedef struct _checkbox_t
 {
