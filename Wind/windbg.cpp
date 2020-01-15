@@ -59,6 +59,8 @@ DWORD init_mutex(struct mutex_info *m_info)
   DWORD errorCode = 0;
   BOOL bSuccessful = FALSE;
 
+  printf("In init_mutex\n");
+  
   SetLastError(0);
 
 

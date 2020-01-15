@@ -25,10 +25,10 @@ struct mutex_info
 DWORD deinit_mutex(struct mutext_info *m_info);
 
 
-DWORD deinit_mutex(struct mutext_info *m_i)
+DWORD deinit_mutex(struct mutext_info *m_info)
 {
   
-  if (m_i->DBWinMutex != NULL)
+  if (m_info->DBWinMutex != NULL)
   {
     CloseHandle(m_info->DBWinMutex);
     m_info->DBWinMutex = NULL;
