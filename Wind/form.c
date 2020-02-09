@@ -2,6 +2,11 @@
 
 #include "form.h"
 
+void on_button_click(void *event)
+{
+
+}
+
 
 // Form callback TODO : Move this out
 LRESULT CALLBACK form_wnd_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -40,6 +45,20 @@ LRESULT CALLBACK form_wnd_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
 
     return 0;
 
+  case WM_COMMAND:
+    switch (HIWORD(wParam))
+    {
+    case BN_CLICKED:
+      // Have a click command
+      c_logf(LOG_INFO, "Button Clicked! Child ID = %d Child Window Handle = 0x%04X",
+             LOWORD(wParam), lParam);
+
+      break;
+
+    default:
+      break;
+    }
+    
   case WM_PAINT:
     hdc = BeginPaint(hwnd, &ps);
 
@@ -175,13 +194,15 @@ form_t *create_child_form(application_t *app, HWND parent)
   form->hwnd = CreateWindow(szAppName,                  // window class name
                             TEXT("Form1"),  // window caption
                             WS_OVERLAPPEDWINDOW,        // window style
+
                             CW_USEDEFAULT,              // initial x position
                             CW_USEDEFAULT,              // initial y position
                             CW_USEDEFAULT,              // initial x size
                             CW_USEDEFAULT,              // initial y size
+
                             NULL,                       // parent window handle
                             NULL,                       // window menu handle
-                            app->hInstance,                  // program instance handle
+                            app->hInstance,             // program instance handle
                             NULL);                      // creation parameters
   
   ShowWindow(form->hwnd, app->iCmdShow);

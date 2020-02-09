@@ -39,6 +39,7 @@ typedef struct _color_t
 #define CT_FORM 0
 #define CT_BUTTON 1
 #define CT_CHECKBOX 2
+#define CT_DROPDOWN 3
 
 
 typedef struct _event_t
@@ -76,8 +77,6 @@ typedef struct _mouse_move_event_t
   unsigned short xbtn2 : 1;
 } mouse_move_event_t;
 
-
-
 #define CONTROL_COMMON int type;\
   int id;\
   char *name;\  
@@ -85,6 +84,8 @@ typedef struct _mouse_move_event_t
   short y;\
   short width;\
   short height;\
+  HWND hwnd;\
+  HWND parent;
 
 
 typedef struct _form_t
@@ -93,15 +94,14 @@ typedef struct _form_t
 
   // Win32 specific data
   WNDCLASS wndclass;
-  HWND hwnd;
 
   //control_t *controls;
 
   // Data
   char *title;
-
-
-
+  
+  list_t *control_list;
+  
   // Events
   void (*mouse_move_ptr)(void *event);  
   

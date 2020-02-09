@@ -10,6 +10,11 @@ typedef struct _button_t
   // Win32 specific data
   WNDCLASS wndclass;
   HWND hwnd;
+
+  // Events
+  void (*mouse_move_ptr)(void *event);  
+  void (*mouse_click_ptr)(void *event);  
+  void (*mouse_dblclick_ptr)(void *event);  
   
 } button_t;
 

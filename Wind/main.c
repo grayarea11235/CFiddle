@@ -35,6 +35,15 @@ void mouse_move(void *event)
   c_logf(LOG_INFO, "In MouseMoveEvt! x=%d y=%d", evt->pnt.x, evt->pnt.y);
 }
 
+void mouse_ldown(void *event)
+{
+
+}
+
+void mouse_click(void *event)
+{
+}
+
 
 // TODO
 //

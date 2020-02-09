@@ -2,6 +2,7 @@
 
 #include "wind.h"
 #include "button.h"
+#include "log.h"
 
 button_t *create_button(create_data_t *data)
 {
@@ -22,5 +23,9 @@ button_t *create_button(create_data_t *data)
                             data->app->hInstance,
                             NULL);
 
+  c_logf(LOG_INFO, "Have created button with handle 0x%04X\n", hwndButton);
+
+  new_btn->hwnd = hwndButton;
+  
   return new_btn;
 }
