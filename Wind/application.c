@@ -41,7 +41,6 @@ form_t *get_form_from_hwnd(HWND hwnd)
   return ret;
 }
 
-
 mouse_move_event_t *create_mouse_move_evt(WPARAM wParam, LPARAM lParam)
 {
   mouse_move_event_t *mme = malloc(sizeof(mouse_move_event_t));

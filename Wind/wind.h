@@ -84,7 +84,8 @@ typedef struct _mouse_move_event_t
   short y;\
   short width;\
   short height;\
-  HWND hwnd;\
+  // Win32 Specific
+  HWND hwnd;                                      \
   HWND parent;
 
 

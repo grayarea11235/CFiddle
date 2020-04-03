@@ -51,7 +51,7 @@ void mouse_click(void *event)
 // 0. Linked list
 // 1. Create form list in application
 // 1.5 Organise files
-// 2. Imlement universal colors
+// 2. Implement universal colors
 // 3. Complete form
 // 4. Create basic button
 // 5. Button events
