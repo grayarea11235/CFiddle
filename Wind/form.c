@@ -126,12 +126,12 @@ form_t *create_form(application_t *app, HWND parent)
   c_log(LOG_INFO, "In create_form\n");
   
   form_t *form = malloc(sizeof(form_t));
+  form->control_list = create_list();
   
   static TCHAR szAppName[] = TEXT ("HelloWin");
 
   form->wndclass.style = CS_HREDRAW | CS_VREDRAW;
-  form->wndclass.lpfnWndProc = form_wnd_proc;
-  form->wndclass.cbClsExtra = 0;
+  form->wndclass.lpfnWndProc = form_wnd_proc;  form->wndclass.cbClsExtra = 0;
   form->wndclass.cbWndExtra = 0;
   form->wndclass.hInstance = app->hInstance;
   form->wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);

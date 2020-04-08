@@ -1,0 +1,25 @@
+* Wind
+
+
+** Structure
+
+- Application
+  - Properties
+    - List of forms
+    - Name
+
+- Form
+  - Properties
+    - List of control 
+    - Name
+    - Location
+    - Size
+    - Visible
+    - Pointer to application
+
+- Control
+  - Properties
+    - Form pointer
+    - Size
+    - Location
+    - etc 

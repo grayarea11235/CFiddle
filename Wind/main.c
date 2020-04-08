@@ -86,7 +86,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
   create_data_t create_data;
 
-  create_data.name = "Button 1";
+  create_data.name = "Test 1";
   create_data.x = 10;
   create_data.y = 50;
   create_data.width = 100;

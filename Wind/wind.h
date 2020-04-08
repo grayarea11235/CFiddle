@@ -79,13 +79,12 @@ typedef struct _mouse_move_event_t
 
 #define CONTROL_COMMON int type;\
   int id;\
-  char *name;\  
+  char *name;\
   short x;\
   short y;\
   short width;\
   short height;\
-  // Win32 Specific
-  HWND hwnd;                                      \
+  HWND hwnd;\
   HWND parent;
 
 
@@ -155,7 +154,6 @@ typedef struct _create_data_t
 {
   CONTROL_COMMON
 
-  HWND parent;
   application_t *app;
 } create_data_t;
 
