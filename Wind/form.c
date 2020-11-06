@@ -142,7 +142,7 @@ form_t *create_form(application_t *app, HWND parent)
 
   if (!RegisterClass(&form->wndclass))
   {
-    MessageBox(NULL, TEXT ("This program requires Windows NT!"),
+    MessageBox(NULL, TEXT("This program requires Windows NT!"),
                szAppName, MB_ICONERROR);
     return 0;
   }
@@ -156,7 +156,7 @@ form_t *create_form(application_t *app, HWND parent)
                             CW_USEDEFAULT,              // initial y size
                             NULL,                       // parent window handle
                             NULL,                       // window menu handle
-                            app->hInstance,                  // program instance handle
+                            app->hInstance,             // program instance handle
                             NULL);                      // creation parameters
   
   ShowWindow(form->hwnd, app->iCmdShow);
