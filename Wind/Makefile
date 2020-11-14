@@ -11,8 +11,8 @@ LIBS=-lgdi32 -lcomctl32
 
 
 # Wind
-all: main.o log.o linked_list.o application.o button.o form.o dialog.o
-	gcc main.o log.o linked_list.o application.o button.o form.o dialog.o $(LIBS) -W --machine-windows -o testwin.exe
+all: main.o log.o linked_list.o application.o button.o form.o dialog.o checkbox.o
+	gcc main.o log.o linked_list.o application.o button.o form.o dialog.o checkbox.o $(LIBS) -W --machine-windows -o testwin.exe
 
 clean:
 	rm testwin.exe
@@ -39,6 +39,8 @@ form.o: form.c form.h
 dialog.o: dialog.c dialog.h
 	gcc -c dialog.c
 
+checkbox.o: checkbox.c checkbox.h
+	$(CC) checkbox.c
 
 # windbg
 windbg: windbg.o

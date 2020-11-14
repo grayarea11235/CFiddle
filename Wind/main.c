@@ -5,12 +5,10 @@
 
 #include "application.h"
 #include "button.h"
+#include "checkbox.h"
 
 #include "linked_list.h"
 #include "log.h"
-
-
-
 
 
 DWORD wind_run()
@@ -105,6 +103,17 @@ int WINAPI WinMain(HINSTANCE hInstance,
   create_data.app = app;
 
   button_t *btn3 = create_button(&create_data);
+
+  create_data.name = "Checkbox 1";
+  create_data.x = 70;
+  create_data.y = 110;
+  create_data.width = 100;
+  create_data.height = 25;
+  create_data.parent = form->hwnd;
+  create_data.app = app;
+
+  checkbox_t *chkbox1 = create_checkbox(&create_data);
+
   
   int ret = wind_run();
   
