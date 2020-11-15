@@ -24,6 +24,8 @@ checkbox_t *create_checkbox(create_data_t *data)
 
   c_logf(LOG_INFO, "Have created checkbox with handle 0x%04X\n", hwndChkbox);
 
+  CheckDlgButton(hwndChkbox, 1, BST_CHECKED);
+
   new_chkbox->hwnd = hwndChkbox;
   
   return new_chkbox;
