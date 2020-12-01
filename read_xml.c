@@ -10,7 +10,8 @@ parseStory (xmlDocPtr doc, xmlNodePtr cur)
   xmlChar *key;
 
   cur = cur->xmlChildrenNode;
-  while (cur != NULL) {
+  while (cur != NULL) 
+  {
     if ((!xmlStrcmp(cur->name, (const xmlChar *)"keyword")))
     {
       key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
