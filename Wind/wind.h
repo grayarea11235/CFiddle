@@ -122,14 +122,7 @@ typedef struct _application_t
 
 typedef struct _checkbox_t
 {
-  int type;
-  int id;
-  char *name;
-  short x;
-  short y;
-  short width;
-  short height;
-
+  CONTROL_COMMON
 
 } checkbox_t;
 

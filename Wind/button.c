@@ -1,6 +1,5 @@
 #include <windows.h>
 
-#include "wind.h"
 #include "button.h"
 #include "log.h"
 
