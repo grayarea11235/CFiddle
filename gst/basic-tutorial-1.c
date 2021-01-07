@@ -27,8 +27,9 @@ int main (int argc, char *argv[])
   /* Free resources */
   if (msg != NULL)
     gst_message_unref (msg);
-  gst_object_unref (bus);
-  gst_element_set_state (pipeline, GST_STATE_NULL);
+
+  gst_object_unref(bus);
+  gst_element_set_state(pipeline, GST_STATE_NULL);
   gst_object_unref (pipeline);
   return 0;
 }
