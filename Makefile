@@ -1,8 +1,8 @@
 CC=gcc
-CFLAGS=-c `pkg-config --cflags gtk+-3.0`
+CFLAGS=-c `pkg-config --cflags gtk+-3.0` -Iinclude
 LDFLAGS=`pkg-config --cflags --libs gtk+-3.0`
 
-all: hello_gtk_notify gtk_simple_app gtk_simple_app_with_btn simp_client read_web
+all: hello_gtk_notify notify gtk_simple_app gtk_simple_app_with_btn simp_client read_web
 
 clean:
 	@echo "Cleaning..."
@@ -11,6 +11,7 @@ clean:
 	rm -f ./gtk_simple_app
 	rm -f ./gtk_simple_app_with_btn
 	rm -f ./read_web
+	rm -f ./notify
 	@echo "Cleaned"
 
 hello_gtk_notify: hello_gtk_notify.o
@@ -18,6 +19,15 @@ hello_gtk_notify: hello_gtk_notify.o
 
 hello_gtk_notify.o: hello_gtk_notify.c
 	$(CC) $(CFLAGS) hello_gtk_notify.c $(LDFLAGS)
+
+notify: notify.o argtable3.o
+	$(CC) notify.o argtable3.o -o notify $(LDFLAGS) -lnotify -lm
+
+libs/argtable3/argtable3.c: libs/argtable3/argtable3.c
+	$(CC) $(CFLAGS) libs/argtable3/argtable3.c $(LDFLAGS)
+
+notify.o: notify.c
+	$(CC) $(CFLAGS) notify.c $(LDFLAGS)
 
 gtk_simple_app: gtk_simple_app.o
 	$(CC) gtk_simple_app.o -o gtk_simple_app $(LDFLAGS)
