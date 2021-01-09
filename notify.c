@@ -11,6 +11,7 @@ struct arg_int *timeout;
 struct arg_file *o, *file;
 struct arg_str *title;
 struct arg_str *message;
+struct arg_str *hint;
 struct arg_end *end;
 
 void print_usage(char *name)
@@ -20,16 +21,34 @@ void print_usage(char *name)
 
 int main(int argc, char *argv[])
 {
+  // GList *notify_get_server_caps (void); 
+  GList *res = notify_get_server_caps(); 
+  printf("List length = %d\n", g_list_length(res));
+
+  GList *l;
+  int i = 0;
+  for (l = res; l != NULL; l = l->next)
+  {
+    printf("%s\n", (char *)l->data);
+  }
+
+  g_list_foreach(res, (GFunc)g_free, NULL);
+  g_list_free(res);
+
+
+  //  gboolean res = notify_get_server_info (char **ret_name,
+  //      char **ret_vendor,                                                                                                            
+  //      char **ret_version,                                                                                                           
+  //      char **ret_spec_version);  
+
   void *argtable[] = {
     help    = arg_litn(NULL, "help", 0, 1, "Display this help and exit"),
     version = arg_litn(NULL, "version", 0, 1, "Display version info and exit"),
-//    level   = arg_intn(NULL, "level", "<n>", 0, 1, "foo value"),
     timeout = arg_intn("o", "timeout", "<n>", 0, 1, "Timeout of the notification in millisecs. If ommited use system default. If expire never set to 0"),
-    verb    = arg_litn("v", "verbose", 0, 1, "verbose output"),
+    //verb    = arg_litn("v", "verbose", 0, 1, "verbose output"),
     title   = arg_strn("t", "title", "string", 1, 1, "The title of the notification."),
     message = arg_strn("m", "message", "string", 1, 1, "The message of the notification"),
-//    o       = arg_filen("o", NULL, "myfile", 0, 1, "output file"),
-//    file    = arg_filen(NULL, NULL, "<file>", 1, 100, "input files"),
+    hint    = arg_strn("h", "hint", "string", 0, 1, "The hint of the notification"),
     end     = arg_end(20),
   };
 
@@ -74,10 +93,6 @@ int main(int argc, char *argv[])
   //  NotifyNotification * Hello = notify_notification_new("Hello world", "This is an example notification.", "dialog-information");
   NotifyNotification *gtk_notify_cmd = notify_notification_new(title->sval[0], message->sval[0], "dialog-information");
 
-
-
-
-  
   printf("timeout->count = %d\n", timeout->count);
   if (timeout->ival != NULL)
   {
@@ -97,27 +112,6 @@ int main(int argc, char *argv[])
     {
       actual_timeout = timeout->ival[0];
     }
-  }
-
-  switch (timeout->count)
-  {
-    case 0: // Expires default
-      break;
-    case 1:
-      if (timeout->ival[0] == -1)
-      {
-        printf("Infinite\n");
-        actual_timeout = NOTIFY_EXPIRES_NEVER; //Actually this value is zero 
-        break;
-      }
-      if (timeout->ival[0] >= 0)
-      {
-        printf("Some value maybe 0\n");
-        actual_timeout = timeout->ival[0];
-        break;
-      }
-    default:
-      break;
   }
 
   printf("actual_timeout=%d\n", actual_timeout);
