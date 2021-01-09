@@ -23,7 +23,7 @@ hello_gtk_notify.o: hello_gtk_notify.c
 notify: notify.o argtable3.o
 	$(CC) notify.o argtable3.o -o notify $(LDFLAGS) -lnotify -lm
 
-libs/argtable3/argtable3.c: libs/argtable3/argtable3.c
+argtable3.o: libs/argtable3/argtable3.c
 	$(CC) $(CFLAGS) libs/argtable3/argtable3.c $(LDFLAGS)
 
 notify.o: notify.c
