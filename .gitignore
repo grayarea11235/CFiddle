@@ -3,3 +3,10 @@
 *.exe
 .nvimlog
 .vscode
+gtk_simple_app
+gtk_simple_app_with_btn
+hello_gtk_notify
+notify
+read_web
+simp_client
+
