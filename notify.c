@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     help    = arg_litn(NULL, "help", 0, 1, "Display this help and exit"),
     version = arg_litn(NULL, "version", 0, 1, "Display version info and exit"),
 //    level   = arg_intn(NULL, "level", "<n>", 0, 1, "foo value"),
-    timeout = arg_intn("o", "timeout", "<n>", 0, 1, "Timeout of the notification in millisecs."),
+    timeout = arg_intn("o", "timeout", "<n>", 0, 1, "Timeout of the notification in millisecs. If ommited use system default. If expire never set to 0"),
     verb    = arg_litn("v", "verbose", 0, 1, "verbose output"),
     title   = arg_strn("t", "title", "string", 1, 1, "The title of the notification."),
     message = arg_strn("m", "message", "string", 1, 1, "The message of the notification"),
@@ -75,14 +75,28 @@ int main(int argc, char *argv[])
   NotifyNotification *gtk_notify_cmd = notify_notification_new(title->sval[0], message->sval[0], "dialog-information");
 
 
-  // DO the timeout
-  int actual_timeout = NOTIFY_EXPIRES_DEFAULT;
+
 
   
   printf("timeout->count = %d\n", timeout->count);
   if (timeout->ival != NULL)
   {
     printf("timeout->ival = %d\n", timeout->ival[0]);
+  }
+
+
+  // Do the timeout
+  int actual_timeout = NOTIFY_EXPIRES_DEFAULT;
+  if (timeout->count > 0)
+  {
+    if (timeout->ival[0] == 0)
+    {
+      actual_timeout = NOTIFY_EXPIRES_NEVER;
+    }
+    if (timeout->ival[0] > 0)
+    {
+      actual_timeout = timeout->ival[0];
+    }
   }
 
   switch (timeout->count)
@@ -93,18 +107,22 @@ int main(int argc, char *argv[])
       if (timeout->ival[0] == -1)
       {
         printf("Infinite\n");
+        actual_timeout = NOTIFY_EXPIRES_NEVER; //Actually this value is zero 
         break;
       }
       if (timeout->ival[0] >= 0)
       {
         printf("Some value maybe 0\n");
+        actual_timeout = timeout->ival[0];
         break;
       }
     default:
       break;
   }
 
-  notify_notification_set_timeout(gtk_notify_cmd, 1000); 
+  printf("actual_timeout=%d\n", actual_timeout);
+
+  notify_notification_set_timeout(gtk_notify_cmd, actual_timeout); 
   //  notify_notification_set_timeout(gtk_notify_cmd, NOTIFY_EXPIRES_NEVER); 
   //  notify_notification_set_timeout(gtk_notify_cmd, NOTIFY_EXPIRES_DEFAULT); 
 
