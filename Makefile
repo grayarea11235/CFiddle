@@ -1,8 +1,12 @@
 CC=gcc
 CFLAGS=-c `pkg-config --cflags gtk+-3.0` -Iinclude
 LDFLAGS=`pkg-config --cflags --libs gtk+-3.0`
+DBUSCFLAGS=`pkg-config --cflags dbus-1`
+DBUSLFLAGS=`pkg-config --libs dbus-1` 
 
-all: hello_gtk_notify notify gtk_simple_app gtk_simple_app_with_btn simp_client read_web
+# gcc ./dbus_example.c  -o dbus_example -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -ldbus-1
+
+all: hello_gtk_notify notify gtk_simple_app gtk_simple_app_with_btn simp_client read_web dbus_example
 
 clean:
 	@echo "Cleaning..."
@@ -12,7 +16,16 @@ clean:
 	rm -f ./gtk_simple_app_with_btn
 	rm -f ./read_web
 	rm -f ./notify
+	rm -f ./dbus_example
 	@echo "Cleaned"
+
+
+dbus_example: dbus_example.o
+	$(CC) dbus_example.o -o dbus_example $(LDFLAGS) $(DBUSLFLAGS)
+
+dbus_example.o: dbus_example.c
+	$(CC) $(CLFAGS) $(DBUSCFLAGS) dbus_example.c $(DBUSLFLAGS)
+	
 
 hello_gtk_notify: hello_gtk_notify.o
 	$(CC) hello_gtk_notify.o -o hello_gtk_notify $(LDFLAGS) -lnotify
