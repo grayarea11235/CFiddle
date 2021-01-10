@@ -24,8 +24,7 @@ dbus_example: dbus_example.o
 	$(CC) dbus_example.o -o dbus_example $(LDFLAGS) $(DBUSLFLAGS)
 
 dbus_example.o: dbus_example.c
-	$(CC) $(CLFAGS) $(DBUSCFLAGS) dbus_example.c $(DBUSLFLAGS)
-	
+	$(CC) $(CFLAGS) $(DBUSCFLAGS) dbus_example.c $(DBUSLFLAGS)
 
 hello_gtk_notify: hello_gtk_notify.o
 	$(CC) hello_gtk_notify.o -o hello_gtk_notify $(LDFLAGS) -lnotify
