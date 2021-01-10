@@ -19,12 +19,18 @@ void print_usage(char *name)
   printf("Usage : %s <title> <message>\n", name);
 }
 
-int main(int argc, char *argv[])
+void callback(NotifyNotification *notification,
+    char *action,
+    gpointer user_data)
 {
-  // GList *notify_get_server_caps (void); 
+
+}
+
+void print_server_caps()
+{
   GList *res = notify_get_server_caps(); 
   printf("List length = %d\n", g_list_length(res));
-
+  
   GList *l;
   int i = 0;
   for (l = res; l != NULL; l = l->next)
@@ -34,12 +40,11 @@ int main(int argc, char *argv[])
 
   g_list_foreach(res, (GFunc)g_free, NULL);
   g_list_free(res);
+}
 
-
-  //  gboolean res = notify_get_server_info (char **ret_name,
-  //      char **ret_vendor,                                                                                                            
-  //      char **ret_version,                                                                                                           
-  //      char **ret_spec_version);  
+int main(int argc, char *argv[])
+{
+  print_server_caps();
 
   void *argtable[] = {
     help    = arg_litn(NULL, "help", 0, 1, "Display this help and exit"),
@@ -99,6 +104,8 @@ int main(int argc, char *argv[])
     printf("timeout->ival = %d\n", timeout->ival[0]);
   }
 
+  // Add a test action
+  notify_notification_add_action(gtk_notify_cmd, "action-name", "Test", NULL, NULL, NULL);
 
   // Do the timeout
   int actual_timeout = NOTIFY_EXPIRES_DEFAULT;
@@ -117,8 +124,6 @@ int main(int argc, char *argv[])
   printf("actual_timeout=%d\n", actual_timeout);
 
   notify_notification_set_timeout(gtk_notify_cmd, actual_timeout); 
-  //  notify_notification_set_timeout(gtk_notify_cmd, NOTIFY_EXPIRES_NEVER); 
-  //  notify_notification_set_timeout(gtk_notify_cmd, NOTIFY_EXPIRES_DEFAULT); 
 
   // NOTIFY_EXPIRES_NEVER 
   notify_notification_show(gtk_notify_cmd, NULL);
