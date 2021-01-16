@@ -1,0 +1,9 @@
+all: glib_variant_ex
+
+
+glib_variant_ex: glib_variant_ex.o
+	gcc $< `pkg-config --libs glib-2.0` -o $@
+
+
+glib_variant_ex.o: glib_variant_ex.c
+	gcc -c `pkg-config --cflags glib-2.0` $<
