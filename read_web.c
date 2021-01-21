@@ -6,7 +6,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-
+#include <netdb.h>
 
 static char *google_news_url = "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx1YlY4U0FtVnVHZ0pWVXlnQVAB?hl=en-US&gl=US&ceid=US:en";
 static char *bbc_news_url = "http://feeds.bbci.co.uk/news/world/rss.xml";

@@ -6,7 +6,8 @@ DBUSLFLAGS=`pkg-config --libs dbus-1`
 
 # gcc ./dbus_example.c  -o dbus_example -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -ldbus-1
 
-all: hello_gtk_notify notify gtk_simple_app gtk_simple_app_with_btn simp_client read_web dbus_example
+all: hello_gtk_notify notify gtk_simple_app gtk_simple_app_with_btn simp_client read_web simp_server simp_client dbus_example
+
 
 clean:
 	@echo "Cleaning..."
@@ -17,14 +18,32 @@ clean:
 	rm -f ./read_web
 	rm -f ./notify
 	rm -f ./dbus_example
+	rm -f ./simp_server
+	rm -f ./simp_client
 	@echo "Cleaned"
 
+
+simp_server: simp_server.o
+	$(CC) simp_server.o -o simp_server $(LDFLAGS)
+
+simp_server.o: simp_server.c
+	$(CC) -c simp_server.c
+
+simp_client: simp_client.o
+	$(CC) simp_client.o -o simp_client $(LDFLAGS)
+
+simp_client.o: simp_client.c
+	$(CC) -c simp_client.c
 
 dbus_example: dbus_example.o
 	$(CC) dbus_example.o -o dbus_example $(LDFLAGS) $(DBUSLFLAGS)
 
 dbus_example.o: dbus_example.c
+<<<<<<< HEAD
 	$(CC) $(CFLAGS) $(DBUSCFLAGS) dbus_example.c $(DBUSLFLAGS)
+=======
+	$(CC) -c $(DBUSCFLAGS) dbus_example.c $(DBUSLFLAGS)
+>>>>>>> e0f90f89a7f5a683753007a5dc1d4eba40b815b0
 
 hello_gtk_notify: hello_gtk_notify.o
 	$(CC) hello_gtk_notify.o -o hello_gtk_notify $(LDFLAGS) -lnotify
@@ -58,9 +77,3 @@ gtk_simple_app_with_btn.o: gtk_simple_app_with_btn.c
 
 read_web.o: read_web.c
 	$(CC) $(CFLAGS) read_web.c $(LDFLAGS)
-
-simp_client: simp_client.o
-	$(CC) simp_client.o -o simp_client $(LDFLAGS)
-
-simp_client.o: simp_client.c
-	$(CC) $(CFLAGS) simp_client.c
