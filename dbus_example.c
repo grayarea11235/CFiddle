@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * Connect to the DBUS bus and send a broadcast signal
