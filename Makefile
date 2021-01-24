@@ -1,3 +1,4 @@
+# Makefile
 CC=gcc
 CFLAGS=-c `pkg-config --cflags gtk+-3.0` -Iinclude
 LDFLAGS=`pkg-config --cflags --libs gtk+-3.0`
