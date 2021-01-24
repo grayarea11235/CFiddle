@@ -40,11 +40,8 @@ dbus_example: dbus_example.o
 	$(CC) dbus_example.o -o dbus_example $(LDFLAGS) $(DBUSLFLAGS)
 
 dbus_example.o: dbus_example.c
-<<<<<<< HEAD
-	$(CC) $(CFLAGS) $(DBUSCFLAGS) dbus_example.c $(DBUSLFLAGS)
-=======
+#	$(CC) $(CFLAGS) $(DBUSCFLAGS) dbus_example.c $(DBUSLFLAGS)
 	$(CC) -c $(DBUSCFLAGS) dbus_example.c $(DBUSLFLAGS)
->>>>>>> e0f90f89a7f5a683753007a5dc1d4eba40b815b0
 
 hello_gtk_notify: hello_gtk_notify.o
 	$(CC) hello_gtk_notify.o -o hello_gtk_notify $(LDFLAGS) -lnotify
