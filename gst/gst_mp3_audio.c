@@ -16,6 +16,10 @@ bus_call (GstBus     *bus,
       g_main_loop_quit (loop);
       break;
 
+    case GST_MESSAGE_STREAM_START:
+      g_print("Start of stream!\n");
+      break;
+
     case GST_MESSAGE_ERROR: {
       gchar  *debug;
       GError *error;
