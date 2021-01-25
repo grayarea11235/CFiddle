@@ -24,5 +24,5 @@ gst_simple_audio: gst_simple_audio.c
 gst_mp3_audio: gst_mp3_audio.c
 	$(COMPILE) $< -o $@ `pkg-config --cflags --libs gstreamer-1.0`
 
-gst_ui_audio: gst_ui_audio.c
-	$(COMPILE) $(GTKFLAGS)  $< -o $@
+gst_mp3_ui: gst_mp3_ui.c
+	$(COMPILE) $< -o $@ `pkg-config --cflags --libs gstreamer-1.0`
