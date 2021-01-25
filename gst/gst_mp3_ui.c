@@ -12,7 +12,7 @@ bus_call (GstBus     *bus,
 
     case GST_MESSAGE_EOS:
       g_print ("End of stream\n");
-      g_main_loop_quit (loop);
+      //g_main_loop_quit(loop);
       break;
 
     case GST_MESSAGE_STREAM_START:
@@ -29,7 +29,7 @@ bus_call (GstBus     *bus,
       g_printerr ("Error: %s\n", error->message);
       g_error_free (error);
 
-      g_main_loop_quit (loop);
+      //g_main_loop_quit (loop);
       break;
     }
     default:
@@ -111,15 +111,7 @@ printf("3.2\n");
 
 printf("4\n");
 
-  /* note that the demuxer will be linked to the decoder dynamically.
-     The reason is that Ogg may contain various streams (for example
-     audio and video). The source pad(s) will be created at run time,
-     by the demuxer when it detects the amount and nature of streams.
-     Therefore we connect a callback function which will be executed
-     when the "pad-added" is emitted.*/
-
-
-  /* Set the pipeline to "playing" state*/
+  // Set the pipeline to "playing" state
   g_print ("Now playing: %s\n", filename);
   gst_element_set_state (pipeline, GST_STATE_PLAYING);
 
@@ -129,10 +121,6 @@ printf("4\n");
 
 
 }
-
-
-
-
 
 static void btn_clk(GtkWidget *widget,
     gpointer   data)
@@ -187,6 +175,8 @@ int main(int argc, char **argv)
 
   /* Initialisation */
   gst_init (&argc, &argv);
+
+  init_gst("piano2-Audacity1.2.5.mp3");
 
   app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
   g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);
