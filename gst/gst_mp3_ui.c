@@ -1,10 +1,9 @@
 #include <gtk/gtk.h>
 #include <gst/gst.h>
 
-static gboolean
-bus_call (GstBus     *bus,
-          GstMessage *msg,
-          gpointer    data)
+static gboolean bus_call (GstBus     *bus,
+    GstMessage *msg,
+    gpointer    data)
 {
   GMainLoop *loop = (GMainLoop *) data;
 
@@ -20,29 +19,29 @@ bus_call (GstBus     *bus,
       break;
 
     case GST_MESSAGE_ERROR: {
-      gchar  *debug;
-      GError *error;
+                              gchar  *debug;
+                              GError *error;
 
-      gst_message_parse_error (msg, &error, &debug);
-      g_free (debug);
+                              gst_message_parse_error (msg, &error, &debug);
+                              g_free (debug);
 
-      g_printerr ("Error: %s\n", error->message);
-      g_error_free (error);
+                              g_printerr ("Error: %s\n", error->message);
+                              g_error_free (error);
 
-      //g_main_loop_quit (loop);
-      break;
-    }
+                              //g_main_loop_quit (loop);
+                              break;
+                            }
     default:
-      break;
+                            break;
   }
 
   return TRUE;
 }
 
-static void
+  static void
 on_pad_added (GstElement *element,
-              GstPad     *pad,
-              gpointer    data)
+    GstPad     *pad,
+    gpointer    data)
 {
   GstPad *sinkpad;
   GstElement *decoder = (GstElement *) data;
@@ -66,8 +65,8 @@ void init_gst(char *filename)
   guint bus_watch_id;
 
 
-printf("1\n");
-  
+  printf("1\n");
+
   /* Create gstreamer elements */
   pipeline = gst_pipeline_new("audio-player");
   source = gst_element_factory_make("filesrc", "file-source");
@@ -80,7 +79,7 @@ printf("1\n");
     printf("decoder = %p\n", decoder);
     return -1;
   }
-printf("2\n");
+  printf("2\n");
 
   /* Set up the pipeline */
 
@@ -92,24 +91,24 @@ printf("2\n");
   bus_watch_id = gst_bus_add_watch(bus, bus_call, loop);
   gst_object_unref(bus);
 
-printf("3\n");
+  printf("3\n");
 
   /* we add all elements into the pipeline */
   /* file-source | vorbis-decoder | converter | alsa-output */
   gst_bin_add_many(GST_BIN (pipeline),
       source, decoder, conv, sink, NULL);
-printf("3.1\n");
+  printf("3.1\n");
 
   /* we link the elements together */
   /* file-source -> ogg-demuxer ~> vorbis-decoder -> converter -> alsa-output */
   //gst_element_link (source, demuxer);
   gst_element_link_many(source, decoder, conv, sink, NULL);
 
-printf("3.2\n");
+  printf("3.2\n");
 
   //g_signal_connect (demuxer, "pad-added", G_CALLBACK (on_pad_added), decoder);
 
-printf("4\n");
+  printf("4\n");
 
   // Set the pipeline to "playing" state
   g_print ("Now playing: %s\n", filename);
@@ -118,14 +117,46 @@ printf("4\n");
 
   /* Iterate */
   g_print ("Running...\n");
-
-
 }
 
 static void btn_clk(GtkWidget *widget,
-    gpointer   data)
+    gpointer data)
 {
   g_print ("Button push\n");
+}
+
+static void file_open_btn_click(GtkWidget *widget,
+    gpointer data)
+{
+  GtkWidget *dialog;
+  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
+  gint res;
+
+  GtkWidget *parent = gtk_widget_get_toplevel(widget);
+  dialog = gtk_file_chooser_dialog_new ("Open File",
+      GTK_WIDGET(parent),
+      action,
+      "_Cancel",
+      GTK_RESPONSE_CANCEL,
+      "_Open",
+      GTK_RESPONSE_ACCEPT,
+      NULL);
+
+  res = gtk_dialog_run(GTK_DIALOG (dialog));
+  if (res == GTK_RESPONSE_ACCEPT)
+  {
+    char *filename;
+    GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
+    filename = gtk_file_chooser_get_filename(chooser);
+    g_print("filename = %s\n", filename);
+    //open_file(filename);
+    g_free(filename);
+  }
+
+  gtk_widget_destroy (dialog);
+
+
+  g_print("file_open_btn_click\n");
 }
 
 void add_list_item(GtkWidget *listbox, char *text)
@@ -137,11 +168,13 @@ void add_list_item(GtkWidget *listbox, char *text)
   gtk_list_box_insert(GTK_LIST_BOX(listbox), new_label, -1);
 }
 
+
 static void activate (GtkApplication* app,
     gpointer        user_data)
 {
   GtkWidget *window;
   GtkWidget *button;
+  GtkWidget *file_open_btn;
   GtkWidget *button_box;
   GtkWidget *list_box;
 
@@ -156,6 +189,10 @@ static void activate (GtkApplication* app,
   g_signal_connect(button, "clicked", G_CALLBACK(btn_clk), NULL);
   //g_signal_connect_swapped(button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
 
+  file_open_btn = gtk_button_new_with_label("Open...");
+  g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), NULL);
+  //g_signal_connect(button, "clicked", G_CALLBACK(btn_clk), NULL);
+
   list_box = gtk_list_box_new();
   add_list_item(list_box, "Chickens");
   add_list_item(list_box, "Cows");
@@ -163,6 +200,7 @@ static void activate (GtkApplication* app,
 
 
   gtk_container_add(GTK_CONTAINER (button_box), button);
+  gtk_container_add(GTK_CONTAINER (button_box), file_open_btn);
   gtk_container_add(GTK_CONTAINER (button_box), list_box);
 
   gtk_widget_show_all(window);
@@ -176,7 +214,8 @@ int main(int argc, char **argv)
   /* Initialisation */
   gst_init (&argc, &argv);
 
-  init_gst("piano2-Audacity1.2.5.mp3");
+  //  init_gst("piano2-Audacity1.2.5.mp3");
+  //init_gst("file_example_MP3_5MG.mp3");
 
   app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
   g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);
