@@ -6,6 +6,7 @@ static gboolean bus_call (GstBus     *bus,
     gpointer    data)
 {
   GMainLoop *loop = (GMainLoop *) data;
+  
 
   switch (GST_MESSAGE_TYPE (msg)) {
 
