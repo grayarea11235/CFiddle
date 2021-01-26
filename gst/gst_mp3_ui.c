@@ -10,7 +10,7 @@ static void clean_gst()
 //  g_source_remove(bus_watch_id);
 }
 
-static gboolean bus_call (GstBus     *bus,
+static gboolean bus_call(GstBus     *bus,
     GstMessage *msg,
     gpointer    data)
 {
@@ -21,7 +21,6 @@ static gboolean bus_call (GstBus     *bus,
 
     case GST_MESSAGE_EOS:
       g_print ("End of stream\n");
-      //g_main_loop_quit(loop);
       break;
 
     case GST_MESSAGE_STREAM_START:
@@ -48,7 +47,7 @@ static gboolean bus_call (GstBus     *bus,
   return TRUE;
 }
 
-static void on_pad_added (GstElement *element,
+static void on_pad_added(GstElement *element,
     GstPad     *pad,
     gpointer    data)
 {
@@ -58,17 +57,15 @@ static void on_pad_added (GstElement *element,
   /* We can now link this pad with the vorbis-decoder sink pad */
   g_print ("Dynamic pad created, linking demuxer/decoder\n");
 
-  sinkpad = gst_element_get_static_pad (decoder, "sink");
+  sinkpad = gst_element_get_static_pad(decoder, "sink");
 
-  gst_pad_link (pad, sinkpad);
-
-  gst_object_unref (sinkpad);
+  gst_pad_link(pad, sinkpad);
+  gst_object_unref(sinkpad);
 }
 
-void init_gst(char *filename)
+void gst_start_play(char *filename)
 {
   GMainLoop *loop;
-
   GstElement *pipeline, *source, *decoder, *conv, *sink;
   GstBus *bus;
   guint bus_watch_id;
@@ -178,7 +175,7 @@ void add_list_item(GtkWidget *listbox, char *text)
 }
 
 
-static void activate (GtkApplication* app,
+static void activate(GtkApplication* app,
     gpointer        user_data)
 {
   GtkWidget *window;
@@ -223,8 +220,8 @@ int main(int argc, char **argv)
   /* Initialisation */
   gst_init (&argc, &argv);
 
-  init_gst("piano2-Audacity1.2.5.mp3");
-  //init_gst("file_example_MP3_5MG.mp3");
+  gst_start_play("piano2-Audacity1.2.5.mp3");
+  //gst_start_play("file_example_MP3_5MG.mp3");
 
   app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
   g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);
