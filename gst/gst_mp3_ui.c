@@ -1,46 +1,55 @@
 #include <gtk/gtk.h>
 #include <gst/gst.h>
 
-static gboolean bus_call (GstBus     *bus,
+
+// Temp globals
+GMainLoop *loop;
+GstElement *pipeline;
+guint bus_watch_id;
+
+static void gst_cleanup();
+
+
+static gboolean bus_call(GstBus *bus,
     GstMessage *msg,
-    gpointer    data)
+    gpointer data)
 {
   GMainLoop *loop = (GMainLoop *) data;
-  
 
-  switch (GST_MESSAGE_TYPE (msg)) {
 
+  switch (GST_MESSAGE_TYPE (msg)) 
+  {
     case GST_MESSAGE_EOS:
       g_print ("End of stream\n");
-      //g_main_loop_quit(loop);
+      gst_cleanup();
       break;
 
     case GST_MESSAGE_STREAM_START:
       g_print("Start of stream!\n");
       break;
 
-    case GST_MESSAGE_ERROR: {
-                              gchar  *debug;
-                              GError *error;
+    case GST_MESSAGE_ERROR: 
+      {
+        gchar  *debug;
+        GError *error;
 
-                              gst_message_parse_error (msg, &error, &debug);
-                              g_free (debug);
+        gst_message_parse_error(msg, &error, &debug);
+        g_free(debug);
 
-                              g_printerr ("Error: %s\n", error->message);
-                              g_error_free (error);
+        g_printerr("Error: %s\n", error->message);
+        g_error_free(error);
 
-                              //g_main_loop_quit (loop);
-                              break;
-                            }
+        //g_main_loop_quit (loop);
+        break;
+      }
     default:
-                            break;
+      break;
   }
 
   return TRUE;
 }
 
-  static void
-on_pad_added (GstElement *element,
+static void on_pad_added(GstElement *element,
     GstPad     *pad,
     gpointer    data)
 {
@@ -59,23 +68,27 @@ on_pad_added (GstElement *element,
 
 static void gst_cleanup()
 {
-  //gst_element_set_state(pipeline, GST_STATE_NULL);
-  //g_print("Deleting pipeline\n");
-  //gst_object_unref(GST_OBJECT (pipeline));
-  //g_source_remove(bus_watch_id);
+  g_print("In gst_cleanup()\n");
+
+
+  gst_element_set_state(pipeline, GST_STATE_NULL);
+  g_print("Deleting pipeline\n");
+  gst_object_unref(GST_OBJECT (pipeline));
+  g_source_remove(bus_watch_id);
   //g_main_loop_unref(loop);
 }
 
 static void gst_start(char *filename)
 {
-  GMainLoop *loop;
-  GstElement *pipeline, 
-             *source, 
+  //GMainLoop *loop;
+  //GstElement *pipeline;
+  //guint bus_watch_id;
+  GstElement *source, 
              *decoder, 
              *conv, 
              *sink;
   GstBus *bus;
-  guint bus_watch_id;
+
 
 
   printf("1\n");
@@ -127,7 +140,6 @@ static void gst_start(char *filename)
   g_print ("Now playing: %s\n", filename);
   gst_element_set_state (pipeline, GST_STATE_PLAYING);
 
-
   /* Iterate */
   g_print ("Running...\n");
 }
@@ -136,6 +148,7 @@ static void btn_clk(GtkWidget *widget,
     gpointer data)
 {
   g_print ("Button push\n");
+  gst_start("piano2-Audacity1.2.5.mp3");
 }
 
 static void file_open_btn_click(GtkWidget *widget,
@@ -166,7 +179,7 @@ static void file_open_btn_click(GtkWidget *widget,
     g_free(filename);
   }
 
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy(dialog);
 
 
   g_print("file_open_btn_click\n");
@@ -227,8 +240,8 @@ int main(int argc, char **argv)
   /* Initialisation */
   gst_init (&argc, &argv);
 
-  gst_start("piano2-Audacity1.2.5.mp3");
-//  gst_start("file_example_MP3_5MG.mp3");
+  // gst_start("piano2-Audacity1.2.5.mp3");
+  // gst_start("file_example_MP3_5MG.mp3");
 
   app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
   g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);
