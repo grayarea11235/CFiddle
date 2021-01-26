@@ -9,14 +9,7 @@ typedef struct _stream_info
   guint bus_watch_id;
 } stream_info;
 
-
-// Temp globals
-//GMainLoop *loop;
-//GstElement *pipeline;
-//guint bus_watch_id;
-
 static void gst_cleanup();
-
 
 static void dump_info(stream_info *data)
 {
@@ -31,7 +24,6 @@ static gboolean bus_call(GstBus *bus,
     GstMessage *msg,
     gpointer data)
 {
-  //GMainLoop *loop = (GMainLoop *) data;
   stream_info *stream_data = (stream_info *) data;
 
   switch (GST_MESSAGE_TYPE (msg)) 
@@ -98,9 +90,6 @@ static void gst_cleanup(stream_info *data)
 
 static void gst_start(char *filename)
 {
-  //GMainLoop *loop;
-  //GstElement *pipeline;
-  //guint bus_watch_id;
   GstElement *source, 
              *decoder, 
              *conv, 
@@ -119,10 +108,10 @@ static void gst_start(char *filename)
   conv = gst_element_factory_make("audioconvert", "converter");
   sink = gst_element_factory_make("autoaudiosink", "audio-output");
 
-  if (!data->pipeline || !source || !decoder || !conv || !sink) {
-    g_printerr ("One element could not be created. Exiting.\n");
-    printf("decoder = %p\n", decoder);
-    return -1;
+  if (!data->pipeline || !source || !decoder || !conv || !sink) 
+  {
+    g_printerr("One element could not be created. Exiting.\n");
+    return;
   }
   printf("2\n");
 
