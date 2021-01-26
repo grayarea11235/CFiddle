@@ -99,8 +99,6 @@ static void gst_start(char *filename)
 
   data = g_new(stream_info, 1);
 
-  printf("1\n");
-
   /* Create gstreamer elements */
   data->pipeline = gst_pipeline_new("audio-player");
   source = gst_element_factory_make("filesrc", "file-source");
@@ -113,10 +111,8 @@ static void gst_start(char *filename)
     g_printerr("One element could not be created. Exiting.\n");
     return;
   }
-  printf("2\n");
 
   /* Set up the pipeline */
-
   /* we set the input filename to the source element */
   g_object_set(G_OBJECT (source), "location", filename, NULL);
 
@@ -124,8 +120,6 @@ static void gst_start(char *filename)
   bus = gst_pipeline_get_bus(GST_PIPELINE(data->pipeline));
   data->bus_watch_id = gst_bus_add_watch(bus, bus_call, data);
   gst_object_unref(bus);
-
-  printf("3\n");
 
   /* we add all elements into the pipeline */
   /* file-source | vorbis-decoder | converter | alsa-output */
@@ -138,11 +132,7 @@ static void gst_start(char *filename)
   //gst_element_link (source, demuxer);
   gst_element_link_many(source, decoder, conv, sink, NULL);
 
-  printf("3.2\n");
-
   //g_signal_connect (demuxer, "pad-added", G_CALLBACK (on_pad_added), decoder);
-
-  printf("4\n");
 
   // Set the pipeline to "playing" state
   g_print ("Now playing: %s\n", filename);
@@ -221,7 +211,7 @@ static void activate (GtkApplication* app,
 
   button = gtk_button_new_with_label("Test Play");
   g_signal_connect(button, "clicked", G_CALLBACK(btn_clk), NULL);
-  //g_signal_connect_swapped(button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
+  //g_signal_connect_swapped(button, "clicked", G_CALLBACK(gtk_widget_destroy), window);
 
   file_open_btn = gtk_button_new_with_label("Open...");
   g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), NULL);
@@ -247,9 +237,6 @@ int main(int argc, char **argv)
 
   /* Initialisation */
   gst_init (&argc, &argv);
-
-  // gst_start("piano2-Audacity1.2.5.mp3");
-  // gst_start("file_example_MP3_5MG.mp3");
 
   app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
   g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);
