@@ -146,9 +146,9 @@ static void file_open_btn_click(GtkWidget *widget,
   GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
   gint res;
 
-  GtkWidget *parent = gtk_widget_get_toplevel(widget);
+  GtkWindow *parent = gtk_widget_get_parent_window(widget);
   dialog = gtk_file_chooser_dialog_new ("Open File",
-      GTK_WIDGET(parent),
+      parent,
       action,
       "_Cancel",
       GTK_RESPONSE_CANCEL,
@@ -191,10 +191,14 @@ static void activate(GtkApplication* app,
   GtkWidget *file_open_btn;
   GtkWidget *button_box;
   GtkWidget *list_box;
+  GtkWidget *grid_box;
+  GtkWidget *status_bar;
 
   g_print("Enter activate\n");
+  
+  grid_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 20);
 
-  window = gtk_application_window_new (app);
+  window = gtk_application_window_new(app);
   gtk_window_set_title(GTK_WINDOW (window), "Window");
   gtk_window_set_default_size(GTK_WINDOW (window), 800, 600);
 
@@ -208,6 +212,10 @@ static void activate(GtkApplication* app,
   file_open_btn = gtk_button_new_with_label("Open...");
   g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), NULL);
   //g_signal_connect(button, "clicked", G_CALLBACK(btn_clk), NULL);
+
+
+  // Status bar
+  status_bar = gtk_statusbar_new();
 
   list_box = gtk_list_box_new();
   add_list_item(list_box, "Chickens");
