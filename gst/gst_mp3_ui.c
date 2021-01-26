@@ -4,7 +4,6 @@
 
 typedef struct _stream_info
 {
-  GMainLoop *loop;
   GstElement *pipeline;
   guint bus_watch_id;
 } stream_info;
@@ -14,7 +13,6 @@ static void gst_cleanup();
 static void dump_info(stream_info *data)
 {
   g_print("\n-----------------------------------------------------------------------------\n");
-  g_print("loop         = %p\n", data->loop);
   g_print("pipline      = %p\n", data->pipeline);
   g_print("bus_watch_id = %d\n", data->bus_watch_id);
   g_print("-----------------------------------------------------------------------------\n");
@@ -52,7 +50,6 @@ static gboolean bus_call(GstBus *bus,
         g_printerr("Error: %s\n", error->message);
         g_error_free(error);
 
-        //g_main_loop_quit (loop);
         break;
       }
     default:
@@ -85,7 +82,6 @@ static void gst_cleanup(stream_info *data)
   g_print("Deleting pipeline\n");
   gst_object_unref(GST_OBJECT(data->pipeline));
   g_source_remove(data->bus_watch_id);
-  //g_main_loop_unref(loop);
 }
 
 static void gst_start(char *filename)
@@ -98,7 +94,7 @@ static void gst_start(char *filename)
   stream_info *data;
 
   data = g_new(stream_info, 1);
-
+    
   /* Create gstreamer elements */
   data->pipeline = gst_pipeline_new("audio-player");
   source = gst_element_factory_make("filesrc", "file-source");
@@ -127,19 +123,13 @@ static void gst_start(char *filename)
       source, decoder, conv, sink, NULL);
   printf("3.1\n");
 
-  /* we link the elements together */
-  /* file-source -> ogg-demuxer ~> vorbis-decoder -> converter -> alsa-output */
-  //gst_element_link (source, demuxer);
   gst_element_link_many(source, decoder, conv, sink, NULL);
 
-  //g_signal_connect (demuxer, "pad-added", G_CALLBACK (on_pad_added), decoder);
-
   // Set the pipeline to "playing" state
-  g_print ("Now playing: %s\n", filename);
+  g_print("Now playing: %s\n", filename);
   gst_element_set_state(data->pipeline, GST_STATE_PLAYING);
 
-  /* Iterate */
-  g_print ("Running...\n");
+  g_print("Running...\n");
 }
 
 static void btn_clk(GtkWidget *widget,
