@@ -18,6 +18,15 @@ typedef struct _stream_info
 static void gst_cleanup();
 
 
+static void dump_info(stream_info *data)
+{
+  g_print("\n-----------------------------------------------------------------------------\n");
+  g_print("loop         = %p\n", data->loop);
+  g_print("pipline      = %p\n", data->pipeline);
+  g_print("bus_watch_id = %d\n", data->bus_watch_id);
+  g_print("-----------------------------------------------------------------------------\n");
+}
+
 static gboolean bus_call(GstBus *bus,
     GstMessage *msg,
     gpointer data)
@@ -29,6 +38,9 @@ static gboolean bus_call(GstBus *bus,
   {
     case GST_MESSAGE_EOS:
       g_print ("End of stream\n");
+
+      dump_info(data);
+
       gst_cleanup(data);
       g_free(data);
       break;
