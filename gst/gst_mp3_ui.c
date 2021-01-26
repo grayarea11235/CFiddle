@@ -64,14 +64,16 @@ static void gst_cleanup()
   //gst_object_unref(GST_OBJECT (pipeline));
   //g_source_remove(bus_watch_id);
   //g_main_loop_unref(loop);
-
 }
 
-void gst_start(char *filename)
+static void gst_start(char *filename)
 {
   GMainLoop *loop;
-
-  GstElement *pipeline, *source, *decoder, *conv, *sink;
+  GstElement *pipeline, 
+             *source, 
+             *decoder, 
+             *conv, 
+             *sink;
   GstBus *bus;
   guint bus_watch_id;
 
