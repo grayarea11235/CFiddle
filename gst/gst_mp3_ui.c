@@ -1,6 +1,15 @@
 #include <gtk/gtk.h>
 #include <gst/gst.h>
 
+
+static void clean_gst()
+{
+//  gst_element_set_state(pipeline, GST_STATE_NULL);
+//  g_print ("Deleting pipeline\n");
+//  gst_object_unref(GST_OBJECT(pipeline));
+//  g_source_remove(bus_watch_id);
+}
+
 static gboolean bus_call (GstBus     *bus,
     GstMessage *msg,
     gpointer    data)
@@ -39,8 +48,7 @@ static gboolean bus_call (GstBus     *bus,
   return TRUE;
 }
 
-  static void
-on_pad_added (GstElement *element,
+static void on_pad_added (GstElement *element,
     GstPad     *pad,
     gpointer    data)
 {
@@ -215,7 +223,7 @@ int main(int argc, char **argv)
   /* Initialisation */
   gst_init (&argc, &argv);
 
-  //  init_gst("piano2-Audacity1.2.5.mp3");
+  init_gst("piano2-Audacity1.2.5.mp3");
   //init_gst("file_example_MP3_5MG.mp3");
 
   app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
