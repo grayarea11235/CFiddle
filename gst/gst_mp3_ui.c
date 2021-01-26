@@ -183,14 +183,16 @@ void add_list_item(GtkWidget *listbox, char *text)
 }
 
 
-static void activate (GtkApplication* app,
-    gpointer        user_data)
+static void activate(GtkApplication* app,
+    gpointer user_data)
 {
   GtkWidget *window;
   GtkWidget *button;
   GtkWidget *file_open_btn;
   GtkWidget *button_box;
   GtkWidget *list_box;
+
+  g_print("Enter activate\n");
 
   window = gtk_application_window_new (app);
   gtk_window_set_title(GTK_WINDOW (window), "Window");
@@ -225,8 +227,12 @@ int main(int argc, char **argv)
   GtkApplication *app;
   int status;
 
-  /* Initialisation */
-  gst_init (&argc, &argv);
+  g_print("%s started.\n", argv[0]);
+
+  // Initialisation
+  gst_init(&argc, &argv);
+
+  g_print("GST is init\n");
 
   app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
   g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);
