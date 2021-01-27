@@ -187,21 +187,50 @@ static void activate(GtkApplication* app,
     gpointer user_data)
 {
   GtkWidget *window;
-  GtkWidget *button;
+  GtkWidget *play_button;
+  GtkWidget *stop_button;
   GtkWidget *file_open_btn;
   GtkWidget *button_box;
   GtkWidget *list_box;
   GtkWidget *grid_box;
   GtkWidget *status_bar;
+  GtkWidget *grid;
 
-  g_print("Enter activate\n");
-  
-  grid_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 20);
 
   window = gtk_application_window_new(app);
+
   gtk_window_set_title(GTK_WINDOW (window), "Window");
   gtk_window_set_default_size(GTK_WINDOW (window), 800, 600);
 
+  grid = gtk_grid_new();
+  gtk_container_add(GTK_CONTAINER(window), grid);
+
+  // Make the button box
+  button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
+
+  list_box = gtk_list_box_new();
+  add_list_item(list_box, "Chickens");
+  add_list_item(list_box, "Cows");
+  add_list_item(list_box, "Goats");
+  gtk_grid_attach(GTK_GRID(grid), list_box, 0, 0, 1, 1);
+
+
+  play_button = gtk_button_new_with_label("Play");
+  g_signal_connect(play_button, "clicked", G_CALLBACK(btn_clk), NULL);
+  //g_signal_connect_swapped(button, "clicked", G_CALLBACK(gtk_widget_destroy), window);
+
+  stop_button = gtk_button_new_with_label("Stop");
+//  g_signal_connect(play_button, "clicked", G_CALLBACK(stop_btn_clk), NULL);
+  
+  file_open_btn = gtk_button_new_with_label("Open...");
+  g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), NULL);
+
+  gtk_container_add(GTK_CONTAINER(button_box), play_button);
+  gtk_container_add(GTK_CONTAINER(button_box), stop_button);
+  gtk_container_add(GTK_CONTAINER(button_box), file_open_btn);
+
+  gtk_grid_attach(GTK_GRID(grid), button_box, 0, 1, 1, 1);
+/*
   button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add(GTK_CONTAINER(window), button_box);
 
@@ -226,6 +255,7 @@ static void activate(GtkApplication* app,
   gtk_container_add(GTK_CONTAINER (button_box), button);
   gtk_container_add(GTK_CONTAINER (button_box), file_open_btn);
   gtk_container_add(GTK_CONTAINER (button_box), list_box);
+*/
 
   gtk_widget_show_all(window);
 }
