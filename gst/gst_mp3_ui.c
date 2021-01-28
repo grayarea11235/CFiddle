@@ -1,7 +1,6 @@
 #include <gtk/gtk.h>
 #include <gst/gst.h>
 
-
 typedef struct _stream_info
 {
   GstElement *pipeline;
@@ -139,7 +138,8 @@ static void btn_clk(GtkWidget *widget,
   gst_start("piano2-Audacity1.2.5.mp3");
 }
 
-static void file_open_btn_click(GtkWidget *widget,
+static void file_open_btn_click(
+    GtkWidget *widget,
     gpointer data)
 {
   GtkWidget *dialog;
@@ -156,7 +156,7 @@ static void file_open_btn_click(GtkWidget *widget,
       GTK_RESPONSE_ACCEPT,
       NULL);
 
-  res = gtk_dialog_run(GTK_DIALOG (dialog));
+  res = gtk_dialog_run(GTK_DIALOG(dialog));
   if (res == GTK_RESPONSE_ACCEPT)
   {
     char *filename;
@@ -168,7 +168,6 @@ static void file_open_btn_click(GtkWidget *widget,
   }
 
   gtk_widget_destroy(dialog);
-
 
   g_print("file_open_btn_click\n");
 }
@@ -182,6 +181,31 @@ void add_list_item(GtkWidget *listbox, char *text)
   gtk_list_box_insert(GTK_LIST_BOX(listbox), new_label, -1);
 }
 
+void configure_callback(GtkWindow *window, 
+    GdkEvent *event, 
+    gpointer data) {
+
+   int x, y;
+   int width, height;
+   GString *buf;
+   GtkGrid *grid = GTK_GRID(data);
+
+   x = event->configure.x;
+   y = event->configure.y;
+   width = event->configure.width;
+   height = event->configure.height;
+   
+   gtk_widget_set_size_request(grid, 10, 10);
+
+   g_print("In config event. x=%d y=%d width=%d height=%d data=%p\n", x, y, width, height, data);
+   
+   buf = g_string_new(NULL);   
+   g_string_printf(buf, "%d, %d", x, y);
+   
+   //gtk_window_set_title(window, buf->str);
+   
+   g_string_free(buf, TRUE);
+}
 
 static void activate(GtkApplication* app,
     gpointer user_data)
@@ -196,23 +220,47 @@ static void activate(GtkApplication* app,
   GtkWidget *status_bar;
   GtkWidget *grid;
 
-
   window = gtk_application_window_new(app);
 
-  gtk_window_set_title(GTK_WINDOW (window), "Window");
-  gtk_window_set_default_size(GTK_WINDOW (window), 800, 600);
+  gtk_window_set_title(GTK_WINDOW(window), "Window");
+  gtk_window_set_default_size(GTK_WINDOW(window), 1024, 768);
+
+  gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
   grid = gtk_grid_new();
+
+  gtk_widget_add_events(GTK_WIDGET(window), GDK_CONFIGURE);
+  g_signal_connect(G_OBJECT(window), "configure-event",
+      G_CALLBACK(configure_callback), grid);
+
+  gtk_widget_set_halign(grid, GTK_ALIGN_FILL);
+  gtk_widget_set_valign(grid, GTK_ALIGN_FILL);
+  gtk_widget_set_hexpand(grid, TRUE);
+  gtk_widget_set_vexpand(grid, TRUE);
+  gtk_container_set_resize_mode(GTK_CONTAINER(grid), GTK_RESIZE_PARENT);
+
   gtk_container_add(GTK_CONTAINER(window), grid);
+  gtk_layout_set_size(grid, 800, 600);
 
   // Make the button box
   button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_set_resize_mode(GTK_CONTAINER(button_box), GTK_RESIZE_PARENT);
+
+  gtk_widget_set_halign(button_box, GTK_ALIGN_FILL);
+  gtk_widget_set_valign(button_box, GTK_ALIGN_FILL);
+  gtk_widget_set_hexpand(button_box, TRUE);
+  gtk_widget_set_vexpand(button_box, TRUE);
 
   list_box = gtk_list_box_new();
   add_list_item(list_box, "Chickens");
   add_list_item(list_box, "Cows");
   add_list_item(list_box, "Goats");
   gtk_grid_attach(GTK_GRID(grid), list_box, 0, 0, 1, 1);
+
+  gtk_widget_set_halign(list_box, GTK_ALIGN_FILL);
+  gtk_widget_set_valign(list_box, GTK_ALIGN_FILL);
+  gtk_widget_set_hexpand(list_box, TRUE);
+  gtk_widget_set_vexpand(list_box, TRUE);
 
 
   play_button = gtk_button_new_with_label("Play");

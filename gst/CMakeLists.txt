@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.10)
 # set the project name
 project(gst)
 
+set(CMAKE_BUILD_TYPE Debug)
+
+
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK REQUIRED gtk+-3.0)
 pkg_check_modules(GST REQUIRED gstreamer-1.0)
