@@ -197,7 +197,7 @@ void configure_callback(GtkWindow *window,
    
    gtk_widget_set_size_request(grid, 10, 10);
 
-   g_print("In config event. x=%d y=%d width=%d height=%d data=%p\n", x, y, width, height, data);
+//   g_print("In config event. x=%d y=%d width=%d height=%d data=%p\n", x, y, width, height, data);
    
    buf = g_string_new(NULL);   
    g_string_printf(buf, "%d, %d", x, y);
