@@ -35,12 +35,18 @@ void scan_dir(char *path)
       printf("full_path = %s ", full_path);
 
 
-      apr_status_t res;
-      res = apr_filepath_merge(char **  	newpath,
-          path,
-          ep->d_name,
-          apr_int32_t  	flags,
-          apr_pool_t *  	p);
+    //  void *pool = apr_palloc(apr_pool_t *  	p,
+		//apr_size_t  	size 
+//	) 		
+
+
+      char *newpath;
+//      apr_status_t res;
+ //     res = apr_filepath_merge(char **  	newpath,
+  //        path,
+   //       ep->d_name,
+    //      apr_int32_t  	flags,
+      //    apr_pool_t *  	p);
 
       if (stat(full_path, &statbuf) != -1)
       {

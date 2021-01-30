@@ -207,6 +207,25 @@ void configure_callback(GtkWindow *window,
    g_string_free(buf, TRUE);
 }
 
+void init_list(GtkWidget *list) 
+{
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  GtkListStore *store;
+
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes("List Items",
+          renderer, "text", LIST_ITEM, NULL);
+  gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+
+  store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING);
+
+  gtk_tree_view_set_model(GTK_TREE_VIEW(list), 
+      GTK_TREE_MODEL(store));
+
+  g_object_unref(store);
+}
+
 static void activate(GtkApplication* app,
     gpointer user_data)
 {
@@ -219,6 +238,8 @@ static void activate(GtkApplication* app,
   GtkWidget *grid_box;
   GtkWidget *status_bar;
   GtkWidget *grid;
+  GtkWidget *tree_view;
+  GtkTreeSelection *selection;
 
   window = gtk_application_window_new(app);
 
@@ -242,6 +263,18 @@ static void activate(GtkApplication* app,
   gtk_container_add(GTK_CONTAINER(window), grid);
   gtk_layout_set_size(grid, 800, 600);
 
+  tree_view = gtk_tree_view_new();
+  gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree_view), FALSE);
+
+  init_list(tree_view);
+  add_to_list(tree_view, "Aliens");
+  add_to_list(tree_view, "Leon");
+  add_to_list(tree_view, "The Verdict");
+  add_to_list(tree_view, "North Face");
+  add_to_list(tree_view, "Der Untergang");
+
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
+
   // Make the button box
   button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
   gtk_container_set_resize_mode(GTK_CONTAINER(button_box), GTK_RESIZE_PARENT);
@@ -252,10 +285,11 @@ static void activate(GtkApplication* app,
   gtk_widget_set_vexpand(button_box, TRUE);
 
   list_box = gtk_list_box_new();
-  add_list_item(list_box, "Chickens");
-  add_list_item(list_box, "Cows");
-  add_list_item(list_box, "Goats");
-  gtk_grid_attach(GTK_GRID(grid), list_box, 0, 0, 1, 1);
+  add_list_item(list_box, "Track 1");
+  add_list_item(list_box, "Track 2");
+  add_list_item(list_box, "Track 3");
+  gtk_grid_attach(GTK_GRID(grid), tree_view, 0, 0, 1, 1);
+  //gtk_grid_attach(GTK_GRID(grid), list_box, 0, 0, 1, 1);
 
   gtk_widget_set_halign(list_box, GTK_ALIGN_FILL);
   gtk_widget_set_valign(list_box, GTK_ALIGN_FILL);
