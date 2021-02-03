@@ -134,7 +134,7 @@ static void gst_start(char *filename)
 static void btn_clk(GtkWidget *widget,
     gpointer data)
 {
-  g_print ("Button push\n");
+  g_print("Button push\n");
   gst_start("piano2-Audacity1.2.5.mp3");
 }
 
@@ -183,8 +183,8 @@ void add_list_item(GtkWidget *listbox, char *text)
 
 void configure_callback(GtkWindow *window, 
     GdkEvent *event, 
-    gpointer data) {
-
+    gpointer data) 
+{
    int x, y;
    int width, height;
    GString *buf;
@@ -213,15 +213,15 @@ void init_list(GtkWidget *list)
   GtkTreeViewColumn *column;
   GtkListStore *store;
 
-  renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes("List Items",
-          renderer, "text", LIST_ITEM, NULL);
-  gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
-
-  store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING);
-
-  gtk_tree_view_set_model(GTK_TREE_VIEW(list), 
-      GTK_TREE_MODEL(store));
+//  renderer = gtk_cell_renderer_text_new();
+//  column = gtk_tree_view_column_new_with_attributes("List Items",
+//          renderer, "text", LIST_ITEM, NULL);
+//  gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+//
+//  store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING);
+//
+//  gtk_tree_view_set_model(GTK_TREE_VIEW(list), 
+//      GTK_TREE_MODEL(store));
 
   g_object_unref(store);
 }
@@ -267,11 +267,11 @@ static void activate(GtkApplication* app,
   gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree_view), FALSE);
 
   init_list(tree_view);
-  add_to_list(tree_view, "Aliens");
-  add_to_list(tree_view, "Leon");
-  add_to_list(tree_view, "The Verdict");
-  add_to_list(tree_view, "North Face");
-  add_to_list(tree_view, "Der Untergang");
+  //add_to_list(tree_view, "Aliens");
+  //add_to_list(tree_view, "Leon");
+  //add_to_list(tree_view, "The Verdict");
+  //add_to_list(tree_view, "North Face");
+  //add_to_list(tree_view, "Der Untergang");
 
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
 
@@ -295,7 +295,6 @@ static void activate(GtkApplication* app,
   gtk_widget_set_valign(list_box, GTK_ALIGN_FILL);
   gtk_widget_set_hexpand(list_box, TRUE);
   gtk_widget_set_vexpand(list_box, TRUE);
-
 
   play_button = gtk_button_new_with_label("Play");
   g_signal_connect(play_button, "clicked", G_CALLBACK(btn_clk), NULL);
