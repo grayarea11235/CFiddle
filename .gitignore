@@ -11,3 +11,6 @@ read_web
 simp_client
 simp_server
 dbus_example
+CMakeCache.txt
+cmake_install.cmake
+sqlite_getversion2
