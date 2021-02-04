@@ -215,8 +215,8 @@ void init_list(GtkWidget *list)
   GtkListStore *store;
 
   renderer = gtk_cell_renderer_text_new();
-  column = gtk_tree_view_column_new_with_attributes("List Items",
-          renderer, "text", LIST_ITEM, NULL);
+//  column = gtk_tree_view_column_new_with_attributes("List Items",
+//          renderer, "text", LIST_ITEM, NULL);
 //  gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
 //
 //  store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING);
