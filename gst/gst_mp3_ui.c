@@ -131,7 +131,8 @@ static void gst_start(char *filename)
   g_print("Running...\n");
 }
 
-static void btn_clk(GtkWidget *widget,
+static void btn_clk(
+    GtkWidget *widget,
     gpointer data)
 {
   g_print("Button push\n");
@@ -213,9 +214,9 @@ void init_list(GtkWidget *list)
   GtkTreeViewColumn *column;
   GtkListStore *store;
 
-//  renderer = gtk_cell_renderer_text_new();
-//  column = gtk_tree_view_column_new_with_attributes("List Items",
-//          renderer, "text", LIST_ITEM, NULL);
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes("List Items",
+          renderer, "text", LIST_ITEM, NULL);
 //  gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
 //
 //  store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING);
@@ -288,8 +289,8 @@ static void activate(GtkApplication* app,
   add_list_item(list_box, "Track 1");
   add_list_item(list_box, "Track 2");
   add_list_item(list_box, "Track 3");
-  gtk_grid_attach(GTK_GRID(grid), tree_view, 0, 0, 1, 1);
-  //gtk_grid_attach(GTK_GRID(grid), list_box, 0, 0, 1, 1);
+  //gtk_grid_attach(GTK_GRID(grid), tree_view, 0, 0, 1, 1);
+  gtk_grid_attach(GTK_GRID(grid), list_box, 0, 0, 1, 1);
 
   gtk_widget_set_halign(list_box, GTK_ALIGN_FILL);
   gtk_widget_set_valign(list_box, GTK_ALIGN_FILL);
