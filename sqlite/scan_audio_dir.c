@@ -30,9 +30,12 @@ int main(int argc, char *argv[])
 //  scan_audio_dir("/home/cpd/Downloads/Ursula K. Le Guin/Hainish Cycle/01 - The Dispossessed");
 //  scan_audio_dir("/home/cpd/Downloads/Dennis E. Taylor - 2020 - Bobiverse, Book 4 - Heaven's River (Sci-Fi)/");
 
+  g_print("argc = %d\n", argc);
+
   if (argc != 2)
   {
-    g_print("Usage : %s <filename/uri>\n", argv[0]);
+    g_print("Usage : %s <directory>\n", argv[0]);
+    exit(EXIT_FAILURE);
   }
 
   // /home/cpd/Downloads/earthsea/1.1\ -\ Shadow.mp3 
