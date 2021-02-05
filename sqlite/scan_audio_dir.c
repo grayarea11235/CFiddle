@@ -1,6 +1,7 @@
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/stat.h>
 #include </usr/include/glib-2.0/glib.h>
 
 int scan_audio_dir(const char *directory)
@@ -15,7 +16,9 @@ int scan_audio_dir(const char *directory)
   while ((filename = g_dir_read_name(dir)))
   {
     printf("%s\n", filename);
-    g_stat(filename);
+    struct stat buf;
+
+    g_stat(filename, &buf);
   }
 
   return res;
