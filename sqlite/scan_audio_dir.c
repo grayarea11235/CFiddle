@@ -21,8 +21,12 @@ int scan_audio_dir(const char *directory)
 
     g_stat(filename, &buf);
 
+<<<<<<< HEAD
     g_print("buf.st_size=%ld\n", buf.st_size);   
     
+=======
+    //g_print("%d\n", buf
+>>>>>>> f87ceba26f29887706a692ad1afbd7c764b325ad
   }
 
   return res;
