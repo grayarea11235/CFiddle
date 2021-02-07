@@ -8,6 +8,7 @@ typedef struct _stream_info
 } stream_info;
 
 static void gst_cleanup();
+static void dump_info(stream_info *data);
 
 static void dump_info(stream_info *data)
 {
@@ -58,7 +59,8 @@ static gboolean bus_call(GstBus *bus,
   return TRUE;
 }
 
-static void on_pad_added(GstElement *element,
+static void on_pad_added(
+    GstElement *element,
     GstPad     *pad,
     gpointer    data)
 {
@@ -76,14 +78,14 @@ static void gst_cleanup(stream_info *data)
 {
   g_print("In gst_cleanup()\n");
 
-
   gst_element_set_state(data->pipeline, GST_STATE_NULL);
   g_print("Deleting pipeline\n");
   gst_object_unref(GST_OBJECT(data->pipeline));
   g_source_remove(data->bus_watch_id);
 }
 
-static void gst_start(char *filename)
+static void gst_start(
+    char *filename)
 {
   GstElement *source, 
              *decoder, 
