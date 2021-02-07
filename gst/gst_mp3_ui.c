@@ -18,7 +18,8 @@ static void dump_info(stream_info *data)
   g_print("-----------------------------------------------------------------------------\n");
 }
 
-static gboolean bus_call(GstBus *bus,
+static gboolean bus_call(
+    GstBus *bus,
     GstMessage *msg,
     gpointer data)
 {

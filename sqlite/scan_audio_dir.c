@@ -19,6 +19,8 @@ int scan_audio_dir(const char *directory)
     struct stat buf;
 
     g_stat(filename, &buf);
+
+    //g_print("%d\n", buf
   }
 
   return res;
