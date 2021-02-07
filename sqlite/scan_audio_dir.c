@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>
-#include </usr/include/glib-2.0/glib.h>
+#include <glib/gstdio.h>
+#include <glib.h>
 
 int scan_audio_dir(const char *directory)
 {
@@ -16,9 +17,12 @@ int scan_audio_dir(const char *directory)
   while ((filename = g_dir_read_name(dir)))
   {
     printf("%s\n", filename);
-    struct stat buf;
+    GStatBuf buf;
 
     g_stat(filename, &buf);
+
+    g_print("buf.st_size=%ld\n", buf.st_size);   
+    
   }
 
   return res;
