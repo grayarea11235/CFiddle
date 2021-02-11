@@ -69,10 +69,10 @@ static void on_pad_added(
   GstElement *decoder = (GstElement *) data;
 
   /* We can now link this pad with the vorbis-decoder sink pad */
-  g_print ("Dynamic pad created, linking demuxer/decoder\n");
-  sinkpad = gst_element_get_static_pad (decoder, "sink");
-  gst_pad_link (pad, sinkpad);
-  gst_object_unref (sinkpad);
+  g_print("Dynamic pad created, linking demuxer/decoder\n");
+  sinkpad = gst_element_get_static_pad(decoder, "sink");
+  gst_pad_link(pad, sinkpad);
+  gst_object_unref(sinkpad);
 }
 
 static void gst_cleanup(stream_info *data)

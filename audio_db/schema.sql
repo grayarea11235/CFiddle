@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS books (
 	description text
 );
 
+INSERT INTO books(1, 'Test Book', 'Test Author', 'This is a test book. Please ignore.'); 
+
 
 CREATE TABLE IF NOT EXISTS tracks (
   id integer PRIMARY KEY,
@@ -14,5 +16,8 @@ CREATE TABLE IF NOT EXISTS tracks (
   length int
   );
 
-
-
+CREATE TABLE IF NOT EXISTS bookmarks (
+  id integer PRIMARY KEY,
+  track_id int,
+  location int
+  );

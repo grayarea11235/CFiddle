@@ -2,14 +2,23 @@
 #include <gst/gst.h>
 #include <gst/pbutils/pbutils.h>
 
-/* Structure to contain all our information, so we can pass it around */
-typedef struct _CustomData {
+/* 
+ * Structure to contain all our information, so we can pass it around 
+ */
+typedef struct _CustomData 
+{
   GstDiscoverer *discoverer;
   GMainLoop *loop;
 } CustomData;
 
-/* Print a tag in a human-readable format (name: value) */
-static void print_tag_foreach (const GstTagList *tags, const gchar *tag, gpointer user_data) {
+/* 
+ * Print a tag in a human-readable format (name: value) #
+ */
+static void print_tag_foreach(
+    const GstTagList *tags, 
+    const gchar *tag, 
+    gpointer user_data) 
+{
   GValue val = { 0, };
   gchar *str;
   gint depth = GPOINTER_TO_INT (user_data);
@@ -27,15 +36,21 @@ static void print_tag_foreach (const GstTagList *tags, const gchar *tag, gpointe
   g_value_unset (&val);
 }
 
-/* Print information regarding a stream */
-static void print_stream_info (GstDiscovererStreamInfo *info, gint depth) {
+/* 
+ * Print information regarding a stream 
+ */
+static void print_stream_info(
+    GstDiscovererStreamInfo *info, 
+    gint depth) 
+{
   gchar *desc = NULL;
   GstCaps *caps;
   const GstTagList *tags;
 
   caps = gst_discoverer_stream_info_get_caps (info);
 
-  if (caps) {
+  if (caps) 
+  {
     if (gst_caps_is_fixed (caps))
       desc = gst_pb_utils_get_codec_description (caps);
     else
@@ -45,20 +60,25 @@ static void print_stream_info (GstDiscovererStreamInfo *info, gint depth) {
 
   g_print ("%*s%s: %s\n", 2 * depth, " ", gst_discoverer_stream_info_get_stream_type_nick (info), (desc ? desc : ""));
 
-  if (desc) {
+  if (desc) 
+  {
     g_free (desc);
     desc = NULL;
   }
 
   tags = gst_discoverer_stream_info_get_tags (info);
-  if (tags) {
+  if (tags) 
+  {
     g_print ("%*sTags:\n", 2 * (depth + 1), " ");
     gst_tag_list_foreach (tags, print_tag_foreach, GINT_TO_POINTER (depth + 2));
   }
 }
 
 /* Print information regarding a stream and its substreams, if any */
-static void print_topology (GstDiscovererStreamInfo *info, gint depth) {
+static void print_topology(
+    GstDiscovererStreamInfo *info, 
+    gint depth) 
+{
   GstDiscovererStreamInfo *next;
 
   if (!info)
@@ -92,76 +112,85 @@ static void on_discovered_cb (GstDiscoverer *discoverer, GstDiscovererInfo *info
 
   uri = gst_discoverer_info_get_uri (info);
   result = gst_discoverer_info_get_result (info);
-  switch (result) {
+  switch (result) 
+  {
     case GST_DISCOVERER_URI_INVALID:
-      g_print ("Invalid URI '%s'\n", uri);
+      g_print("Invalid URI '%s'\n", uri);
       break;
     case GST_DISCOVERER_ERROR:
-      g_print ("Discoverer error: %s\n", err->message);
+      g_print("Discoverer error: %s\n", err->message);
       break;
     case GST_DISCOVERER_TIMEOUT:
-      g_print ("Timeout\n");
+      g_print("Timeout\n");
       break;
     case GST_DISCOVERER_BUSY:
-      g_print ("Busy\n");
+      g_print("Busy\n");
       break;
-    case GST_DISCOVERER_MISSING_PLUGINS:{
-                                          const GstStructure *s;
-                                          gchar *str;
+    case GST_DISCOVERER_MISSING_PLUGINS:
+      {
+        const GstStructure *s;
+        gchar *str;
 
-                                          s = gst_discoverer_info_get_misc (info);
-                                          str = gst_structure_to_string (s);
+        s = gst_discoverer_info_get_misc(info);
+        str = gst_structure_to_string(s);
 
-                                          g_print ("Missing plugins: %s\n", str);
-                                          g_free (str);
-                                          break;
-                                        }
+        g_print("Missing plugins: %s\n", str);
+        g_free(str);
+        break;
+      }
     case GST_DISCOVERER_OK:
-                                        g_print ("Discovered '%s'\n", uri);
-                                        break;
+      g_print("Discovered '%s'\n", uri);
+      break;
   }
 
-  if (result != GST_DISCOVERER_OK) {
-    g_printerr ("This URI cannot be played\n");
+  if (result != GST_DISCOVERER_OK) 
+  {
+    g_printerr("This URI cannot be played\n");
     return;
   }
 
-  /* If we got no error, show the retrieved information */
+  /* 
+   * If we got no error, show the retrieved information 
+   */
 
-  g_print ("\nDuration: %" GST_TIME_FORMAT "\n", GST_TIME_ARGS (gst_discoverer_info_get_duration (info)));
+  g_print("\nDuration: %" GST_TIME_FORMAT "\n", GST_TIME_ARGS (gst_discoverer_info_get_duration (info)));
 
-  tags = gst_discoverer_info_get_tags (info);
-  if (tags) {
-    g_print ("Tags:\n");
-    gst_tag_list_foreach (tags, print_tag_foreach, GINT_TO_POINTER (1));
+  tags = gst_discoverer_info_get_tags(info);
+  if (tags) 
+  {
+    g_print("Tags:\n");
+    gst_tag_list_foreach(tags, print_tag_foreach, GINT_TO_POINTER (1));
   }
 
-  g_print ("Seekable: %s\n", (gst_discoverer_info_get_seekable (info) ? "yes" : "no"));
+  g_print("Seekable: %s\n", (gst_discoverer_info_get_seekable (info) ? "yes" : "no"));
 
-  g_print ("\n");
+  g_print("\n");
 
-  sinfo = gst_discoverer_info_get_stream_info (info);
+  sinfo = gst_discoverer_info_get_stream_info(info);
   if (!sinfo)
     return;
 
-  g_print ("Stream information:\n");
+  g_print("Stream information:\n");
 
-  print_topology (sinfo, 1);
+  print_topology(sinfo, 1);
 
-  gst_discoverer_stream_info_unref (sinfo);
+  gst_discoverer_stream_info_unref(sinfo);
 
-  g_print ("\n");
+  g_print("\n");
 }
 
-/* This function is called when the discoverer has finished examining
- * all the URIs we provided.*/
+/* 
+ * This function is called when the discoverer has finished examining
+ * all the URIs we provided.
+ * */
 static void on_finished_cb (GstDiscoverer *discoverer, CustomData *data) {
-  g_print ("Finished discovering\n");
+  g_print("Finished discovering\n");
 
-  g_main_loop_quit (data->loop);
+  g_main_loop_quit(data->loop);
 }
 
-int main (int argc, char **argv) {
+int main (int argc, char **argv) 
+{
   CustomData data;
   GError *err = NULL;
   gchar *uri = "https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm";
