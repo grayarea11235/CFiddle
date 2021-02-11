@@ -95,6 +95,8 @@ static void gst_start(
   GstBus *bus;
   stream_info *data;
 
+  g_print("In gst_start()\n");
+
   data = g_new(stream_info, 1);
     
   /* Create gstreamer elements */
@@ -230,9 +232,12 @@ void init_list(GtkWidget *list)
   g_object_unref(store);
 }
 
-static void activate(GtkApplication* app,
+static void activate(
+    GtkApplication* app,
     gpointer user_data)
 {
+  g_print("In activate\n");
+  
   GtkWidget *window;
   GtkWidget *play_button;
   GtkWidget *stop_button;
@@ -270,7 +275,9 @@ static void activate(GtkApplication* app,
   tree_view = gtk_tree_view_new();
   gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree_view), FALSE);
 
-  init_list(tree_view);
+g_print("1\n");
+
+  //init_list(tree_view);
   //add_to_list(tree_view, "Aliens");
   //add_to_list(tree_view, "Leon");
   //add_to_list(tree_view, "The Verdict");
@@ -278,6 +285,7 @@ static void activate(GtkApplication* app,
   //add_to_list(tree_view, "Der Untergang");
 
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
+g_print("2\n");
 
   // Make the button box
   button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
@@ -358,7 +366,13 @@ int main(int argc, char **argv)
   g_print("GST is init\n");
 
   app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
-  g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);
+
+  g_print("Application created\n");
+
+  g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
+  
+  g_print("activate signal connected... about to run\n");
+
   status = g_application_run(G_APPLICATION (app), argc, argv);
   g_object_unref(app);
 
