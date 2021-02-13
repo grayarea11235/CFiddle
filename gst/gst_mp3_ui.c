@@ -7,8 +7,28 @@ typedef struct _stream_info
   guint bus_watch_id;
 } stream_info;
 
+enum {
+  LIST_ITEM = 0,
+  N_COLUMNS
+};
+
 static void gst_cleanup();
 static void dump_info(stream_info *data);
+
+static void add_to_list(GtkWidget *list, const gchar *str) {
+    
+  GtkListStore *store;
+  GtkTreeIter iter;
+
+  store = GTK_LIST_STORE(gtk_tree_view_get_model
+      (GTK_TREE_VIEW(list)));
+
+  gtk_list_store_append(store, &iter);
+  gtk_list_store_set(store, &iter, LIST_ITEM, str, -1);
+}
+
+
+
 
 static void dump_info(stream_info *data)
 {
@@ -178,7 +198,9 @@ static void file_open_btn_click(
   g_print("file_open_btn_click\n");
 }
 
-void add_list_item(GtkWidget *listbox, char *text)
+void add_list_item(
+    GtkWidget *listbox, 
+    char *text)
 {
   GtkWidget *item;
   GtkWidget *new_label;
@@ -187,7 +209,8 @@ void add_list_item(GtkWidget *listbox, char *text)
   gtk_list_box_insert(GTK_LIST_BOX(listbox), new_label, -1);
 }
 
-void configure_callback(GtkWindow *window, 
+void configure_callback(
+    GtkWindow *window, 
     GdkEvent *event, 
     gpointer data) 
 {
@@ -220,14 +243,14 @@ void init_list(GtkWidget *list)
   GtkListStore *store;
 
   renderer = gtk_cell_renderer_text_new();
-//  column = gtk_tree_view_column_new_with_attributes("List Items",
-//          renderer, "text", LIST_ITEM, NULL);
-//  gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
-//
-//  store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING);
-//
-//  gtk_tree_view_set_model(GTK_TREE_VIEW(list), 
-//      GTK_TREE_MODEL(store));
+  column = gtk_tree_view_column_new_with_attributes("List Items",
+          renderer, "text", LIST_ITEM, NULL);
+  gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+
+  store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING);
+
+  gtk_tree_view_set_model(GTK_TREE_VIEW(list), 
+      GTK_TREE_MODEL(store));
 
   g_object_unref(store);
 }
@@ -253,7 +276,7 @@ static void activate(
   window = gtk_application_window_new(app);
 
   gtk_window_set_title(GTK_WINDOW(window), "Window");
-  gtk_window_set_default_size(GTK_WINDOW(window), 1024, 768);
+  gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
 
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
@@ -267,29 +290,25 @@ static void activate(
   gtk_widget_set_valign(grid, GTK_ALIGN_FILL);
   gtk_widget_set_hexpand(grid, TRUE);
   gtk_widget_set_vexpand(grid, TRUE);
-  gtk_container_set_resize_mode(GTK_CONTAINER(grid), GTK_RESIZE_PARENT);
+  //gtk_container_set_resize_mode(GTK_CONTAINER(grid), GTK_RESIZE_PARENT);
 
   gtk_container_add(GTK_CONTAINER(window), grid);
   gtk_layout_set_size(grid, 800, 600);
 
   tree_view = gtk_tree_view_new();
-  gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree_view), FALSE);
+  gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree_view), TRUE);
 
-g_print("1\n");
-
-  //init_list(tree_view);
-  //add_to_list(tree_view, "Aliens");
-  //add_to_list(tree_view, "Leon");
-  //add_to_list(tree_view, "The Verdict");
-  //add_to_list(tree_view, "North Face");
-  //add_to_list(tree_view, "Der Untergang");
+  init_list(tree_view);
+  add_to_list(tree_view, "Aliens");
+  add_to_list(tree_view, "Leon");
+  add_to_list(tree_view, "The Verdict");
+  add_to_list(tree_view, "North Face");
+  add_to_list(tree_view, "Der Untergang");
 
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
-g_print("2\n");
 
   // Make the button box
   button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_set_resize_mode(GTK_CONTAINER(button_box), GTK_RESIZE_PARENT);
 
   gtk_widget_set_halign(button_box, GTK_ALIGN_FILL);
   gtk_widget_set_valign(button_box, GTK_ALIGN_FILL);
@@ -300,8 +319,7 @@ g_print("2\n");
   add_list_item(list_box, "Track 1");
   add_list_item(list_box, "Track 2");
   add_list_item(list_box, "Track 3");
-  //gtk_grid_attach(GTK_GRID(grid), tree_view, 0, 0, 1, 1);
-  gtk_grid_attach(GTK_GRID(grid), list_box, 0, 0, 1, 1);
+  gtk_grid_attach(GTK_GRID(grid), tree_view, 0, 0, 1, 1);
 
   gtk_widget_set_halign(list_box, GTK_ALIGN_FILL);
   gtk_widget_set_valign(list_box, GTK_ALIGN_FILL);
