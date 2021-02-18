@@ -82,7 +82,9 @@ static void print_topology(
   GstDiscovererStreamInfo *next;
 
   if (!info)
+  {
     return;
+  }
 
   print_stream_info (info, depth);
 

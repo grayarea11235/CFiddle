@@ -15,8 +15,10 @@ enum {
 static void gst_cleanup();
 static void dump_info(stream_info *data);
 
-static void add_to_list(GtkWidget *list, const gchar *str) {
-    
+static void add_to_list(
+    GtkWidget *list, 
+    const gchar *str) 
+{
   GtkListStore *store;
   GtkTreeIter iter;
 
@@ -26,9 +28,6 @@ static void add_to_list(GtkWidget *list, const gchar *str) {
   gtk_list_store_append(store, &iter);
   gtk_list_store_set(store, &iter, LIST_ITEM, str, -1);
 }
-
-
-
 
 static void dump_info(stream_info *data)
 {
@@ -103,6 +102,10 @@ static void gst_cleanup(stream_info *data)
   g_print("Deleting pipeline\n");
   gst_object_unref(GST_OBJECT(data->pipeline));
   g_source_remove(data->bus_watch_id);
+}
+
+static void gst_pause()
+{
 }
 
 static void gst_start(
