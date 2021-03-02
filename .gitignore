@@ -12,5 +12,6 @@ simp_client
 simp_server
 dbus_example
 CMakeCache.txt
+CMakeFiles
 cmake_install.cmake
 sqlite_getversion2
