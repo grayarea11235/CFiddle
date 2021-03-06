@@ -4,16 +4,18 @@
 #include <linux/fs.h>
 #include <asm/uaccess.h>
 
-MODULE_LICENSE(“GPL”);
-MODULE_AUTHOR(“Robert W. Oliver II”);
-MODULE_DESCRIPTION(“A simple example Linux module.”);
-MODULE_VERSION(“0.01”);#define DEVICE_NAME “lkm_example”
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("cpd");
+MODULE_DESCRIPTION("A simple example Linux module.");
+MODULE_VERSION("0.01");
 
-
+#define DEVICE_NAME “lkm_example”
 #define EXAMPLE_MSG “Hello, World!\n”
-#define MSG_BUFFER_LEN 15/* Prototypes for device functions */
+#define MSG_BUFFER_LEN 15
 
-
+/* 
+ * Prototypes for device functions 
+ */
 static int device_open(struct inode *, struct file *);
 static int device_release(struct inode *, struct file *);
 static ssize_t device_read(struct file *, char *, size_t, loff_t *);
@@ -35,11 +37,17 @@ static struct file_operations file_ops =
 };
 
 /* When a process reads from our device, this gets called. */
-static ssize_t device_read(struct file *flip, char *buffer, size_t len, loff_t *offset) 
+static ssize_t device_read(
+    struct file *flip, 
+    char *buffer, 
+    size_t len, 
+    loff_t *offset) 
 {
   int bytes_read = 0;
 
-  /* If we’re at the end, loop back to the beginning */
+  /* 
+   * If we’re at the end, loop back to the beginning 
+   */
   if (*msg_ptr == 0) 
   {
     msg_ptr = msg_buffer;
@@ -63,14 +71,22 @@ static ssize_t device_read(struct file *flip, char *buffer, size_t len, loff_t *
 }
 
 /* Called when a process tries to write to our device */
-static ssize_t device_writ(struct file *flip, const char *buffer, size_t len, loff_t *offset) {
+static ssize_t device_writ(
+    struct file *flip, 
+    const char *buffer, 
+    size_t len, 
+    loff_t *offset) 
+{
   /* This is a read-only device */
-  printk(KERN_ALERT “This operation is not supported.\n”);
+  printk(KERN_ALERT "This operation is not supported.\n");
+
   return -EINVAL;
 }
 
 /* Called when a process opens our device */
-static int device_open(struct inode *inode, struct file *file) 
+static int device_open(
+    struct inode *inode, 
+    struct file *file) 
 {
   /* If device is open, return busy */
   if (device_open_count) 
@@ -84,7 +100,9 @@ static int device_open(struct inode *inode, struct file *file)
 }
 
 /* Called when a process closes our device */
-static int device_release(struct inode *inode, struct file *file) 
+static int device_release(
+    struct inode *inode, 
+    struct file *file) 
 {
   /* 
    * Decrement the open counter and usage count. 
@@ -105,16 +123,17 @@ static int __init lkm_example_init(void)
   msg_ptr = msg_buffer;
   
   /* Try to register character device */
-  major_num = register_chrdev(0, “lkm_example”, &file_ops);
+  major_num = register_chrdev(0, "lkm_example", &file_ops);
   
   if (major_num < 0) 
   {
-    printk(KERN_ALERT “Could not register device: %d\n”, major_num);
+    printk(KERN_ALERT "Could not register device: %d\n", major_num);
+    
     return major_num;
   } 
   else 
   {
-    printk(KERN_INFO “lkm_example module loaded with device major number %d\n”, major_num);
+    printk(KERN_INFO "lkm_example module loaded with device major number %d\n", major_num);
   
     return 0;
   }
@@ -124,7 +143,7 @@ static void __exit lkm_example_exit(void)
 {
   /* Remember — we have to clean up after ourselves. Unregister the character device. */
   unregister_chrdev(major_num, DEVICE_NAME);
-  printk(KERN_INFO “Goodbye, World!\n”);
+  printk(KERN_INFO "Goodbye, World!\n");
 }
 
 /* Register module functions */
