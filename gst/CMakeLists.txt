@@ -40,4 +40,3 @@ target_include_directories(gst_discover PUBLIC ${GST_INCLUDE_DIRS})
 target_link_libraries(gst_discover ${GST_LIBRARIES})
 target_include_directories(gst_discover PUBLIC ${PBUTILS_INCLUDE_DIRS})
 target_link_libraries(gst_discover ${PBUTILS_LIBRARIES})
-
