@@ -7,6 +7,14 @@ typedef struct _stream_info
   guint bus_watch_id;
 } stream_info;
 
+typedef struct _ui_info
+{
+  GtkWidget *file_label;
+} ui_info;
+
+static stream_info *data;
+static char *file_name;
+
 enum {
   LIST_ITEM = 0,
   N_COLUMNS
@@ -14,6 +22,7 @@ enum {
 
 static void gst_cleanup();
 static void dump_info(stream_info *data);
+static void gst_pause();
 
 static void add_to_list(
     GtkWidget *list, 
@@ -51,7 +60,7 @@ static gboolean bus_call(
 
       dump_info(data);
 
-      gst_cleanup(data);
+      gst_cleanup(/*data*/);
       g_free(data);
       break;
 
@@ -94,7 +103,19 @@ static void on_pad_added(
   gst_object_unref(sinkpad);
 }
 
-static void gst_cleanup(stream_info *data)
+static void gst_stop()
+{
+  g_print("In gst_stop()\n");
+
+  if (data != NULL)
+  {
+    gst_element_set_state(data->pipeline, GST_STATE_PAUSED);
+    gst_cleanup();
+  }
+}
+
+
+static void gst_cleanup(/*stream_info *data*/)
 {
   g_print("In gst_cleanup()\n");
 
@@ -102,10 +123,38 @@ static void gst_cleanup(stream_info *data)
   g_print("Deleting pipeline\n");
   gst_object_unref(GST_OBJECT(data->pipeline));
   g_source_remove(data->bus_watch_id);
+
+//  g_free(data);
+  g_print("Setting data to NULL\n");
+  data = NULL;
 }
 
 static void gst_pause()
 {
+  g_print("In gst_pause()\n");
+  GstState cur_state;
+
+  if (data != NULL)
+  {
+    gst_element_get_state(data->pipeline, &cur_state, NULL, 0); 
+    if (cur_state == GST_STATE_PAUSED)
+    {
+      g_print("PAUSED\n");
+    }
+    if (cur_state == GST_STATE_PLAYING)
+    {
+      g_print("PLAYING\n");
+    }
+
+    if (cur_state == GST_STATE_PLAYING)
+    {
+      gst_element_set_state(data->pipeline, GST_STATE_PAUSED);
+    }
+    if (cur_state == GST_STATE_PAUSED)
+    {
+      gst_element_set_state(data->pipeline, GST_STATE_PLAYING);
+    }
+  }
 }
 
 static void gst_start(
@@ -116,7 +165,14 @@ static void gst_start(
              *conv, 
              *sink;
   GstBus *bus;
-  stream_info *data;
+//  stream_info *data;
+
+  g_print("data = %p\n", data);
+
+  if (data != NULL)
+  {
+    return;
+  }
 
   g_print("In gst_start()\n");
 
@@ -174,7 +230,12 @@ static void file_open_btn_click(
   GtkWidget *dialog;
   GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
   gint res;
-
+  
+  ui_info *ui = (ui_info *) data;
+  g_print("file_label = %p\n", ui->file_label);
+  gtk_label_set_text(ui->file_label, "Chickens");
+  
+  
   GtkWindow *parent = gtk_widget_get_parent_window(widget);
   dialog = gtk_file_chooser_dialog_new ("Open File",
       parent,
@@ -267,6 +328,7 @@ static void activate(
   GtkWidget *window;
   GtkWidget *play_button;
   GtkWidget *stop_button;
+  GtkWidget *pause_button;
   GtkWidget *file_open_btn;
   GtkWidget *button_box;
   GtkWidget *list_box;
@@ -274,8 +336,11 @@ static void activate(
   GtkWidget *status_bar;
   GtkWidget *grid;
   GtkWidget *tree_view;
+  GtkWidget *file_label;
   GtkTreeSelection *selection;
-
+  ui_info *ui_data = malloc(sizeof(ui_info));
+  ui_data->file_label = NULL;
+  
   window = gtk_application_window_new(app);
 
   gtk_window_set_title(GTK_WINDOW(window), "Window");
@@ -287,7 +352,7 @@ static void activate(
 
   gtk_widget_add_events(GTK_WIDGET(window), GDK_CONFIGURE);
   g_signal_connect(G_OBJECT(window), "configure-event",
-      G_CALLBACK(configure_callback), grid);
+		   G_CALLBACK(configure_callback), grid);
 
   gtk_widget_set_halign(grid, GTK_ALIGN_FILL);
   gtk_widget_set_valign(grid, GTK_ALIGN_FILL);
@@ -309,7 +374,12 @@ static void activate(
   add_to_list(tree_view, "Der Untergang");
 
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
-
+  
+  // Label for filename
+  ui_data->file_label = gtk_label_new("Filename goes here"); 
+  g_print("file_label = %p\n", ui_data->file_label);
+//  gtk_widget_set_name(ui_data->file_label, "file_label");
+  
   // Make the button box
   button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
 
@@ -334,16 +404,25 @@ static void activate(
   //g_signal_connect_swapped(button, "clicked", G_CALLBACK(gtk_widget_destroy), window);
 
   stop_button = gtk_button_new_with_label("Stop");
-//  g_signal_connect(play_button, "clicked", G_CALLBACK(stop_btn_clk), NULL);
+  g_signal_connect(stop_button, "clicked", G_CALLBACK(gst_stop), NULL);
+  
+  pause_button = gtk_button_new_with_label("Pause");
+  g_signal_connect(pause_button, "clicked", G_CALLBACK(gst_pause), NULL);
   
   file_open_btn = gtk_button_new_with_label("Open...");
-  g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), NULL);
+  g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), ui_data);
 
   gtk_container_add(GTK_CONTAINER(button_box), play_button);
+  gtk_container_add(GTK_CONTAINER(button_box), pause_button);
   gtk_container_add(GTK_CONTAINER(button_box), stop_button);
   gtk_container_add(GTK_CONTAINER(button_box), file_open_btn);
 
-  gtk_grid_attach(GTK_GRID(grid), button_box, 0, 1, 1, 1);
+  gtk_grid_attach(GTK_GRID(grid), file_label, 0, 1, 1, 1);
+  gtk_grid_attach(GTK_GRID(grid), button_box, 0, 2, 1, 1);
+
+
+
+
 /*
   button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add(GTK_CONTAINER(window), button_box);
