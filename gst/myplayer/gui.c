@@ -1,29 +1,29 @@
 #include <gtk/gtk.h>
 #include <gst/gst.h>
 
-typedef struct _stream_info
-{
-  GstElement *pipeline;
-  guint bus_watch_id;
-} stream_info;
+#include "gui.h"
+#include "gst.h"
 
-typedef struct _ui_info
-{
-  GtkWidget *file_label;
-  GtkWidget *list_box;
-} ui_info;
-
-static stream_info *data;
-static char *file_name;
 
 enum {
   LIST_ITEM = 0,
   N_COLUMNS
 };
 
-static void gst_cleanup();
-static void dump_info(stream_info *data);
-static void gst_pause();
+
+// Should be in header or not here
+static char *file_name;
+
+void add_list_item(GtkWidget *listbox, 
+		   char *text)
+{
+  GtkWidget *item;
+  GtkWidget *new_label;
+
+  new_label = gtk_label_new(text);
+  gtk_list_box_insert(GTK_LIST_BOX(listbox), new_label, -1);
+}
+
 
 static void add_to_list(
     GtkWidget *list, 
@@ -39,6 +39,7 @@ static void add_to_list(
   gtk_list_store_set(store, &iter, LIST_ITEM, str, -1);
 }
 
+// gst.c
 static void dump_info(stream_info *data)
 {
   g_print("\n-----------------------------------------------------------------------------\n");
@@ -47,6 +48,8 @@ static void dump_info(stream_info *data)
   g_print("-----------------------------------------------------------------------------\n");
 }
 
+
+// gst.c
 static gboolean bus_call(
     GstBus *bus,
     GstMessage *msg,
@@ -89,74 +92,7 @@ static gboolean bus_call(
   return TRUE;
 }
 
-static void on_pad_added(
-    GstElement *element,
-    GstPad     *pad,
-    gpointer    data)
-{
-  GstPad *sinkpad;
-  GstElement *decoder = (GstElement *) data;
 
-  /* We can now link this pad with the vorbis-decoder sink pad */
-  g_print("Dynamic pad created, linking demuxer/decoder\n");
-  sinkpad = gst_element_get_static_pad(decoder, "sink");
-  gst_pad_link(pad, sinkpad);
-  gst_object_unref(sinkpad);
-}
-
-static void gst_stop()
-{
-  g_print("In gst_stop()\n");
-
-  if (data != NULL)
-  {
-    gst_element_set_state(data->pipeline, GST_STATE_PAUSED);
-    gst_cleanup();
-  }
-}
-
-
-static void gst_cleanup(/*stream_info *data*/)
-{
-  g_print("In gst_cleanup()\n");
-
-  gst_element_set_state(data->pipeline, GST_STATE_NULL);
-  g_print("Deleting pipeline\n");
-  gst_object_unref(GST_OBJECT(data->pipeline));
-  g_source_remove(data->bus_watch_id);
-
-//  g_free(data);
-  g_print("Setting data to NULL\n");
-  data = NULL;
-}
-
-static void gst_pause()
-{
-  g_print("In gst_pause()\n");
-  GstState cur_state;
-
-  if (data != NULL)
-  {
-    gst_element_get_state(data->pipeline, &cur_state, NULL, 0); 
-    if (cur_state == GST_STATE_PAUSED)
-    {
-      g_print("PAUSED\n");
-    }
-    if (cur_state == GST_STATE_PLAYING)
-    {
-      g_print("PLAYING\n");
-    }
-
-    if (cur_state == GST_STATE_PLAYING)
-    {
-      gst_element_set_state(data->pipeline, GST_STATE_PAUSED);
-    }
-    if (cur_state == GST_STATE_PAUSED)
-    {
-      gst_element_set_state(data->pipeline, GST_STATE_PLAYING);
-    }
-  }
-}
 
 static void gst_start(
     char *filename)
@@ -198,6 +134,7 @@ static void gst_start(
 
   /* we add a message handler */
   bus = gst_pipeline_get_bus(GST_PIPELINE(data->pipeline));
+
   data->bus_watch_id = gst_bus_add_watch(bus, bus_call, data);
   gst_object_unref(bus);
 
@@ -216,12 +153,112 @@ static void gst_start(
   g_print("Running...\n");
 }
 
+void init_list(GtkWidget *list) 
+{
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  GtkListStore *store;
+
+  renderer = gtk_cell_renderer_text_new();
+  column = gtk_tree_view_column_new_with_attributes("List Items",
+          renderer, "text", LIST_ITEM, NULL);
+  gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+
+  store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING);
+
+  gtk_tree_view_set_model(GTK_TREE_VIEW(list), 
+      GTK_TREE_MODEL(store));
+
+  g_object_unref(store);
+}
+
+
 static void btn_clk(
     GtkWidget *widget,
     gpointer data)
 {
   g_print("Button push\n");
   gst_start("piano2-Audacity1.2.5.mp3");
+}
+
+static void gst_stop()
+{
+  g_print("In gst_stop()\n");
+
+  if (data != NULL)
+  {
+    gst_element_set_state(data->pipeline, GST_STATE_PAUSED);
+    gst_cleanup();
+  }
+}
+
+void gst_cleanup(/*stream_info *data*/)
+{
+  g_print("In gst_cleanup()\n");
+
+  gst_element_set_state(data->pipeline, GST_STATE_NULL);
+  g_print("Deleting pipeline\n");
+  gst_object_unref(GST_OBJECT(data->pipeline));
+  g_source_remove(data->bus_watch_id);
+
+//  g_free(data);
+  g_print("Setting data to NULL\n");
+  data = NULL;
+}
+
+static void gst_pause()
+{
+  g_print("In gst_pause()\n");
+  GstState cur_state;
+
+  if (data != NULL)
+  {
+    gst_element_get_state(data->pipeline, &cur_state, NULL, 0); 
+    if (cur_state == GST_STATE_PAUSED)
+    {
+      g_print("PAUSED\n");
+    }
+    if (cur_state == GST_STATE_PLAYING)
+    {
+      g_print("PLAYING\n");
+    }
+
+    if (cur_state == GST_STATE_PLAYING)
+    {
+      gst_element_set_state(data->pipeline, GST_STATE_PAUSED);
+    }
+    if (cur_state == GST_STATE_PAUSED)
+    {
+      gst_element_set_state(data->pipeline, GST_STATE_PLAYING);
+    }
+  }
+}
+
+void configure_callback(
+    GtkWindow *window, 
+    GdkEvent *event, 
+    gpointer data) 
+{
+   int x, y;
+   int width, height;
+   GString *buf;
+   GtkGrid *grid = GTK_GRID(data);
+
+   x = event->configure.x;
+   y = event->configure.y;
+   width = event->configure.width;
+   height = event->configure.height;
+   
+   gtk_widget_set_size_request(GTK_WIDGET(grid), 10, 10);
+
+//   g_print("In config event. x=%d y=%d width=%d height=%d data=%p\n", x, y, width, height, data);
+   
+   buf = g_string_new(NULL);   
+   g_string_printf(buf, "%d, %d", x, y);
+   
+   //gtk_window_set_title(window, buf->str);
+   
+   g_string_free(buf, TRUE);
 }
 
 static void file_open_btn_click(
@@ -234,10 +271,10 @@ static void file_open_btn_click(
   
   ui_info *ui = (ui_info *) data;
   g_print("file_label = %p\n", ui->file_label);
-  gtk_label_set_text(ui->file_label, "Chickens");
+  gtk_label_set_text(GTK_LABEL(ui->file_label), "Chickens");
   
   
-  GtkWindow *parent = gtk_widget_get_parent_window(widget);
+  GtkWindow *parent = GTK_WINDOW(gtk_widget_get_parent_window(widget));
   dialog = gtk_file_chooser_dialog_new ("Open File",
       parent,
       action,
@@ -263,66 +300,8 @@ static void file_open_btn_click(
   g_print("file_open_btn_click\n");
 }
 
-void add_list_item(
-    GtkWidget *listbox, 
-    char *text)
-{
-  GtkWidget *item;
-  GtkWidget *new_label;
-
-  new_label = gtk_label_new(text);
-  gtk_list_box_insert(GTK_LIST_BOX(listbox), new_label, -1);
-}
-
-void configure_callback(
-    GtkWindow *window, 
-    GdkEvent *event, 
-    gpointer data) 
-{
-   int x, y;
-   int width, height;
-   GString *buf;
-   GtkGrid *grid = GTK_GRID(data);
-
-   x = event->configure.x;
-   y = event->configure.y;
-   width = event->configure.width;
-   height = event->configure.height;
-   
-   gtk_widget_set_size_request(grid, 10, 10);
-
-//   g_print("In config event. x=%d y=%d width=%d height=%d data=%p\n", x, y, width, height, data);
-   
-   buf = g_string_new(NULL);   
-   g_string_printf(buf, "%d, %d", x, y);
-   
-   //gtk_window_set_title(window, buf->str);
-   
-   g_string_free(buf, TRUE);
-}
-
-void init_list(GtkWidget *list) 
-{
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-  GtkListStore *store;
-
-  renderer = gtk_cell_renderer_text_new();
-  column = gtk_tree_view_column_new_with_attributes("List Items",
-          renderer, "text", LIST_ITEM, NULL);
-  gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
-
-  store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING);
-
-  gtk_tree_view_set_model(GTK_TREE_VIEW(list), 
-      GTK_TREE_MODEL(store));
-
-  g_object_unref(store);
-}
-
-static void activate(
-    GtkApplication* app,
-    gpointer user_data)
+void mainwindow_activate(GtkApplication* app,
+			 gpointer user_data)
 {
   g_print("In activate\n");
   
@@ -339,8 +318,8 @@ static void activate(
   GtkWidget *tree_view;
 //  GtkWidget *file_label;
   GtkTreeSelection *selection;
-  ui_info *ui_data = malloc(sizeof(ui_info));
-  ui_data->file_label = NULL;
+  ui_info *ui_info_cb = malloc(sizeof(ui_info));
+  ui_info_cb->file_label = NULL;
   
   window = gtk_application_window_new(app);
 
@@ -362,7 +341,7 @@ static void activate(
   //gtk_container_set_resize_mode(GTK_CONTAINER(grid), GTK_RESIZE_PARENT);
 
   gtk_container_add(GTK_CONTAINER(window), grid);
-  gtk_layout_set_size(grid, 800, 600);
+  gtk_layout_set_size(GTK_LAYOUT(grid), 800, 600);
 
   tree_view = gtk_tree_view_new();
   gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree_view), TRUE);
@@ -372,14 +351,14 @@ static void activate(
   add_to_list(tree_view, "Leon");
   add_to_list(tree_view, "The Verdict");
   add_to_list(tree_view, "North Face");
-  add_to_list(tree_view, "Der Untergang");
+//  add_to_list(tree_view, "Der Untergang");
 
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
   
   // Label for filename
-  ui_data->file_label = gtk_label_new("Filename goes here"); 
-  g_print("file_label = %p\n", ui_data->file_label);
-//  gtk_widget_set_name(ui_data->file_label, "file_label");
+  ui_info_cb->file_label = gtk_label_new("Filename goes here"); 
+  g_print("file_label = %p\n", ui_info_cb->file_label);
+//  gtk_widget_set_name(ui_info_cb->file_label, "file_label");
   
   // Make the button box
   button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
@@ -411,14 +390,14 @@ static void activate(
   g_signal_connect(pause_button, "clicked", G_CALLBACK(gst_pause), NULL);
   
   file_open_btn = gtk_button_new_with_label("Open...");
-  g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), ui_data);
+  g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), ui_info_cb);
 
   gtk_container_add(GTK_CONTAINER(button_box), play_button);
   gtk_container_add(GTK_CONTAINER(button_box), pause_button);
   gtk_container_add(GTK_CONTAINER(button_box), stop_button);
   gtk_container_add(GTK_CONTAINER(button_box), file_open_btn);
 
-  gtk_grid_attach(GTK_GRID(grid), file_label, 0, 1, 1, 1);
+  gtk_grid_attach(GTK_GRID(grid), ui_info_cb->file_label, 0, 1, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), button_box, 0, 2, 1, 1);
 
 
@@ -454,28 +433,4 @@ static void activate(
   gtk_widget_show_all(window);
 }
 
-int main(int argc, char **argv)
-{
-  GtkApplication *app;
-  int status;
 
-  g_print("%s started.\n", argv[0]);
-
-  // Initialisation
-  gst_init(&argc, &argv);
-
-  g_print("GST is init\n");
-
-  app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
-
-  g_print("Application created\n");
-
-  g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
-  
-  g_print("activate signal connected... about to run\n");
-
-  status = g_application_run(G_APPLICATION (app), argc, argv);
-  g_object_unref(app);
-
-  return status;
-}

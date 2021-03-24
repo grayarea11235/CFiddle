@@ -198,6 +198,7 @@ static void gst_start(
 
   /* we add a message handler */
   bus = gst_pipeline_get_bus(GST_PIPELINE(data->pipeline));
+
   data->bus_watch_id = gst_bus_add_watch(bus, bus_call, data);
   gst_object_unref(bus);
 
@@ -418,7 +419,7 @@ static void activate(
   gtk_container_add(GTK_CONTAINER(button_box), stop_button);
   gtk_container_add(GTK_CONTAINER(button_box), file_open_btn);
 
-  gtk_grid_attach(GTK_GRID(grid), file_label, 0, 1, 1, 1);
+  gtk_grid_attach(GTK_GRID(grid), ui_data->file_label, 0, 1, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), button_box, 0, 2, 1, 1);
 
 
