@@ -173,12 +173,22 @@ void init_list(GtkWidget *list)
 }
 
 
-static void btn_clk(
-    GtkWidget *widget,
-    gpointer data)
+// TODO : rename this
+static void btn_clk(GtkWidget *widget,
+		    gpointer data)
 {
   g_print("Button push\n");
-  gst_start("piano2-Audacity1.2.5.mp3");
+
+  ui_info *ui = (ui_info *) data;
+  //g_print("file_label = %p\n", ui->file_label);
+  
+  // Get the file name from the GtkLabel
+  const gchar *name = gtk_label_get_text(GTK_LABEL(ui->file_label));  
+  
+//  gst_start("piano2-Audacity1.2.5.mp3");
+  
+  //gst_start("/home/cpd/Dev/C/CFiddle/gst/myplayer/piano2-Audacity1.2.5.mp3");
+  gst_start((char *)name);
 }
 
 static void gst_stop()
@@ -261,9 +271,8 @@ void configure_callback(
    g_string_free(buf, TRUE);
 }
 
-static void file_open_btn_click(
-    GtkWidget *widget,
-    gpointer data)
+static void file_open_btn_click(GtkWidget *widget,
+				gpointer data)
 {
   GtkWidget *dialog;
   GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
@@ -271,8 +280,6 @@ static void file_open_btn_click(
   
   ui_info *ui = (ui_info *) data;
   g_print("file_label = %p\n", ui->file_label);
-  gtk_label_set_text(GTK_LABEL(ui->file_label), "Chickens");
-  
   
   GtkWindow *parent = GTK_WINDOW(gtk_widget_get_parent_window(widget));
   dialog = gtk_file_chooser_dialog_new ("Open File",
@@ -291,6 +298,7 @@ static void file_open_btn_click(
     GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
     filename = gtk_file_chooser_get_filename(chooser);
     g_print("filename = %s\n", filename);
+    gtk_label_set_text(GTK_LABEL(ui->file_label), filename);
     //open_file(filename);
     g_free(filename);
   }
@@ -306,17 +314,13 @@ void mainwindow_activate(GtkApplication* app,
   g_print("In activate\n");
   
   GtkWidget *window;
-  GtkWidget *play_button;
-  GtkWidget *stop_button;
-  GtkWidget *pause_button;
-  GtkWidget *file_open_btn;
+//  GtkWidget *file_open_btn;
   GtkWidget *button_box;
   GtkWidget *list_box;
   GtkWidget *grid_box;
   GtkWidget *status_bar;
   GtkWidget *grid;
   GtkWidget *tree_view;
-//  GtkWidget *file_label;
   GtkTreeSelection *selection;
   ui_info *ui_info_cb = malloc(sizeof(ui_info));
   ui_info_cb->file_label = NULL;
@@ -379,23 +383,23 @@ void mainwindow_activate(GtkApplication* app,
   gtk_widget_set_hexpand(list_box, TRUE);
   gtk_widget_set_vexpand(list_box, TRUE);
 
-  play_button = gtk_button_new_with_label("Play");
-  g_signal_connect(play_button, "clicked", G_CALLBACK(btn_clk), NULL);
+  ui_info_cb->play_button = gtk_button_new_with_label("Play");
+  g_signal_connect(ui_info_cb->play_button, "clicked", G_CALLBACK(btn_clk), ui_info_cb);
   //g_signal_connect_swapped(button, "clicked", G_CALLBACK(gtk_widget_destroy), window);
 
-  stop_button = gtk_button_new_with_label("Stop");
-  g_signal_connect(stop_button, "clicked", G_CALLBACK(gst_stop), NULL);
+  ui_info_cb->stop_button = gtk_button_new_with_label("Stop");
+  g_signal_connect(ui_info_cb->stop_button, "clicked", G_CALLBACK(gst_stop), ui_info_cb);
   
-  pause_button = gtk_button_new_with_label("Pause");
-  g_signal_connect(pause_button, "clicked", G_CALLBACK(gst_pause), NULL);
+  ui_info_cb->pause_button = gtk_button_new_with_label("Pause");
+  g_signal_connect(ui_info_cb->pause_button, "clicked", G_CALLBACK(gst_pause), ui_info_cb);
   
-  file_open_btn = gtk_button_new_with_label("Open...");
-  g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), ui_info_cb);
+  ui_info_cb->file_open_btn = gtk_button_new_with_label("Open...");
+  g_signal_connect(ui_info_cb->file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), ui_info_cb);
 
-  gtk_container_add(GTK_CONTAINER(button_box), play_button);
-  gtk_container_add(GTK_CONTAINER(button_box), pause_button);
-  gtk_container_add(GTK_CONTAINER(button_box), stop_button);
-  gtk_container_add(GTK_CONTAINER(button_box), file_open_btn);
+  gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->play_button);
+  gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->pause_button);
+  gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->stop_button);
+  gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->file_open_btn);
 
   gtk_grid_attach(GTK_GRID(grid), ui_info_cb->file_label, 0, 1, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), button_box, 0, 2, 1, 1);

@@ -11,6 +11,9 @@ typedef struct _ui_info
   GtkWidget *play_button;
   GtkWidget *stop_button;
   GtkWidget *pause_button;
+  GtkWidget *file_open_btn;
+  
+//  stream_info stream_data;
 } ui_info;
 
 
