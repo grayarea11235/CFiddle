@@ -12,7 +12,10 @@ pkg_check_modules(GST REQUIRED gstreamer-1.0)
 # pkg_check_modules(PBUTILS REQUIRED gstreamer-pbutils-1.0)
 
 # add the executable
-add_executable(myplayer main.c gui.c)
+add_executable(myplayer 
+  main.c 
+  gui.c 
+  gst.c)
 
 target_include_directories(myplayer PUBLIC ${GTK_INCLUDE_DIRS})
 target_include_directories(myplayer PUBLIC ${GST_INCLUDE_DIRS})

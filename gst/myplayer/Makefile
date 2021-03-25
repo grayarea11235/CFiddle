@@ -123,6 +123,33 @@ myplayer/fast:
 	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/build
 .PHONY : myplayer/fast
 
+gst.o: gst.c.o
+
+.PHONY : gst.o
+
+# target to build an object file
+gst.c.o:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/gst.c.o
+.PHONY : gst.c.o
+
+gst.i: gst.c.i
+
+.PHONY : gst.i
+
+# target to preprocess a source file
+gst.c.i:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/gst.c.i
+.PHONY : gst.c.i
+
+gst.s: gst.c.s
+
+.PHONY : gst.s
+
+# target to generate assembly for a file
+gst.c.s:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/gst.c.s
+.PHONY : gst.c.s
+
 gui.o: gui.c.o
 
 .PHONY : gui.o
@@ -186,6 +213,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... myplayer"
+	@echo "... gst.o"
+	@echo "... gst.i"
+	@echo "... gst.s"
 	@echo "... gui.o"
 	@echo "... gui.i"
 	@echo "... gui.s"
