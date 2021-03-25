@@ -34,22 +34,22 @@ static gboolean bus_call(
       break;
 
     case GST_MESSAGE_ERROR: 
-      {
-        gchar  *debug;
-        GError *error;
-
-        gst_message_parse_error(msg, &error, &debug);
-        g_free(debug);
-
-        g_printerr("Error: %s\n", error->message);
-        g_error_free(error);
-
-        break;
-      }
-    default:
+    {
+      gchar  *debug;
+      GError *error;
+      
+      gst_message_parse_error(msg, &error, &debug);
+      g_free(debug);
+      
+      g_printerr("Error: %s\n", error->message);
+      g_error_free(error);
+      
       break;
+    }
+  default:
+    break;
   }
-
+  
   return TRUE;
 }
 
@@ -64,6 +64,65 @@ void gst_stop()
   }
 }
 
+void gst_play(gst_info *info)
+{
+  // Set the filename - Should be in play
+//  g_object_set(G_OBJECT(source), "location", filename, NULL);
+  
+}
+
+gst_info *gst_startup()
+{
+  GstElement *source, 
+    *pipeline, 
+    *decoder, 
+    *conv, 
+    *sink,
+    *volume;
+  GstBus *bus;
+  guint bus_watch_id;
+
+  gst_info *return_data = malloc(sizeof(stream_info));
+  
+  g_print("data = %p\n", data);
+
+  g_print("In gst_startup()\n");
+
+  // Create elements
+  pipeline = gst_pipeline_new("audio-player");
+  source = gst_element_factory_make("filesrc", "file-source");
+  decoder = gst_element_factory_make("flump3dec", "fluendo-decoder");
+  conv = gst_element_factory_make("audioconvert", "converter");
+  volume = gst_element_factory_make("volume", "volume-name");
+  sink = gst_element_factory_make("autoaudiosink", "audio-output");
+
+
+  if (!pipeline || !source || !decoder || !conv || !volume || !sink) 
+  {
+    g_printerr("One element could not be created. Exiting.\n");
+    return;
+  }
+
+  // Set the filename - Should be in play
+//  g_object_set(G_OBJECT(source), "location", filename, NULL);
+  
+  bus = gst_pipeline_get_bus(GST_PIPELINE(pipeline));
+
+  bus_watch_id = gst_bus_add_watch(bus, bus_call, data);
+  gst_object_unref(bus);
+
+  gst_bin_add_many(GST_BIN(pipeline),
+		   source, decoder, volume, conv, sink, NULL);
+
+  // Link em up
+  gst_element_link_many(source, decoder, volume, conv, sink, NULL);
+
+  return_data->pipeline = pipeline;
+  return_data->volume = volume;
+  return_data->bus_watch_id = bus_watch_id; // Why??
+  
+  return return_data;
+}
 
 void gst_start(char *filename)
 {
@@ -73,7 +132,6 @@ void gst_start(char *filename)
     *sink,
     *volume;
   GstBus *bus;
-//  stream_info *data;
   
   g_print("data = %p\n", data);
 

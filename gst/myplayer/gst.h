@@ -6,12 +6,19 @@
 #include <gst/gst.h>
 
 
+// Deprecated
 typedef struct _stream_info
 {
   GstElement *pipeline;
   guint bus_watch_id;
 } stream_info;
 
+typedef struct _gst_info
+{
+  GstElement *pipeline;
+  GstElement *volume;
+  guint bus_watch_id;
+} gst_info;
 
 // TODO : This is BAD
 static stream_info *data;
