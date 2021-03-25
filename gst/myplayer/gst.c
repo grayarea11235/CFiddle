@@ -11,14 +11,13 @@ static void dump_info(stream_info *data)
 
 
 // gst.c
-static gboolean bus_call(
-    GstBus *bus,
-    GstMessage *msg,
-    gpointer data)
+static gboolean bus_call(GstBus *bus,
+			 GstMessage *msg,
+			 gpointer data)
 {
   stream_info *stream_data = (stream_info *) data;
 
-  switch (GST_MESSAGE_TYPE (msg)) 
+  switch (GST_MESSAGE_TYPE(msg)) 
   {
     case GST_MESSAGE_EOS:
       g_print ("End of stream\n");
@@ -64,14 +63,31 @@ void gst_stop()
   }
 }
 
-void gst_play(gst_info *info)
+// gst_player --------------------------------------------------------------
+
+void gst_player_stop(gst_info *info)
+{
+  // How do I reset?
+  gst_element_set_state(info->pipeline, GST_STATE_PAUSED);
+  gst_element_set_state(info->pipeline, GST_STATE_NULL);
+}
+
+void gst_player_pause(gst_info *info)
+{
+  gst_element_set_state(info->pipeline, GST_STATE_PAUSED);
+}
+
+void gst_player_play(gst_info *info, gchar *filename)
 {
   // Set the filename - Should be in play
 //  g_object_set(G_OBJECT(source), "location", filename, NULL);
-  
+
+//  g_print("Now playing: %s\n", filename);
+//  gst_element_set_state(data->pipeline, GST_STATE_PLAYING);
+
 }
 
-gst_info *gst_startup()
+gst_info *gst_player_startup()
 {
   GstElement *source, 
     *pipeline, 
@@ -96,11 +112,10 @@ gst_info *gst_startup()
   volume = gst_element_factory_make("volume", "volume-name");
   sink = gst_element_factory_make("autoaudiosink", "audio-output");
 
-
   if (!pipeline || !source || !decoder || !conv || !volume || !sink) 
   {
     g_printerr("One element could not be created. Exiting.\n");
-    return;
+    return NULL;
   }
 
   // Set the filename - Should be in play
@@ -119,10 +134,12 @@ gst_info *gst_startup()
 
   return_data->pipeline = pipeline;
   return_data->volume = volume;
+  return_data->source = source;
   return_data->bus_watch_id = bus_watch_id; // Why??
   
   return return_data;
 }
+// gst_player --------------------------------------------------------------
 
 void gst_start(char *filename)
 {

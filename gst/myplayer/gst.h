@@ -13,10 +13,12 @@ typedef struct _stream_info
   guint bus_watch_id;
 } stream_info;
 
+// Contrains the main pipeline for the player
 typedef struct _gst_info
 {
   GstElement *pipeline;
   GstElement *volume;
+  GstElement *source;
   guint bus_watch_id;
 } gst_info;
 
