@@ -38,7 +38,6 @@ static void add_to_list(
   gtk_list_store_set(store, &iter, LIST_ITEM, str, -1);
 }
 
-
 // Init the track list
 void init_list(GtkWidget *list) 
 {
@@ -74,8 +73,6 @@ void play_btn_clk(GtkWidget *widget,
   gst_start((char *)name);
 }
 
-
-
 void configure_callback(
     GtkWindow *window, 
     GdkEvent *event, 
@@ -103,6 +100,7 @@ void configure_callback(
    g_string_free(buf, TRUE);
 }
 
+
 static void file_open_btn_click(GtkWidget *widget,
 				gpointer data)
 {
@@ -111,6 +109,7 @@ static void file_open_btn_click(GtkWidget *widget,
   gint res;
   
   ui_info *ui = (ui_info *) data;
+
   g_print("file_label = %p\n", ui->file_label);
   
   GtkWindow *parent = GTK_WINDOW(gtk_widget_get_parent_window(widget));
@@ -195,6 +194,8 @@ void mainwindow_activate(GtkApplication* app,
   ui_info_cb->file_label = gtk_label_new("Filename goes here"); 
   g_print("file_label = %p\n", ui_info_cb->file_label);
 //  gtk_widget_set_name(ui_info_cb->file_label, "file_label");
+
+  GtkWidget *scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, NULL);
   
   // Make the button box
   button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
@@ -208,7 +209,6 @@ void mainwindow_activate(GtkApplication* app,
   add_list_item(list_box, "Track 1");
   add_list_item(list_box, "Track 2");
   add_list_item(list_box, "Track 3");
-  gtk_grid_attach(GTK_GRID(grid), tree_view, 0, 0, 1, 1);
 
   gtk_widget_set_halign(list_box, GTK_ALIGN_FILL);
   gtk_widget_set_valign(list_box, GTK_ALIGN_FILL);
@@ -233,8 +233,11 @@ void mainwindow_activate(GtkApplication* app,
   gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->stop_button);
   gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->file_open_btn);
 
+  gtk_grid_attach(GTK_GRID(grid), tree_view, 0, 0, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), ui_info_cb->file_label, 0, 1, 1, 1);
-  gtk_grid_attach(GTK_GRID(grid), button_box, 0, 2, 1, 1);
+  gtk_grid_attach(GTK_GRID(grid), scale, 0, 2, 1, 1);
+  gtk_grid_attach(GTK_GRID(grid), button_box, 0, 3, 1, 1);
+  
   gtk_widget_show_all(window);
 }
 
