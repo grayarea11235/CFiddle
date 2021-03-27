@@ -10,7 +10,6 @@ static void dump_info(stream_info *data)
 }
 
 
-// gst.c
 static gboolean bus_call(GstBus *bus,
 			 GstMessage *msg,
 			 gpointer data)
@@ -20,7 +19,7 @@ static gboolean bus_call(GstBus *bus,
   switch (GST_MESSAGE_TYPE(msg)) 
   {
     case GST_MESSAGE_EOS:
-      g_print ("End of stream\n");
+      g_print("End of stream\n");
 
       dump_info(data);
 
@@ -52,32 +51,31 @@ static gboolean bus_call(GstBus *bus,
   return TRUE;
 }
 
-void gst_stop()
-{
-  g_print("In gst_stop()\n");
-
-  if (data != NULL)
-  {
-    gst_element_set_state(data->pipeline, GST_STATE_PAUSED);
-    gst_cleanup();
-  }
-}
-
 // gst_player --------------------------------------------------------------
 
-void gst_player_stop(gst_info *info)
+static void gst_player_dump_info(gst_info_t *data)
+{
+  g_print("\n-----------------------------------------------------------------------------\n");
+  g_print("pipline      = %p\n", data->pipeline);
+  g_print("volume       = %p\n", data->volume);
+  g_print("source       = %p\n", data->source);
+  g_print("bus_watch_id = %d\n", data->bus_watch_id);
+  g_print("-----------------------------------------------------------------------------\n");
+}
+
+void gst_player_stop(gst_info_t *info)
 {
   // How do I reset?
   gst_element_set_state(info->pipeline, GST_STATE_PAUSED);
   gst_element_set_state(info->pipeline, GST_STATE_NULL);
 }
 
-void gst_player_pause(gst_info *info)
+void gst_player_pause(gst_info_t *info)
 {
   gst_element_set_state(info->pipeline, GST_STATE_PAUSED);
 }
 
-void gst_player_play(gst_info *info, gchar *filename)
+void gst_player_play(gst_info_t *info, gchar *filename)
 {
   // Set the filename - Should be in play
 //  g_object_set(G_OBJECT(source), "location", filename, NULL);
@@ -87,7 +85,7 @@ void gst_player_play(gst_info *info, gchar *filename)
 
 }
 
-gst_info *gst_player_startup()
+gst_info_t *gst_player_startup()
 {
   GstElement *source, 
     *pipeline, 
@@ -98,12 +96,15 @@ gst_info *gst_player_startup()
   GstBus *bus;
   guint bus_watch_id;
 
-  gst_info *return_data = malloc(sizeof(stream_info));
-  
+  gst_info_t *return_data = malloc(sizeof(stream_info));
+
   g_print("data = %p\n", data);
 
   g_print("In gst_startup()\n");
-
+  
+  // Look into autosource
+  // https://gstreamer.freedesktop.org/documentation/autodetect/index.html?gi-language=c
+  
   // Create elements
   pipeline = gst_pipeline_new("audio-player");
   source = gst_element_factory_make("filesrc", "file-source");
@@ -262,4 +263,17 @@ void gst_pause()
     }
   }
 }
+
+void gst_stop()
+{
+  g_print("In gst_stop()\n");
+
+  if (data != NULL)
+  {
+    gst_element_set_state(data->pipeline, GST_STATE_PAUSED);
+    gst_cleanup();
+  }
+}
+
+
 

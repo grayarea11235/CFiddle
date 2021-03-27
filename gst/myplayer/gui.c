@@ -172,6 +172,10 @@ void mainwindow_activate(GtkApplication* app,
   GtkTreeSelection *selection;
   ui_info *ui_info_cb = malloc(sizeof(ui_info));
   ui_info_cb->file_label = NULL;
+
+  // Init the gst player
+  gst_info_t *gst_info = gst_player_startup();
+  g_print("gst_player created");
   
   window = gtk_application_window_new(app);
 
@@ -181,7 +185,7 @@ void mainwindow_activate(GtkApplication* app,
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
   grid = gtk_grid_new();
-
+  
   gtk_widget_add_events(GTK_WIDGET(window), GDK_CONFIGURE);
   g_signal_connect(G_OBJECT(window), "configure-event",
 		   G_CALLBACK(configure_callback), grid);
