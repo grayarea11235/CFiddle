@@ -1,16 +1,15 @@
 #include <gst/gst.h>
 #include <glib.h>
 
-
-static gboolean
-bus_call (GstBus     *bus,
-          GstMessage *msg,
-          gpointer    data)
+static gboolean bus_call(
+    GstBus     *bus,
+    GstMessage *msg,
+    gpointer    data)
 {
   GMainLoop *loop = (GMainLoop *) data;
 
-  switch (GST_MESSAGE_TYPE (msg)) {
-
+  switch (GST_MESSAGE_TYPE (msg)) 
+  {
     case GST_MESSAGE_EOS:
       g_print ("End of stream\n");
       g_main_loop_quit (loop);
@@ -40,7 +39,8 @@ bus_call (GstBus     *bus,
   return TRUE;
 }
 
-static void on_pad_added (GstElement *element,
+static void on_pad_added(
+    GstElement *element,
     GstPad     *pad,
     gpointer    data)
 {
@@ -54,11 +54,16 @@ static void on_pad_added (GstElement *element,
   gst_object_unref(sinkpad);
 }
 
-int main(int   argc,
+int main(
+    int   argc,
     char *argv[])
 {
   GMainLoop *loop;
-  GstElement *pipeline, *source, *decoder, *conv, *sink;
+  GstElement *pipeline, 
+             *source, 
+             *decoder, 
+             *conv, 
+             *sink;
   GstBus *bus;
   guint bus_watch_id;
 

@@ -5,7 +5,6 @@ project(gst)
 
 set(CMAKE_BUILD_TYPE Debug)
 
-
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK REQUIRED gtk+-3.0)
 pkg_check_modules(GST REQUIRED gstreamer-1.0)
@@ -41,4 +40,3 @@ target_include_directories(gst_discover PUBLIC ${GST_INCLUDE_DIRS})
 target_link_libraries(gst_discover ${GST_LIBRARIES})
 target_include_directories(gst_discover PUBLIC ${PBUTILS_INCLUDE_DIRS})
 target_link_libraries(gst_discover ${PBUTILS_LIBRARIES})
-
