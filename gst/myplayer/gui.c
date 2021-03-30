@@ -105,7 +105,6 @@ void configure_callback(GtkWindow *window,
   g_string_free(buf, TRUE);
 }
 
-
 static void file_open_btn_click(GtkWidget *widget,
 				gpointer data)
 {
