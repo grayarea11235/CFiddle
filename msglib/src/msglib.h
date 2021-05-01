@@ -4,7 +4,11 @@
 
 typedef struct _msg
 {
+  void *data;
+  long data_length;
 
+  // timestamp
+  // TTL
 } msg;
 
 
