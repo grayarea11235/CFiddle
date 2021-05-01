@@ -7,7 +7,9 @@
 
 msg_queue *init_msg_queue()
 {
+  msg_queue *res = malloc(sizeof(msg_queu));
 
+  return res;
 }
 
 
