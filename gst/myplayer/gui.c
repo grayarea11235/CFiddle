@@ -64,7 +64,7 @@ void init_list(GtkWidget *list)
   g_object_unref(store);
 }
 
-void play_btn_clk(GtkWidget *widget,
+void play_button_click(GtkWidget *widget,
 		  gpointer data)
 {
   g_print("Play button push\n");
@@ -74,9 +74,8 @@ void play_btn_clk(GtkWidget *widget,
   // Get the file name from the GtkLabel
   const gchar *name = gtk_label_get_text(GTK_LABEL(ui->file_label));  
   
-  gst_player_play(ui->gst_info, name);
-  
   // TODO : Check if the file exists
+  gst_player_play(ui->gst_info, name);
   //gst_start((char *)name);
 }
 
@@ -250,8 +249,8 @@ void mainwindow_activate(GtkApplication* app,
 
   list_box = gtk_list_box_new();
   add_list_item(list_box, "Track 1");
-  add_list_item(list_box, "Track 2");
-  add_list_item(list_box, "Track 3");
+  //add_list_item(list_box, "Track 2");
+  //add_list_item(list_box, "Track 3");
 
   gtk_widget_set_halign(list_box, GTK_ALIGN_FILL);
   gtk_widget_set_valign(list_box, GTK_ALIGN_FILL);
@@ -259,11 +258,11 @@ void mainwindow_activate(GtkApplication* app,
   gtk_widget_set_vexpand(list_box, TRUE);
 
   ui_info_cb->play_button = gtk_button_new_with_label("Play");
-  g_signal_connect(ui_info_cb->play_button, "clicked", G_CALLBACK(play_btn_clk), ui_info_cb);
+  g_signal_connect(ui_info_cb->play_button, "clicked", G_CALLBACK(play_button_click), ui_info_cb);
   //g_signal_connect_swapped(button, "clicked", G_CALLBACK(gtk_widget_destroy), window);
 
   ui_info_cb->stop_button = gtk_button_new_with_label("Stop");
-  g_signal_connect(ui_info_cb->stop_button, "clicked", G_CALLBACK(gst_stop), ui_info_cb);
+  g_signal_connect(ui_info_cb->stop_button, "clicked", G_CALLBACK(stop_button_click), ui_info_cb);
   
   ui_info_cb->pause_button = gtk_button_new_with_label("Pause");
   g_signal_connect(ui_info_cb->pause_button, "clicked", G_CALLBACK(pause_button_click), ui_info_cb);
