@@ -14,13 +14,13 @@ typedef struct _stream_info
 } stream_info;
 
 // Contrains the main pipeline for the player
-typedef struct _gst_info
+typedef struct _gst_info_t
 {
   GstElement *pipeline;
   GstElement *volume;
   GstElement *source;
   guint bus_watch_id;
-} gst_info;
+} gst_info_t;
 
 // TODO : This is BAD
 static stream_info *data;
@@ -30,6 +30,12 @@ extern void gst_cleanup();
 extern void gst_pause();
 extern void gst_start(char *filename);
 extern void gst_stop();
+
+// The new interface
+extern gst_info_t *gst_player_startup();
+extern void gst_player_play(gst_info_t *info, gchar *filename);
+extern void gst_player_pause(gst_info_t *info);
+extern void gst_player_stop(gst_info_t *info);
 
 #endif
 
