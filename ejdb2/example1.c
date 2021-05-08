@@ -4,10 +4,10 @@
 
 #include <ejdb2/ejdb2.h>
 
-#define CHECK(rc_)          \
-  if (rc_) {                 \
-    iwlog_ecode_error3(rc_); \
-    return 1;                \
+#define CHECK(rc_)				\
+  if (rc_) {					\
+    iwlog_ecode_error3(rc_);			\
+    return 1;					\
   }
 
 static iwrc documents_visitor(EJDB_EXEC *ctx, const EJDB_DOC doc, int64_t *step) 
@@ -18,7 +18,7 @@ static iwrc documents_visitor(EJDB_EXEC *ctx, const EJDB_DOC doc, int64_t *step)
 
 int main(void)
 {
- EJDB_OPTS opts = {
+  EJDB_OPTS opts = {
     .kv = {
       .path = "example.db",
       .oflags = IWKV_TRUNC
