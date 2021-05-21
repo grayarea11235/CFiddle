@@ -23,8 +23,10 @@ static gboolean bus_call(GstBus *bus,
 
       dump_info(data);
 
-      gst_cleanup(/*data*/);
-      g_free(data);
+      gst_player_stop(data);
+      
+//gst_cleanup(/*data*/);
+      //g_free(data);
       break;
 
     case GST_MESSAGE_STREAM_START:
@@ -72,17 +74,24 @@ void gst_player_stop(gst_info_t *info)
 
 void gst_player_pause(gst_info_t *info)
 {
+  g_print("In gst_player_pause\n");
+  g_print("pipeline = %p\n", info->pipeline);
+  gst_player_dump_info(info);
+    
   gst_element_set_state(info->pipeline, GST_STATE_PAUSED);
 }
 
 void gst_player_play(gst_info_t *info, gchar *filename)
 {
   // Set the filename - Should be in play
-//  g_object_set(G_OBJECT(source), "location", filename, NULL);
+  g_object_set(G_OBJECT(info->source), "location", filename, NULL);
 
-//  g_print("Now playing: %s\n", filename);
-//  gst_element_set_state(data->pipeline, GST_STATE_PLAYING);
+  g_print("Now playing: %s\n", filename);
+  g_print("pipeline = %p\n", info->pipeline);
+  gst_player_dump_info(info);
 
+  gst_element_set_state(info->pipeline, GST_STATE_PLAYING);
+  g_print("Started\n");
 }
 
 gst_info_t *gst_player_startup()
@@ -124,7 +133,8 @@ gst_info_t *gst_player_startup()
   
   bus = gst_pipeline_get_bus(GST_PIPELINE(pipeline));
 
-  bus_watch_id = gst_bus_add_watch(bus, bus_call, data);
+//  bus_watch_id = gst_bus_add_watch(bus, bus_call, data);
+  bus_watch_id = gst_bus_add_watch(bus, bus_call, return_data);
   gst_object_unref(bus);
 
   gst_bin_add_many(GST_BIN(pipeline),
@@ -137,6 +147,8 @@ gst_info_t *gst_player_startup()
   return_data->volume = volume;
   return_data->source = source;
   return_data->bus_watch_id = bus_watch_id; // Why??
+
+  gst_player_dump_info(return_data);
   
   return return_data;
 }
