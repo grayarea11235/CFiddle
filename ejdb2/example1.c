@@ -72,7 +72,5 @@ finish:
   ejdb_close(&db);
   CHECK(rc);
 
-
-
   return EXIT_SUCCESS;
 }
