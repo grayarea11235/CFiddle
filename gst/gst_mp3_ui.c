@@ -418,7 +418,7 @@ static void activate(
   gtk_container_add(GTK_CONTAINER(button_box), stop_button);
   gtk_container_add(GTK_CONTAINER(button_box), file_open_btn);
 
-  gtk_grid_attach(GTK_GRID(grid), file_label, 0, 1, 1, 1);
+  //gtk_grid_attach(GTK_GRID(grid), file_label, 0, 1, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), button_box, 0, 2, 1, 1);
 
 
