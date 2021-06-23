@@ -24,7 +24,7 @@ enum {
 static void gst_cleanup();
 static void dump_info(stream_info *data);
 static void gst_pause();
-
+:q
 static void add_to_list(
     GtkWidget *list, 
     const gchar *str) 
@@ -933,7 +933,6 @@ static void activate(
   gtk_container_add(GTK_CONTAINER (button_box), button);
   gtk_container_add(GTK_CONTAINER (button_box), file_open_btn);
   gtk_container_add(GTK_CONTAINER (button_box), list_box);
-*/
 
   gtk_widget_show_all(window);
 }
