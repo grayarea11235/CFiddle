@@ -188,6 +188,12 @@ static void gst_start(
 
   if (!data->pipeline || !source || !decoder || !conv || !sink) 
   {
+    g_print("data->pipeline  = %p\n", data->pipeline); 
+    g_print("source          = %p\n", source); 
+    g_print("decoder         = %p\n", decoder); 
+    g_print("conv            = %p\n", conv); 
+    g_print("sink            = %p\n", sink); 
+    
     g_printerr("One element could not be created. Exiting.\n");
     return;
   }
@@ -418,7 +424,7 @@ static void activate(
   gtk_container_add(GTK_CONTAINER(button_box), stop_button);
   gtk_container_add(GTK_CONTAINER(button_box), file_open_btn);
 
-  gtk_grid_attach(GTK_GRID(grid), file_label, 0, 1, 1, 1);
+//  gtk_grid_attach(GTK_GRID(grid), file_label, 0, 1, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), button_box, 0, 2, 1, 1);
 
 
@@ -545,7 +551,8 @@ static gboolean bus_call(
 
       dump_info(data);
 
-      gst_cleanup(/*data*/);
+      gst_cleanup(/*data*///);
+/*
       g_free(data);
       break;
 
@@ -581,7 +588,7 @@ static void on_pad_added(
   GstPad *sinkpad;
   GstElement *decoder = (GstElement *) data;
 
-  /* We can now link this pad with the vorbis-decoder sink pad */
+  // We can now link this pad with the vorbis-decoder sink pad 
   g_print("Dynamic pad created, linking demuxer/decoder\n");
   sinkpad = gst_element_get_static_pad(decoder, "sink");
   gst_pad_link(pad, sinkpad);
@@ -599,8 +606,9 @@ static void gst_stop()
   }
 }
 
-
-static void gst_cleanup(/*stream_info *data*/)
+static void gst_cleanup(
+  //stream_info *data
+  )
 {
   g_print("In gst_cleanup()\n");
 
@@ -663,7 +671,7 @@ static void gst_start(
 
   data = g_new(stream_info, 1);
     
-  /* Create gstreamer elements */
+  // Create gstreamer elements
   data->pipeline = gst_pipeline_new("audio-player");
   source = gst_element_factory_make("filesrc", "file-source");
   decoder = gst_element_factory_make("flump3dec", "fluendo-decoder");
@@ -676,17 +684,17 @@ static void gst_start(
     return;
   }
 
-  /* Set up the pipeline */
-  /* we set the input filename to the source element */
+  // Set up the pipeline
+  // we set the input filename to the source element
   g_object_set(G_OBJECT (source), "location", filename, NULL);
 
-  /* we add a message handler */
+  // we add a message handler
   bus = gst_pipeline_get_bus(GST_PIPELINE(data->pipeline));
   data->bus_watch_id = gst_bus_add_watch(bus, bus_call, data);
   gst_object_unref(bus);
 
-  /* we add all elements into the pipeline */
-  /* file-source | vorbis-decoder | converter | alsa-output */
+  // we add all elements into the pipeline
+  // file-source | vorbis-decoder | converter | alsa-output
   gst_bin_add_many(GST_BIN(data->pipeline),
       source, decoder, conv, sink, NULL);
   printf("3.1\n");
@@ -908,33 +916,33 @@ static void activate(
 
 
 
+
+  /* button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL); */
+  /* gtk_container_add(GTK_CONTAINER(window), button_box); */
+
+  /* button = gtk_button_new_with_label("Test Play"); */
+  /* g_signal_connect(button, "clicked", G_CALLBACK(btn_clk), NULL); */
+  /* //g_signal_connect_swapped(button, "clicked", G_CALLBACK(gtk_widget_destroy), window); */
+
+  /* file_open_btn = gtk_button_new_with_label("Open..."); */
+  /* g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), NULL); */
+  /* //g_signal_connect(button, "clicked", G_CALLBACK(btn_clk), NULL); */
+
+
+  /* // Status bar */
+  /* status_bar = gtk_statusbar_new(); */
+
+  /* list_box = gtk_list_box_new(); */
+  /* add_list_item(list_box, "Chickens"); */
+  /* add_list_item(list_box, "Cows"); */
+  /* add_list_item(list_box, "Goats"); */
+
+
+  /* gtk_container_add(GTK_CONTAINER (button_box), button); */
+  /* gtk_container_add(GTK_CONTAINER (button_box), file_open_btn); */
+  /* gtk_container_add(GTK_CONTAINER (button_box), list_box); */
+
 /*
-  button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add(GTK_CONTAINER(window), button_box);
-
-  button = gtk_button_new_with_label("Test Play");
-  g_signal_connect(button, "clicked", G_CALLBACK(btn_clk), NULL);
-  //g_signal_connect_swapped(button, "clicked", G_CALLBACK(gtk_widget_destroy), window);
-
-  file_open_btn = gtk_button_new_with_label("Open...");
-  g_signal_connect(file_open_btn, "clicked", G_CALLBACK(file_open_btn_click), NULL);
-  //g_signal_connect(button, "clicked", G_CALLBACK(btn_clk), NULL);
-
-
-  // Status bar
-  status_bar = gtk_statusbar_new();
-
-  list_box = gtk_list_box_new();
-  add_list_item(list_box, "Chickens");
-  add_list_item(list_box, "Cows");
-  add_list_item(list_box, "Goats");
-
-
-  gtk_container_add(GTK_CONTAINER (button_box), button);
-  gtk_container_add(GTK_CONTAINER (button_box), file_open_btn);
-  gtk_container_add(GTK_CONTAINER (button_box), list_box);
-*/
-
   gtk_widget_show_all(window);
 }
 
@@ -963,5 +971,4 @@ int main(int argc, char **argv)
 
   return status;
 }
->>>>>>> 870799c24881d846999a8ca619e3324ad052adcd
 */
