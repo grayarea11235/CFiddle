@@ -115,7 +115,6 @@ static void gst_stop()
   }
 }
 
-
 static void gst_cleanup(/*stream_info *data*/)
 {
   g_print("In gst_cleanup()\n");
@@ -159,7 +158,7 @@ static void gst_pause()
 }
 
 static void gst_start(
-    char *filename)
+  char *filename)
 {
   GstElement *source, 
              *decoder, 
@@ -344,7 +343,6 @@ static void activate(
   GtkWidget *status_bar;
   GtkWidget *grid;
   GtkWidget *tree_view;
-//  GtkWidget *file_label;
   GtkTreeSelection *selection;
   ui_info *ui_data = malloc(sizeof(ui_info));
   ui_data->file_label = NULL;
