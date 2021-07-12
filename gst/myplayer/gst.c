@@ -9,6 +9,21 @@ static void dump_info(stream_info *data)
   g_print("-----------------------------------------------------------------------------\n");
 }
 
+gboolean
+cb_print_position(GstElement *pipeline)
+{
+  gint64 pos, len;
+  
+  if (gst_element_query_position(pipeline, GST_FORMAT_TIME, &pos)
+      && gst_element_query_duration(pipeline, GST_FORMAT_TIME, &len))
+  {
+    g_print("Time: %" GST_TIME_FORMAT " / %" GST_TIME_FORMAT "\r",
+	    GST_TIME_ARGS (pos), GST_TIME_ARGS (len));
+  }
+
+  // call me again
+  return TRUE;
+}
 
 static gboolean bus_call(GstBus *bus,
 			 GstMessage *msg,
@@ -20,13 +35,9 @@ static gboolean bus_call(GstBus *bus,
   {
     case GST_MESSAGE_EOS:
       g_print("End of stream\n");
-
       dump_info(data);
-
       gst_player_stop(data);
       
-//gst_cleanup(/*data*/);
-      //g_free(data);
       break;
 
     case GST_MESSAGE_STREAM_START:
@@ -149,6 +160,12 @@ gst_info_t *gst_player_startup()
   return_data->bus_watch_id = bus_watch_id; // Why??
 
   gst_player_dump_info(return_data);
+
+  g_print("About to set timeout\n");
+  guint timeout_ret = g_timeout_add(200, (GSourceFunc) cb_print_position,
+				    pipeline);
+  g_print("timeout_ret = %d\n", timeout_ret);
+  
   
   return return_data;
 }
@@ -194,6 +211,10 @@ void gst_start(char *filename)
     return;
   }
 
+  guint timeout_ret = g_timeout_add(200, (GSourceFunc) cb_print_position, data->pipeline);
+
+  g_print("timeout_ret = %d\n", timeout_ret);
+  
   /* Set up the pipeline */
   /* we set the input filename to the source element */
   g_object_set(G_OBJECT(source), "location", filename, NULL);
@@ -227,8 +248,7 @@ void gst_start(char *filename)
   {
     g_print("HAVE GOT A VOLUME!!\n");
   }
-  
-
+   
   g_print("Running...\n");
 }
 
