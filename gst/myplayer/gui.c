@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <gst/gst.h>
 #include <math.h>
+#include <libgen.h>
 
 #include "gui.h"
 #include "gst.h"
@@ -9,15 +10,6 @@ enum {
   LIST_ITEM = 0,
   N_COLUMNS
 };
-
-
-//#ifndef M_LN10
-//#define M_LN10 (log(10.0))
-//#endif
-
-
-// Should be in header or not here
-static char *file_name;
 
 void add_list_item(GtkWidget *listbox, 
 		   char *text)
@@ -28,7 +20,6 @@ void add_list_item(GtkWidget *listbox,
   new_label = gtk_label_new(text);
   gtk_list_box_insert(GTK_LIST_BOX(listbox), new_label, -1);
 }
-
 
 static void add_to_list(
   GtkWidget *list, 
@@ -77,7 +68,7 @@ void play_button_click(GtkWidget *widget,
   g_print("About the play file %s\n", name);
   
   // TODO : Check if the file exists
-  gst_player_play(ui->gst_info, name);
+  gst_player_play(ui->gst_info, ui->current_file);
   //gst_start((char *)name);
 }
 
@@ -134,9 +125,17 @@ static void file_open_btn_click(GtkWidget *widget,
     char *filename;
     GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
     filename = gtk_file_chooser_get_filename(chooser);
-    g_print("filename = %s\n", filename);
-    gtk_label_set_text(GTK_LABEL(ui->file_label), filename);
-    //open_file(filename);
+
+    if (ui->current_file != NULL)
+    {
+      free(ui->current_file);
+      ui->current_file = NULL;
+    }
+
+    ui->current_file = strdup(filename);
+    g_print("filename = %s\n", basename(filename));
+
+    gtk_label_set_text(GTK_LABEL(ui->file_label), basename(filename));
     g_free(filename);
   }
 
@@ -189,6 +188,7 @@ void mainwindow_activate(GtkApplication* app,
   GtkWidget *tree_view;
   GtkTreeSelection *selection;
   ui_info *ui_info_cb = malloc(sizeof(ui_info));
+  ui_info_cb->current_file = NULL;
   ui_info_cb->file_label = NULL;
 
   // Init the gst player

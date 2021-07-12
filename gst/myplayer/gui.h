@@ -15,6 +15,8 @@ typedef struct _ui_info
   GtkWidget *file_open_btn;
 
   gst_info_t *gst_info;
+
+  char *current_file;
 } ui_info;
 
 
