@@ -21,9 +21,8 @@ void add_list_item(GtkWidget *listbox,
   gtk_list_box_insert(GTK_LIST_BOX(listbox), new_label, -1);
 }
 
-static void add_to_list(
-  GtkWidget *list, 
-  const gchar *str) 
+static void add_to_list(GtkWidget *list, 
+			const gchar *str) 
 {
   GtkListStore *store;
   GtkTreeIter iter;
