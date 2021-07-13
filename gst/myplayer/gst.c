@@ -19,8 +19,10 @@ gboolean cb_print_position(GstElement *pipeline)
   if (gst_element_query_position(pipeline, GST_FORMAT_TIME, &pos)
       && gst_element_query_duration(pipeline, GST_FORMAT_TIME, &len))
   {
-    g_print("Time: %" GST_TIME_FORMAT " / %" GST_TIME_FORMAT "\r",
-	    GST_TIME_ARGS (pos), GST_TIME_ARGS (len));
+    gint64 percent = (pos * 100) / len;
+    
+    g_print("Time: %" GST_TIME_FORMAT " / %" GST_TIME_FORMAT " %ld\r",
+	    GST_TIME_ARGS(pos), GST_TIME_ARGS(len), percent);
   }
 
   // call me again
@@ -189,6 +191,8 @@ gst_info_t *gst_player_startup()
   
   return return_data;
 }
+// -----------------------------------------------------------------------------------------
+
 // gst_player --------------------------------------------------------------
 
 
