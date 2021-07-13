@@ -20,6 +20,8 @@ typedef struct _gst_info_t
   GstElement *volume;
   GstElement *source;
   guint bus_watch_id;
+
+  GSourceFunc progress_callback;
 } gst_info_t;
 
 // TODO : This is BAD
