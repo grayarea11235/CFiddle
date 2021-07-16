@@ -12,6 +12,8 @@ int main(int argc, char **argv)
 
   // Initialisation
   gst_init(&argc, &argv);
+  gst_meta_info();
+  
 
   g_print("GST is init\n");
 

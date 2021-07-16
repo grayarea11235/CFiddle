@@ -236,7 +236,7 @@ void mainwindow_activate(GtkApplication* app,
 //  gtk_widget_set_name(ui_info_cb->file_label, "file_label");
 
   // Set up the vol scale
-  GtkWidget *volume_scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, -90.0, 10.0, 0.2);
+  GtkWidget *volume_scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0.0, 10.0, 0.5);
   g_signal_connect(volume_scale, "value-changed",
 		   G_CALLBACK(volume_scale_changed), volume_scale);
   
