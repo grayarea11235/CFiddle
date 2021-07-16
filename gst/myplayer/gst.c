@@ -90,7 +90,10 @@ void gst_meta_info()
   GstElement *dec;
   GstElement *sink;
   GstMessage *msg;
-  gchar *uri = "file:///home/cpd/Devel/CFiddle/gst/myplayer/piano2-Audacity1.2.5.mp3";
+//  gchar *uri = "file:///home/cpd/Devel/CFiddle/gst/myplayer/piano2-Audacity1.2.5.mp3";
+
+  gchar *uri = "file:///media/cpd/3634-6261/Music/(2000) Kid A/01 Radiohead - Everything In Its Right Place.mp3";
+
   
   pipe = gst_pipeline_new("pipeline");
   
