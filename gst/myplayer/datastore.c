@@ -15,6 +15,26 @@ void create_datastore(const char *database_name)
     
     return;
   }
+  
+  rc = sqlite3_prepare_v2(db, "SELECT SQLITE_VERSION()", -1, &res, 0);    
+  
+  if (rc != SQLITE_OK)
+  {
+    fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db));
+    sqlite3_close(db);
+        
+    return;
+  }    
+}
+
+void open_datastore()
+{
+
+}
+
+void close_datastore()
+{
+
 }
 
 #ifdef SIMP_TEST

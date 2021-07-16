@@ -79,7 +79,7 @@ static void on_new_pad(GstElement *dec,
 
 // -----------------------------------------------------------------------------------------
 //
-// Function : cb_print_position
+// Function : gst_meta_info
 //
 // Description : 
 //
