@@ -14,7 +14,6 @@ int main(int argc, char **argv)
   gst_init(&argc, &argv);
   gst_meta_info();
   
-
   g_print("GST is init\n");
 
   app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);

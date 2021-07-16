@@ -39,6 +39,7 @@ extern void gst_player_play(gst_info_t *info, gchar *filename);
 extern void gst_player_pause(gst_info_t *info);
 extern void gst_player_stop(gst_info_t *info);
 
+extern void gst_meta_info();
 #endif
 
 
