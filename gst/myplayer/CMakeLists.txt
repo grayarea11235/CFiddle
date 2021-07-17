@@ -16,7 +16,8 @@ add_executable(myplayer
   main.c 
   gui.c 
   gst.c
-  datastore.c)
+  datastore.c
+  config.c)
 
 target_include_directories(myplayer PUBLIC ${GTK_INCLUDE_DIRS})
 target_include_directories(myplayer PUBLIC ${GST_INCLUDE_DIRS})

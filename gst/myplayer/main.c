@@ -2,6 +2,7 @@
 #include <gst/gst.h>
 
 #include "gui.h"
+#include "config.h"
 
 int main(int argc, char **argv)
 {
@@ -10,6 +11,8 @@ int main(int argc, char **argv)
 
   g_print("%s started.\n", argv[0]);
 
+  init_config();
+  
   // Initialisation
   gst_init(&argc, &argv);
   gst_meta_info();
