@@ -10,7 +10,7 @@
 
 config_info_t *init_config()
 {
-  struct stat st = {0};
+  struct stat st = { 0 };
   config_info_t *ret = malloc(sizeof(config_info_t));
 
   apr_pool_t *mp;
@@ -20,24 +20,24 @@ config_info_t *init_config()
 			   
   const char *home_dir = getenv("HOME");
   
-  g_print("In init_config... home dir is %s\n", home_dir);
+  g_info("In init_config... home dir is %s\n", home_dir);
 
   char *path_test;
 
   if ((rv = apr_filepath_merge(&path_test, home_dir, ".config", 0, mp)) == APR_SUCCESS)
   {
-    g_print("path_test = %s\n", path_test);
+    g_info("path_test = %s\n", path_test);
   }
   
   if (stat(path_test, &st) == -1)
   {
-    g_print("Creating config dir\n");
+    g_info("Creating config dir\n");
     assert(mkdir("~/.config", 0700) != -1);
   }
 
   if (stat("/home/cpd/.config/mply", &st) == -1)
   {
-    g_print("Creating mply dir\n");
+    g_info("Creating mply dir\n");
     assert(mkdir("/home/cpd/mply", 0700) != -1);
   }
 

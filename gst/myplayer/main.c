@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 #include <gst/gst.h>
-#include <apr_generalq.h> 
+#include <apr_general.h> 
 
 #include "gui.h"
 #include "config.h"
@@ -22,7 +22,7 @@ int main(int argc, char **argv)
   
   g_print("GST is init\n");
 
-  app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  app = gtk_application_new("org.gtk.myplayer", G_APPLICATION_FLAGS_NONE);
 
   g_print("Application created\n");
 

@@ -1,5 +1,6 @@
 #include <sqlite3.h>
 #include <stdio.h>
+#include <glib.h>
 
 // DB Structure
 
@@ -15,8 +16,18 @@
 // CREATE TABLE track_state
 
 
-int add_track()
+int add_track(const char *track_name,
+	      int track_number,
+	      const char *directory,
+	      const char *album)
 {
+  g_info("Adding new track to store\n");
+  g_info("track_name   = %s\n", track_name);
+  g_info("track_number = %d\n", track_number);
+  g_info("directory    = %s\n", directory);
+  g_info("album        = %s\n", album);
+
+  
   return 0;
 }
 
