@@ -123,6 +123,33 @@ myplayer/fast:
 	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/build
 .PHONY : myplayer/fast
 
+datastore.o: datastore.c.o
+
+.PHONY : datastore.o
+
+# target to build an object file
+datastore.c.o:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/datastore.c.o
+.PHONY : datastore.c.o
+
+datastore.i: datastore.c.i
+
+.PHONY : datastore.i
+
+# target to preprocess a source file
+datastore.c.i:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/datastore.c.i
+.PHONY : datastore.c.i
+
+datastore.s: datastore.c.s
+
+.PHONY : datastore.s
+
+# target to generate assembly for a file
+datastore.c.s:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/datastore.c.s
+.PHONY : datastore.c.s
+
 gst.o: gst.c.o
 
 .PHONY : gst.o
@@ -213,6 +240,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... myplayer"
 	@echo "... edit_cache"
+	@echo "... datastore.o"
+	@echo "... datastore.i"
+	@echo "... datastore.s"
 	@echo "... gst.o"
 	@echo "... gst.i"
 	@echo "... gst.s"

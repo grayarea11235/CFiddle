@@ -9,36 +9,36 @@ static void dump_info(stream_info *data)
   g_print("-----------------------------------------------------------------------------\n");
 }
 
-
-
-static void print_one_tag (const GstTagList * list, const gchar * tag, gpointer user_data)
+static void print_one_tag(const GstTagList * list,
+			  const gchar * tag,
+			  gpointer user_data)
 {
   int i, num;
 
-  num = gst_tag_list_get_tag_size (list, tag);
+  num = gst_tag_list_get_tag_size(list, tag);
   for (i = 0; i < num; ++i)
   {
     const GValue *val;
 
     /* Note: when looking for specific tags, use the gst_tag_list_get_xyz() API,
      * we only use the GValue approach here because it is more generic */
-    val = gst_tag_list_get_value_index (list, tag, i);
-    if (G_VALUE_HOLDS_STRING (val))
+    val = gst_tag_list_get_value_index(list, tag, i);
+    if (G_VALUE_HOLDS_STRING(val))
     {
-      g_print ("\t%20s : %s\n", tag, g_value_get_string (val));
+      g_print("\t%20s : %s\n", tag, g_value_get_string (val));
     }
     else if (G_VALUE_HOLDS_UINT (val))
     {
-      g_print ("\t%20s : %u\n", tag, g_value_get_uint (val));
+      g_print("\t%20s : %u\n", tag, g_value_get_uint (val));
     }
     else if (G_VALUE_HOLDS_DOUBLE (val))
     {
-      g_print ("\t%20s : %g\n", tag, g_value_get_double (val));
+      g_print("\t%20s : %g\n", tag, g_value_get_double (val));
     }
     else if (G_VALUE_HOLDS_BOOLEAN (val))
     {
-      g_print ("\t%20s : %s\n", tag,
-	       (g_value_get_boolean (val)) ? "true" : "false");
+      g_print("\t%20s : %s\n", tag,
+	      (g_value_get_boolean (val)) ? "true" : "false");
     }
     else if (GST_VALUE_HOLDS_BUFFER (val))
     {
@@ -84,7 +84,7 @@ static void on_new_pad(GstElement *dec,
 // Description : 
 //
 // -----------------------------------------------------------------------------------------
-void gst_meta_info()
+void gst_meta_info(const gchar *uri)
 {
   GstElement *pipe;
   GstElement *dec;
@@ -92,7 +92,7 @@ void gst_meta_info()
   GstMessage *msg;
 //  gchar *uri = "file:///home/cpd/Devel/CFiddle/gst/myplayer/piano2-Audacity1.2.5.mp3";
 
-  gchar *uri = "file:///media/cpd/3634-6261/Music/(2000) Kid A/01 Radiohead - Everything In Its Right Place.mp3";
+//  gchar *uri = "file:///media/cpd/3634-6261/Music/(2000) Kid A/01 Radiohead - Everything In Its Right Place.mp3";
 
   
   pipe = gst_pipeline_new("pipeline");
