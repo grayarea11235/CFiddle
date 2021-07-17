@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <gst/gst.h>
+#include <apr_generalq.h> 
 
 #include "gui.h"
 #include "config.h"
@@ -11,11 +12,13 @@ int main(int argc, char **argv)
 
   g_print("%s started.\n", argv[0]);
 
-  init_config();
-  
+  apr_initialize();
+
   // Initialisation
   gst_init(&argc, &argv);
   gst_meta_info();
+
+  init_config();
   
   g_print("GST is init\n");
 
@@ -30,5 +33,7 @@ int main(int argc, char **argv)
   status = g_application_run(G_APPLICATION (app), argc, argv);
   g_object_unref(app);
 
+  apr_terminate();
+  
   return status;
 }
