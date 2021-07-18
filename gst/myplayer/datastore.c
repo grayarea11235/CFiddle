@@ -120,6 +120,7 @@ int create_tracks_table(sqlite3 *db)
     "CREATE TABLE tracks(track_id INTEGER PRIMARY KEY,"
     "track_name TEXT NOT NULL,"
     "track_number INTEGER,"
+    "artist TEXT NOT NULL,"
     "directory TEXT NOT NULL,"
     "album TEXT NOT NULL);";
 
