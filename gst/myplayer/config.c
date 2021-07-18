@@ -26,6 +26,7 @@ config_info_t *init_config()
 
   if ((rv = apr_filepath_merge(&path_test, home_dir, ".config", 0, mp)) == APR_SUCCESS)
   {
+    //g_print("path
     g_info("path_test = %s\n", path_test);
   }
   
@@ -35,10 +36,12 @@ config_info_t *init_config()
     assert(mkdir("~/.config", 0700) != -1);
   }
 
+  apr_pool_destroy(mp);
+  
   if (stat("/home/cpd/.config/mply", &st) == -1)
   {
     g_info("Creating mply dir\n");
-    assert(mkdir("/home/cpd/mply", 0700) != -1);
+    assert(mkdir("/home/cpd/.config/mply", 0700) != -1);
   }
 
   return ret;
