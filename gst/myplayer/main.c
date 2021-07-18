@@ -6,23 +6,22 @@
 
 #include "gui.h"
 #include "config.h"
+#include "datastore.h"
 
 int main(int argc, char **argv)
 {
   GtkApplication *app;
   int status;
+  datastore_t *ds;
 
   const gchar *home_dir = g_getenv("HOME");
-  //datastore_t *ds = open_datastore(
 
+  ds = open_datastore("/home/cpd/testdb.db");
 
   // Initialisation
   gst_init(&argc, &argv);
   apr_initialize();
 
-  
-
-  
   g_print("%s started.\n", argv[0]);
   assert(scan_directory("/media/cpd/3634-6261/Music/1988 - Green/") == 0);
   
@@ -45,6 +44,8 @@ int main(int argc, char **argv)
   g_object_unref(app);
 
   apr_terminate();
+
+  close_datastore(ds);
   
   return status;
 }
