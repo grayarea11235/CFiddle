@@ -26,7 +26,6 @@ config_info_t *init_config()
 
   if ((rv = apr_filepath_merge(&path_test, home_dir, ".config", 0, mp)) == APR_SUCCESS)
   {
-    //g_print("path
     g_info("path_test = %s\n", path_test);
   }
   
