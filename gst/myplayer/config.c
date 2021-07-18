@@ -12,7 +12,7 @@ config_info_t *init_config()
 {
   struct stat st = { 0 };
   config_info_t *ret = malloc(sizeof(config_info_t));
-
+  
   apr_pool_t *mp;
   apr_status_t rv;
 
