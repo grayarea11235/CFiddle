@@ -12,14 +12,8 @@ msg_queue *init_msg_queue()
   return res;
 }
 
-
-
-
 int main(void)
 {
 
   return 0;
 }
-
-
-
