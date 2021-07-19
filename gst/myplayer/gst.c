@@ -309,7 +309,7 @@ gst_info_t *gst_player_startup()
 
   gst_info_t *return_data = malloc(sizeof(stream_info));
 
-  g_print("data = %p\n", data);
+  g_print("return_data = %p\n", return_data);
 
   g_print("In gst_startup()\n");
   

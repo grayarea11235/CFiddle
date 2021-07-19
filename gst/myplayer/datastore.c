@@ -46,11 +46,14 @@ int add_track(const datastore_t *ds,
   }    
 
   int c = 1;
-  rc = sqlite3_bind_text(stmt, c++, track->track_name, strlen(track->track_name), NULL);
-  rc = sqlite3_bind_int(stmt, c++, track->track_number);
-  rc = sqlite3_bind_text(stmt, c++, track->track_name, strlen(track->track_name), NULL);
-  rc = sqlite3_bind_text(stmt, c++, track->track_name, strlen(track->track_name), NULL);
-
+  rc = sqlite3_bind_text(stmt, c++, track->track_name,
+			 strlen(track->track_name), NULL);
+  rc = sqlite3_bind_int(stmt, c++,
+			track->track_number);
+  rc = sqlite3_bind_text(stmt, c++, track->track_name,
+			 strlen(track->track_name), NULL);
+  rc = sqlite3_bind_text(stmt, c++, track->track_name,
+			 strlen(track->track_name), NULL);
   
   rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
     
