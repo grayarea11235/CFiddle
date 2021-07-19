@@ -24,7 +24,6 @@ int main(int argc, char **argv)
 
   g_print("%s started.\n", argv[0]);
   assert(scan_directory("/media/cpd/3634-6261/Music/1988 - Green/") == 0);
-  
 
   gst_meta_info("file:///media/cpd/3634-6261/Music/(2000) Kid A/01 Radiohead - Everything In Its Right Place.mp3");
 

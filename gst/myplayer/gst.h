@@ -27,7 +27,6 @@ typedef struct _gst_info_t
 // TODO : This is BAD
 static stream_info *data;
 
-
 extern void gst_cleanup();
 extern void gst_pause();
 extern void gst_start(char *filename);
