@@ -327,6 +327,7 @@ gst_info_t *gst_player_startup()
   if (!pipeline || !source || !decoder || !conv || !volume || !sink) 
   {
     g_printerr("One element could not be created. Exiting.\n");
+
     return NULL;
   }
 
