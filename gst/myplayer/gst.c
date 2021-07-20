@@ -25,38 +25,38 @@ static void print_one_tag(const GstTagList * list,
     val = gst_tag_list_get_value_index(list, tag, i);
     if (G_VALUE_HOLDS_STRING(val))
     {
-      g_print("\t%20s : %s\n", tag, g_value_get_string (val));
+      g_print("\t%20s : %s\n", tag, g_value_get_string(val));
     }
     else if (G_VALUE_HOLDS_UINT (val))
     {
-      g_print("\t%20s : %u\n", tag, g_value_get_uint (val));
+      g_print("\t%20s : %u\n", tag, g_value_get_uint(val));
     }
-    else if (G_VALUE_HOLDS_DOUBLE (val))
+    else if (G_VALUE_HOLDS_DOUBLE(val))
     {
-      g_print("\t%20s : %g\n", tag, g_value_get_double (val));
+      g_print("\t%20s : %g\n", tag, g_value_get_double(val));
     }
-    else if (G_VALUE_HOLDS_BOOLEAN (val))
+    else if(G_VALUE_HOLDS_BOOLEAN(val))
     {
       g_print("\t%20s : %s\n", tag,
 	      (g_value_get_boolean (val)) ? "true" : "false");
     }
-    else if (GST_VALUE_HOLDS_BUFFER (val))
+    else if(GST_VALUE_HOLDS_BUFFER (val))
     {
       GstBuffer *buf = gst_value_get_buffer (val);
       guint buffer_size = gst_buffer_get_size (buf);
 
-      g_print ("\t%20s : buffer of size %u\n", tag, buffer_size);
+      g_print("\t%20s : buffer of size %u\n", tag, buffer_size);
     }
-    else if (GST_VALUE_HOLDS_DATE_TIME (val)) {
-      GstDateTime *dt = g_value_get_boxed (val);
-      gchar *dt_str = gst_date_time_to_iso8601_string (dt);
+    else if(GST_VALUE_HOLDS_DATE_TIME(val)) {
+      GstDateTime *dt = g_value_get_boxed(val);
+      gchar *dt_str = gst_date_time_to_iso8601_string(dt);
 
-      g_print ("\t%20s : %s\n", tag, dt_str);
-      g_free (dt_str);
+      g_print("\t%20s : %s\n", tag, dt_str);
+      g_free(dt_str);
     }
     else
     {
-      g_print ("\t%20s : tag of type '%s'\n", tag, G_VALUE_TYPE_NAME (val));
+      g_print("\t%20s : tag of type '%s'\n", tag, G_VALUE_TYPE_NAME(val));
     }
   }
 }
