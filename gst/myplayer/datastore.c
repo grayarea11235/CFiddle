@@ -19,6 +19,7 @@
 // CREATE TABLE directories
 // CREATE TABLE track_state
 // CREATE TABLE albums
+// CREATE TABLE play_list
 
 
 int add_track(const datastore_t *ds,
@@ -39,7 +40,7 @@ int add_track(const datastore_t *ds,
   
   if (rc != SQLITE_OK)
   {
-    //fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db));
+    fprintf(stderr, "Failed to fetch data: %s\n", sqlite3_errmsg(db));
     //sqlite3_close(db);
     
     return 1;
@@ -84,7 +85,7 @@ int scan_directory(const char *directory)
   struct dirent *entry;
   int files = 0;
 
-  while ((entry = readdir(dir)))
+  while((entry = readdir(dir)))
   {
     files++;
     g_print("File %3d: %s %s\n", files,
@@ -105,7 +106,7 @@ int exec_sql(sqlite3 *db,
 
   int rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
 
-  if (rc != SQLITE_OK)
+  if(rc != SQLITE_OK)
   {
     fprintf(stderr, "SQL error: %s\n", err_msg);
     

@@ -117,7 +117,7 @@ static void file_open_btn_click(GtkWidget *widget,
 					"_Open",
 					GTK_RESPONSE_ACCEPT,
 					NULL);
-
+  
   res = gtk_dialog_run(GTK_DIALOG(dialog));
   if (res == GTK_RESPONSE_ACCEPT)
   {
@@ -125,6 +125,14 @@ static void file_open_btn_click(GtkWidget *widget,
     GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
     filename = gtk_file_chooser_get_filename(chooser);
 
+    char *ext = "file://";
+    char *temp = malloc(strlen(filename) + strlen(ext));
+    strcat(temp, ext);
+    strcat(temp, filename);
+    g_print("temp = %s\n", temp);
+    gst_meta_info(temp);
+    free(temp);
+    
     if (ui->current_file != NULL)
     {
       free(ui->current_file);

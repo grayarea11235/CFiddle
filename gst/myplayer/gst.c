@@ -90,10 +90,6 @@ void gst_meta_info(const gchar *uri)
   GstElement *dec;
   GstElement *sink;
   GstMessage *msg;
-//  gchar *uri = "file:///home/cpd/Devel/CFiddle/gst/myplayer/piano2-Audacity1.2.5.mp3";
-
-//  gchar *uri = "file:///media/cpd/3634-6261/Music/(2000) Kid A/01 Radiohead - Everything In Its Right Place.mp3";
-
   
   pipe = gst_pipeline_new("pipeline");
   
@@ -109,11 +105,11 @@ void gst_meta_info(const gchar *uri)
   gst_element_set_state(pipe, GST_STATE_PAUSED);
 
   g_print("About to loop\n");
-  while (TRUE)
+  while(TRUE)
   {
     GstTagList *tags = NULL;
     
-    msg = gst_bus_timed_pop_filtered(GST_ELEMENT_BUS (pipe),
+    msg = gst_bus_timed_pop_filtered(GST_ELEMENT_BUS(pipe),
 				     GST_CLOCK_TIME_NONE,
 				     GST_MESSAGE_ASYNC_DONE | GST_MESSAGE_TAG | GST_MESSAGE_ERROR);
     
@@ -165,7 +161,7 @@ gboolean cb_print_position(GstElement *pipeline)
   {
     gint64 percent = (pos * 100) / len;
     
-    g_print("Time: %" GST_TIME_FORMAT " / %" GST_TIME_FORMAT " %ld\r",
+    g_print("Time: %" GST_TIME_FORMAT " / %" GST_TIME_FORMAT " %ld%%\r",
 	    GST_TIME_ARGS(pos), GST_TIME_ARGS(len), percent);
   }
 
