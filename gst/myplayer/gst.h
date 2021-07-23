@@ -13,7 +13,7 @@ typedef struct _stream_info
   guint bus_watch_id;
 } stream_info;
 
-// Contrains the main pipeline for the player
+// Contains the main pipeline for the player
 typedef struct _gst_info_t
 {
   GstElement *pipeline;
@@ -21,7 +21,7 @@ typedef struct _gst_info_t
   GstElement *source;
   guint bus_watch_id;
 
-  GSourceFunc progress_callback;
+  void (*progress_callback)(gint64 pos, gint64 length);
 } gst_info_t;
 
 
@@ -31,12 +31,13 @@ extern void gst_start(char *filename);
 extern void gst_stop();
 
 // The new interface
-extern gst_info_t *gst_player_startup();
+extern gst_info_t *gst_player_init();
 extern void gst_player_play(gst_info_t *info, gchar *filename);
 extern void gst_player_pause(gst_info_t *info);
 extern void gst_player_stop(gst_info_t *info);
 
 extern void gst_meta_info();
+
 #endif
 
 

@@ -27,7 +27,7 @@ static void print_one_tag(const GstTagList * list,
     {
       g_print("\t%20s : %s\n", tag, g_value_get_string(val));
     }
-    else if (G_VALUE_HOLDS_UINT (val))
+    else if (G_VALUE_HOLDS_UINT(val))
     {
       g_print("\t%20s : %u\n", tag, g_value_get_uint(val));
     }
@@ -38,16 +38,17 @@ static void print_one_tag(const GstTagList * list,
     else if(G_VALUE_HOLDS_BOOLEAN(val))
     {
       g_print("\t%20s : %s\n", tag,
-	      (g_value_get_boolean (val)) ? "true" : "false");
+	      (g_value_get_boolean(val)) ? "true" : "false");
     }
-    else if(GST_VALUE_HOLDS_BUFFER (val))
+    else if(GST_VALUE_HOLDS_BUFFER(val))
     {
-      GstBuffer *buf = gst_value_get_buffer (val);
+      GstBuffer *buf = gst_value_get_buffer(val);
       guint buffer_size = gst_buffer_get_size (buf);
 
       g_print("\t%20s : buffer of size %u\n", tag, buffer_size);
     }
-    else if(GST_VALUE_HOLDS_DATE_TIME(val)) {
+    else if(GST_VALUE_HOLDS_DATE_TIME(val))
+    {
       GstDateTime *dt = g_value_get_boxed(val);
       gchar *dt_str = gst_date_time_to_iso8601_string(dt);
 
@@ -90,7 +91,6 @@ void gst_meta_info(const gchar *uri)
   GstElement *dec;
   GstElement *sink;
   GstMessage *msg;
-  
   pipe = gst_pipeline_new("pipeline");
   
   dec = gst_element_factory_make("uridecodebin", NULL);
@@ -100,7 +100,7 @@ void gst_meta_info(const gchar *uri)
   sink = gst_element_factory_make("fakesink", NULL);
   gst_bin_add(GST_BIN (pipe), sink);
   
-  g_signal_connect(dec, "pad-added", G_CALLBACK (on_new_pad), sink);
+  g_signal_connect(dec, "pad-added", G_CALLBACK(on_new_pad), sink);
   
   gst_element_set_state(pipe, GST_STATE_PAUSED);
 
@@ -111,7 +111,9 @@ void gst_meta_info(const gchar *uri)
     
     msg = gst_bus_timed_pop_filtered(GST_ELEMENT_BUS(pipe),
 				     GST_CLOCK_TIME_NONE,
-				     GST_MESSAGE_ASYNC_DONE | GST_MESSAGE_TAG | GST_MESSAGE_ERROR);
+				     GST_MESSAGE_ASYNC_DONE |
+				     GST_MESSAGE_TAG |
+				     GST_MESSAGE_ERROR);
     
     if (GST_MESSAGE_TYPE (msg) != GST_MESSAGE_TAG) /* error or async_done */
     {
@@ -144,7 +146,6 @@ void gst_meta_info(const gchar *uri)
 }
 // -----------------------------------------------------------------------------------------
 
-
 // -----------------------------------------------------------------------------------------
 //
 // Function : cb_print_position
@@ -152,13 +153,19 @@ void gst_meta_info(const gchar *uri)
 // Description : 
 //
 // -----------------------------------------------------------------------------------------
-gboolean cb_print_position(GstElement *pipeline)
+gboolean cb_print_position(gst_info_t *info)
 {
   gint64 pos, len;
   
-  if (gst_element_query_position(pipeline, GST_FORMAT_TIME, &pos)
-      && gst_element_query_duration(pipeline, GST_FORMAT_TIME, &len))
+  if (gst_element_query_position(info->pipeline, GST_FORMAT_TIME, &pos)
+      && gst_element_query_duration(info->pipeline, GST_FORMAT_TIME, &len))
   {
+    // If the callback is defined call it
+    if (info->progress_callback)
+    {
+      (*info->progress_callback)(pos, len);
+    }
+    
     gint64 percent = (pos * 100) / len;
     
     g_print("Time: %" GST_TIME_FORMAT " / %" GST_TIME_FORMAT " %ld%%\r",
@@ -269,8 +276,9 @@ void gst_player_pause(gst_info_t *info)
 void gst_player_play(gst_info_t *info, gchar *filename)
 {
   g_print("About to set timeout\n");
+  
   guint timeout_ret = g_timeout_add(200, (GSourceFunc) cb_print_position,
-				    info->pipeline);
+				    info);
   g_print("timeout_ret = %d\n", timeout_ret);
   
   // Set the filename - Should be in play
@@ -292,10 +300,10 @@ void gst_player_play(gst_info_t *info, gchar *filename)
 // Description :
 //
 // -----------------------------------------------------------------------------------------
-gst_info_t *gst_player_startup()
+gst_info_t *gst_player_init()
 {
   GstElement *source, 
-    *pipeline, 
+//    *pipeline, 
     *decoder, 
     *conv, 
     *sink,
@@ -313,14 +321,14 @@ gst_info_t *gst_player_startup()
   // https://gstreamer.freedesktop.org/documentation/autodetect/index.html?gi-language=c
   
   // Create elements
-  pipeline = gst_pipeline_new("audio-player");
+  return_data->pipeline = gst_pipeline_new("audio-player");
   source = gst_element_factory_make("filesrc", "file-source");
   decoder = gst_element_factory_make("flump3dec", "fluendo-decoder");
   conv = gst_element_factory_make("audioconvert", "converter");
   volume = gst_element_factory_make("volume", "volume-name");
   sink = gst_element_factory_make("autoaudiosink", "audio-output");
 
-  if (!pipeline || !source || !decoder || !conv || !volume || !sink) 
+  if (!return_data->pipeline || !source || !decoder || !conv || !volume || !sink) 
   {
     g_printerr("One element could not be created. Exiting.\n");
 
@@ -330,19 +338,19 @@ gst_info_t *gst_player_startup()
   // Set the filename - Should be in play
 //  g_object_set(G_OBJECT(source), "location", filename, NULL);
   
-  bus = gst_pipeline_get_bus(GST_PIPELINE(pipeline));
+  bus = gst_pipeline_get_bus(GST_PIPELINE(return_data->pipeline));
 
 //  bus_watch_id = gst_bus_add_watch(bus, bus_call, data);
   bus_watch_id = gst_bus_add_watch(bus, bus_call, return_data);
   gst_object_unref(bus);
 
-  gst_bin_add_many(GST_BIN(pipeline),
+  gst_bin_add_many(GST_BIN(return_data->pipeline),
 		   source, decoder, volume, conv, sink, NULL);
 
   // Link em up
   gst_element_link_many(source, decoder, volume, conv, sink, NULL);
 
-  return_data->pipeline = pipeline;
+//  return_data->pipeline = pipeline;
   return_data->volume = volume;
   return_data->source = source;
   return_data->bus_watch_id = bus_watch_id; // Why??
@@ -354,10 +362,14 @@ gst_info_t *gst_player_startup()
 //				    pipeline);
 //  g_print("timeout_ret = %d\n", timeout_ret);
   
-  
   return return_data;
 }
 // -----------------------------------------------------------------------------------------
+
+void gst_player_deinit(gst_info_t *info)
+{
+
+}
 
 // gst_player --------------------------------------------------------------
 

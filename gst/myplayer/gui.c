@@ -57,6 +57,8 @@ void init_list(GtkWidget *list)
 void play_button_click(GtkWidget *widget,
 		  gpointer data)
 {
+  g_info("ENTER");
+  
   g_print("Play button push\n");
 
   ui_info *ui = (ui_info *) data;
@@ -66,9 +68,11 @@ void play_button_click(GtkWidget *widget,
 
   g_print("About the play file %s\n", name);
   
-  // TODO : Check if the file exists
+  // TODO : Check if the file exists and get file info
   gst_player_play(ui->gst_info, ui->current_file);
   //gst_start((char *)name);
+
+  g_info("EXIT");
 }
 
 void configure_callback(GtkWindow *window, 
@@ -180,6 +184,11 @@ static void pause_button_click(GtkWidget *widget,
   gst_player_pause(ui->gst_info);  
 }
 
+void gst_progress_callback(gint64 pos, gint64 len)
+{
+//  printf("\t\tpos = %ld len = %ld\n", pos, len);
+}
+
 void mainwindow_activate(GtkApplication* app,
 			 gpointer user_data)
 {
@@ -199,7 +208,8 @@ void mainwindow_activate(GtkApplication* app,
   ui_info_cb->file_label = NULL;
 
   // Init the gst player
-  gst_info_t *gst_info = gst_player_startup();
+  gst_info_t *gst_info = gst_player_init();
+  gst_info->progress_callback = gst_progress_callback;
   g_print("gst_player created");
   
   ui_info_cb->gst_info = gst_info;
