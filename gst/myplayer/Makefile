@@ -231,6 +231,33 @@ gui.c.s:
 	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/gui.c.s
 .PHONY : gui.c.s
 
+logging.o: logging.c.o
+
+.PHONY : logging.o
+
+# target to build an object file
+logging.c.o:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/logging.c.o
+.PHONY : logging.c.o
+
+logging.i: logging.c.i
+
+.PHONY : logging.i
+
+# target to preprocess a source file
+logging.c.i:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/logging.c.i
+.PHONY : logging.c.i
+
+logging.s: logging.c.s
+
+.PHONY : logging.s
+
+# target to generate assembly for a file
+logging.c.s:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/logging.c.s
+.PHONY : logging.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -279,6 +306,9 @@ help:
 	@echo "... gui.o"
 	@echo "... gui.i"
 	@echo "... gui.s"
+	@echo "... logging.o"
+	@echo "... logging.i"
+	@echo "... logging.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

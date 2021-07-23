@@ -7,12 +7,17 @@
 #include "gui.h"
 #include "config.h"
 #include "datastore.h"
+#include "logging.h"
 
 int main(int argc, char **argv)
 {
   GtkApplication *app;
   int status;
   datastore_t *ds;
+
+  init_logging();
+
+  g_info("Starting main...\n");
   
   const gchar *home_dir = g_getenv("HOME");
   
