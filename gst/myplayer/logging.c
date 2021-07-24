@@ -7,7 +7,7 @@
 
 void dirty_log(const char *msg)
 {
-  FILE *f = fopen("/home/cpd/dirty_log.txt", "at");
+  FILE *f = fopen("dirty_log.txt", "at");
   time_t rawtime;
   struct tm * timeinfo;
   char time_str[32];
@@ -20,7 +20,7 @@ void dirty_log(const char *msg)
   if (time_str[strlen(time_str) - 1] == '\n')
   {
     time_str[strlen(time_str) - 1] = '\0';
-  }
+   }
   
   fprintf(f, "%s : %s\n", time_str, msg);
    
@@ -75,7 +75,11 @@ static void log_handler_cb(const gchar *log_domain,
 
 void init_logging()
 {
+  dirty_log("init_logging - ENTER");
+
   g_log_set_handler("log-domain",
 		    G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,
 		    log_handler_cb, NULL);
+
+  dirty_log("init_logging - EXIT");
 }
