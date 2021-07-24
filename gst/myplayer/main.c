@@ -15,6 +15,7 @@ int main(int argc, char **argv)
   int status;
   datastore_t *ds;
 
+  dirty_log("Starting up...\n");
   init_logging();
 
   g_info("Starting main...\n");

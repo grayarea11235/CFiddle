@@ -1,14 +1,20 @@
 #include <glib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "logging.h"
 
 void dirty_log(const char *msg)
 {
-  FILE *f = fopen("/home/cpd/dirty_log.txt", "wt");
+  FILE *f = fopen("/home/cpd/dirty_log.txt", "at");
+  time_t rawtime;
+  struct tm * timeinfo;
 
-  fprintf(f, "%s", msg);
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
+  
+  fprintf(f, "%s : %s\n", asctime(timeinfo), msg);
    
   fclose(f);
 }
