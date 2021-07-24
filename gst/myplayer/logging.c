@@ -61,8 +61,6 @@ static void log_handler_cb(const gchar *log_domain,
 
 void init_logging()
 {
-  
-  
   g_log_set_handler("log-domain",
 		    G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,
 		    log_handler_cb, NULL);
