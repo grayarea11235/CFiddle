@@ -13,8 +13,13 @@ void dirty_log(const char *msg)
 
   time(&rawtime);
   timeinfo = localtime(&rawtime);
+  char *time = asctime(timeinfo);
+  if (time[strlen(time) - 1] == '\n')
+  {
+    time[strlen(time) - 1] = '\0';
+  }
   
-  fprintf(f, "%s : %s\n", asctime(timeinfo), msg);
+  fprintf(f, "%s : %s\n", time, msg);
    
   fclose(f);
 }
