@@ -20,7 +20,7 @@ void dirty_log(const char *msg)
   if (time_str[strlen(time_str) - 1] == '\n')
   {
     time_str[strlen(time_str) - 1] = '\0';
-   }
+  }
   
   fprintf(f, "%s : %s\n", time_str, msg);
    
@@ -51,7 +51,6 @@ static void log_handler_cb(const gchar *log_domain,
   bool debug_enabled = true;
 
   dirty_log("In log_handler_cb\n");
-  printf("In Log handler\n");
   
   /* Ignore debug messages if disabled. */
   /* if (!debug_enabled && (log_level & G_LOG_LEVEL_DEBUG)) */
@@ -61,6 +60,10 @@ static void log_handler_cb(const gchar *log_domain,
    
   log_level_str = log_level_to_string(log_level & G_LOG_LEVEL_MASK);
   g_print("%s: %s: %s\n", log_domain, log_level_str, message);
+
+  char temp[4096];
+  sprintf(temp, "F %s: %s: %s\n", log_domain, log_level_str, message);
+  dirty_log(temp);
   
   /* Use g_printerr() for warnings and g_print() otherwise. */
   /* if (flags <= G_LOG_LEVEL_WARNING) */
@@ -77,9 +80,11 @@ void init_logging()
 {
   dirty_log("init_logging - ENTER");
 
-  g_log_set_handler("log-domain",
-		    G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,
-		    log_handler_cb, NULL);
+  guint res = g_log_set_handler(G_LOG_DOMAIN,
+				G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,
+				log_handler_cb, NULL);
+
+  printf("\t ***res = %d\n", res);
 
   dirty_log("init_logging - EXIT");
 }
