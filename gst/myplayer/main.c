@@ -1,21 +1,43 @@
 #include <gtk/gtk.h>
 #include <gst/gst.h>
+#include <assert.h>
+
+#include <apr_general.h> 
 
 #include "gui.h"
+#include "config.h"
+#include "datastore.h"
+#include "logging.h"
 
 int main(int argc, char **argv)
 {
   GtkApplication *app;
   int status;
+  datastore_t *ds;
 
-  g_print("%s started.\n", argv[0]);
+  dirty_log("Starting up...\n");
+  init_logging();
 
+  g_info("Starting main...\n");
+  
+  const gchar *home_dir = g_getenv("HOME");
+  
+  ds = open_datastore("/home/cpd/testdb.db");
+  
   // Initialisation
   gst_init(&argc, &argv);
-
+  apr_initialize();
+  
+  g_print("%s started.\n", argv[0]);
+  assert(scan_directory("/media/cpd/3634-6261/Music/1988 - Green/") == 0);
+  
+  gst_meta_info("file:///media/cpd/3634-6261/Music/(2000) Kid A/01 Radiohead - Everything In Its Right Place.mp3");
+    
+  init_config();
+  
   g_print("GST is init\n");
 
-  app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  app = gtk_application_new("org.gtk.myplayer", G_APPLICATION_FLAGS_NONE);
 
   g_print("Application created\n");
 
@@ -26,5 +48,9 @@ int main(int argc, char **argv)
   status = g_application_run(G_APPLICATION (app), argc, argv);
   g_object_unref(app);
 
+  apr_terminate();
+
+  close_datastore(ds);
+  
   return status;
 }

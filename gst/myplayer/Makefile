@@ -123,6 +123,60 @@ myplayer/fast:
 	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/build
 .PHONY : myplayer/fast
 
+config.o: config.c.o
+
+.PHONY : config.o
+
+# target to build an object file
+config.c.o:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/config.c.o
+.PHONY : config.c.o
+
+config.i: config.c.i
+
+.PHONY : config.i
+
+# target to preprocess a source file
+config.c.i:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/config.c.i
+.PHONY : config.c.i
+
+config.s: config.c.s
+
+.PHONY : config.s
+
+# target to generate assembly for a file
+config.c.s:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/config.c.s
+.PHONY : config.c.s
+
+datastore.o: datastore.c.o
+
+.PHONY : datastore.o
+
+# target to build an object file
+datastore.c.o:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/datastore.c.o
+.PHONY : datastore.c.o
+
+datastore.i: datastore.c.i
+
+.PHONY : datastore.i
+
+# target to preprocess a source file
+datastore.c.i:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/datastore.c.i
+.PHONY : datastore.c.i
+
+datastore.s: datastore.c.s
+
+.PHONY : datastore.s
+
+# target to generate assembly for a file
+datastore.c.s:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/datastore.c.s
+.PHONY : datastore.c.s
+
 gst.o: gst.c.o
 
 .PHONY : gst.o
@@ -177,6 +231,33 @@ gui.c.s:
 	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/gui.c.s
 .PHONY : gui.c.s
 
+logging.o: logging.c.o
+
+.PHONY : logging.o
+
+# target to build an object file
+logging.c.o:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/logging.c.o
+.PHONY : logging.c.o
+
+logging.i: logging.c.i
+
+.PHONY : logging.i
+
+# target to preprocess a source file
+logging.c.i:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/logging.c.i
+.PHONY : logging.c.i
+
+logging.s: logging.c.s
+
+.PHONY : logging.s
+
+# target to generate assembly for a file
+logging.c.s:
+	$(MAKE) -f CMakeFiles/myplayer.dir/build.make CMakeFiles/myplayer.dir/logging.c.s
+.PHONY : logging.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -213,12 +294,21 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... myplayer"
 	@echo "... edit_cache"
+	@echo "... config.o"
+	@echo "... config.i"
+	@echo "... config.s"
+	@echo "... datastore.o"
+	@echo "... datastore.i"
+	@echo "... datastore.s"
 	@echo "... gst.o"
 	@echo "... gst.i"
 	@echo "... gst.s"
 	@echo "... gui.o"
 	@echo "... gui.i"
 	@echo "... gui.s"
+	@echo "... logging.o"
+	@echo "... logging.i"
+	@echo "... logging.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

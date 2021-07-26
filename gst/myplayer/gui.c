@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <gst/gst.h>
 #include <math.h>
+#include <libgen.h>
 
 #include "gui.h"
 #include "gst.h"
@@ -9,15 +10,6 @@ enum {
   LIST_ITEM = 0,
   N_COLUMNS
 };
-
-
-//#ifndef M_LN10
-//#define M_LN10 (log(10.0))
-//#endif
-
-
-// Should be in header or not here
-static char *file_name;
 
 void add_list_item(GtkWidget *listbox, 
 		   char *text)
@@ -29,10 +21,8 @@ void add_list_item(GtkWidget *listbox,
   gtk_list_box_insert(GTK_LIST_BOX(listbox), new_label, -1);
 }
 
-
-static void add_to_list(
-  GtkWidget *list, 
-  const gchar *str) 
+static void add_to_list(GtkWidget *list, 
+			const gchar *str) 
 {
   GtkListStore *store;
   GtkTreeIter iter;
@@ -67,16 +57,22 @@ void init_list(GtkWidget *list)
 void play_button_click(GtkWidget *widget,
 		  gpointer data)
 {
+  g_info("ENTER");
+  
   g_print("Play button push\n");
 
   ui_info *ui = (ui_info *) data;
   
   // Get the file name from the GtkLabel
   const gchar *name = gtk_label_get_text(GTK_LABEL(ui->file_label));  
+
+  g_print("About the play file %s\n", name);
   
-  // TODO : Check if the file exists
-  gst_player_play(ui->gst_info, name);
+  // TODO : Check if the file exists and get file info
+  gst_player_play(ui->gst_info, ui->current_file);
   //gst_start((char *)name);
+
+  g_info("EXIT");
 }
 
 void configure_callback(GtkWindow *window, 
@@ -125,16 +121,32 @@ static void file_open_btn_click(GtkWidget *widget,
 					"_Open",
 					GTK_RESPONSE_ACCEPT,
 					NULL);
-
+  
   res = gtk_dialog_run(GTK_DIALOG(dialog));
   if (res == GTK_RESPONSE_ACCEPT)
   {
     char *filename;
     GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
     filename = gtk_file_chooser_get_filename(chooser);
-    g_print("filename = %s\n", filename);
-    gtk_label_set_text(GTK_LABEL(ui->file_label), filename);
-    //open_file(filename);
+
+    char *ext = "file://";
+    char *temp = malloc(strlen(filename) + strlen(ext));
+    strcat(temp, ext);
+    strcat(temp, filename);
+    g_print("temp = %s\n", temp);
+    gst_meta_info(temp);
+    free(temp);
+    
+    if (ui->current_file != NULL)
+    {
+      free(ui->current_file);
+      ui->current_file = NULL;
+    }
+
+    ui->current_file = strdup(filename);
+    g_print("filename = %s\n", basename(filename));
+
+    gtk_label_set_text(GTK_LABEL(ui->file_label), basename(filename));
     g_free(filename);
   }
 
@@ -172,6 +184,11 @@ static void pause_button_click(GtkWidget *widget,
   gst_player_pause(ui->gst_info);  
 }
 
+void gst_progress_callback(gint64 pos, gint64 len)
+{
+//  printf("\t\tpos = %ld len = %ld\n", pos, len);
+}
+
 void mainwindow_activate(GtkApplication* app,
 			 gpointer user_data)
 {
@@ -187,10 +204,12 @@ void mainwindow_activate(GtkApplication* app,
   GtkWidget *tree_view;
   GtkTreeSelection *selection;
   ui_info *ui_info_cb = malloc(sizeof(ui_info));
+  ui_info_cb->current_file = NULL;
   ui_info_cb->file_label = NULL;
 
   // Init the gst player
-  gst_info_t *gst_info = gst_player_startup();
+  gst_info_t *gst_info = gst_player_init();
+  gst_info->progress_callback = gst_progress_callback;
   g_print("gst_player created");
   
   ui_info_cb->gst_info = gst_info;
@@ -235,7 +254,7 @@ void mainwindow_activate(GtkApplication* app,
 //  gtk_widget_set_name(ui_info_cb->file_label, "file_label");
 
   // Set up the vol scale
-  GtkWidget *volume_scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, -90.0, 10.0, 0.2);
+  GtkWidget *volume_scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0.0, 10.0, 0.5);
   g_signal_connect(volume_scale, "value-changed",
 		   G_CALLBACK(volume_scale_changed), volume_scale);
   
@@ -275,6 +294,7 @@ void mainwindow_activate(GtkApplication* app,
   gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->stop_button);
   gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->file_open_btn);
 
+  g_print("Attaching...\n");
   gtk_grid_attach(GTK_GRID(grid), tree_view, 0, 0, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), ui_info_cb->file_label, 0, 1, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), volume_scale, 0, 2, 1, 1);

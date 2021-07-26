@@ -1,0 +1,6 @@
+TODO List
+
+1. Proper logging
+2. Clean up gst to be structured
+3. Finish config and DB stuff
+4. CLean up datastore
