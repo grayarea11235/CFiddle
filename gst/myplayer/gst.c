@@ -9,13 +9,15 @@ static void dump_info(stream_info *data)
   g_print("-----------------------------------------------------------------------------\n");
 }
 
-static void print_one_tag(const GstTagList * list,
-			  const gchar * tag,
+static void print_one_tag(const GstTagList* list,
+			  const gchar* tag,
 			  gpointer user_data)
 {
-  int i = 0, num = 0;
+  int i = 0,
+    num = 0;
 
   num = gst_tag_list_get_tag_size(list, tag);
+
   for (i = 0; i < num; ++i)
   {
     const GValue *val = NULL;
@@ -105,7 +107,7 @@ void gst_meta_info(const gchar *uri)
   
   gst_element_set_state(pipe, GST_STATE_PAUSED);
 
-  g_print("About to loop\n");
+  g_info("About to loop\n");
   while(TRUE)
   {
     GstTagList *tags = NULL;
@@ -156,6 +158,7 @@ void gst_meta_info(const gchar *uri)
 // -----------------------------------------------------------------------------------------
 gboolean cb_print_position(gst_info_t *info)
 {
+  g_info("ENTER - cb_print_position");
   gint64 pos = 0, len = 0;
   
   if (gst_element_query_position(info->pipeline, GST_FORMAT_TIME, &pos)
@@ -173,8 +176,9 @@ gboolean cb_print_position(gst_info_t *info)
 	    GST_TIME_ARGS(pos), GST_TIME_ARGS(len), percent);
   }
 
-  // call me again
-  return TRUE;
+  g_info("EXIT - cb_print_position");
+  
+  return TRUE; // call me again
 }
 // -----------------------------------------------------------------------------------------
 
@@ -189,6 +193,8 @@ static gboolean bus_call(GstBus *bus,
 			 GstMessage *msg,
 			 gpointer data)
 {
+  g_info("ENTER - bus_call");
+
   stream_info *stream_data = (stream_info *) data;
 
   switch (GST_MESSAGE_TYPE(msg)) 
@@ -206,8 +212,8 @@ static gboolean bus_call(GstBus *bus,
 
     case GST_MESSAGE_ERROR: 
     {
-      gchar  *debug;
-      GError *error;
+      gchar  *debug = NULL;
+      GError *error = NULL;
       
       gst_message_parse_error(msg, &error, &debug);
       g_free(debug);
@@ -221,6 +227,8 @@ static gboolean bus_call(GstBus *bus,
     break;
   }
   
+  g_info("EXIT - bus_call");
+
   return TRUE;
 }
 // -----------------------------------------------------------------------------------------
@@ -307,7 +315,7 @@ gst_info_t *gst_player_init()
 {
   g_info("ENTER - gst_player_init");
   GstBus *bus;
-  guint bus_watch_id;
+//  guint bus_watch_id;
 
   gst_info_t *return_data = malloc(sizeof(stream_info));
 
@@ -345,7 +353,7 @@ gst_info_t *gst_player_init()
   bus = gst_pipeline_get_bus(GST_PIPELINE(return_data->pipeline));
 
 //  bus_watch_id = gst_bus_add_watch(bus, bus_call, data);
-  bus_watch_id = gst_bus_add_watch(bus, bus_call, return_data);
+  return_data->bus_watch_id = gst_bus_add_watch(bus, bus_call, return_data);
   gst_object_unref(bus);
 
   gst_bin_add_many(GST_BIN(return_data->pipeline),
@@ -360,8 +368,6 @@ gst_info_t *gst_player_init()
 			return_data->conv, return_data->sink,
 			NULL);
 
-  return_data->bus_watch_id = bus_watch_id; // Why??
-
   gst_player_dump_info(return_data);
 
 //  g_print("About to set timeout\n");
@@ -369,14 +375,19 @@ gst_info_t *gst_player_init()
 //				    pipeline);
 //  g_print("timeout_ret = %d\n", timeout_ret);
   
-  g_info("ENTER - gst_player_init");
+  g_info("EXIT - gst_player_init");
+
   return return_data;
 }
 // -----------------------------------------------------------------------------------------
 
 void gst_player_deinit(gst_info_t *info)
 {
+  g_info("ENTER - gst_player_deinit");
 
+  free(info);
+
+  g_info("EXIT - gst_player_deinit");
 }
 
 // gst_player --------------------------------------------------------------

@@ -22,6 +22,7 @@ typedef struct _gst_info_t
   GstElement *pipeline;
   GstElement *volume;
   GstElement *source;
+
   guint bus_watch_id;
 
   void (*progress_callback)(gint64 pos, gint64 length);
