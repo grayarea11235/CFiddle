@@ -26,6 +26,7 @@ int add_track(const datastore_t *ds,
 	      sqlite3 *db,
 	      const tracks_t *track)
 {
+  g_info("ENTER - add_track"); 
   sqlite3_stmt *stmt;
   char *err_msg = 0;
   
@@ -68,6 +69,7 @@ int add_track(const datastore_t *ds,
     return 1;
   } 
   
+  g_info("EXIT - add_track"); 
   return 0;
 }
 
