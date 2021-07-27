@@ -5,6 +5,7 @@
 
 #include "gui.h"
 #include "gst.h"
+#include "logging.h"
 
 enum
 {
@@ -58,22 +59,22 @@ void init_list(GtkWidget *list)
 void play_button_click(GtkWidget *widget,
 		       gpointer data)
 {
-  g_info("ENTER");
+  LOG_INFO("ENTER");
   
-  g_print("Play button push\n");
+  LOG_INFO("Play button push\n");
 
   ui_info *ui = (ui_info *) data;
   
   // Get the file name from the GtkLabel
   const gchar *name = gtk_label_get_text(GTK_LABEL(ui->file_label));  
 
-  g_print("About the play file %s\n", name);
+  LOG_INFO("About the play file %s\n", name);
   
   // TODO : Check if the file exists and get file info
   gst_player_play(ui->gst_info, ui->current_file);
   //gst_start((char *)name);
 
-  g_info("EXIT");
+  LOG_INFO("EXIT");
 }
 
 void configure_callback(GtkWindow *window, 

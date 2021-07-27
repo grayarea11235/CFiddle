@@ -7,9 +7,11 @@
 #include <apr_file_info.h>
 
 #include "config.h"
+#include "logging.h"
 
 config_info_t *init_config()
 {
+  LOG_INFO("ENTER");
   struct stat st = { 0 };
   config_info_t *ret = malloc(sizeof(config_info_t));
   
@@ -43,5 +45,6 @@ config_info_t *init_config()
     assert(mkdir("/home/cpd/.config/mply", 0700) != -1);
   }
 
+  LOG_INFO("EXIT");
   return ret;
 }

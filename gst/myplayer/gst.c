@@ -14,7 +14,7 @@ static void print_one_tag(const GstTagList* list,
 			  const gchar* tag,
 			  gpointer user_data)
 {
-  LOG_INFO("ENTER - print_one_tag");
+  LOG_INFO("ENTER");
   int i = 0,
     num = 0;
 
@@ -65,14 +65,14 @@ static void print_one_tag(const GstTagList* list,
     }
   }
 
-  LOG_INFO("EXIT - print_one_tag");
+  LOG_INFO("EXIT");
 }
 
 static void on_new_pad(GstElement *dec,
 		       GstPad *pad,
 		       GstElement *fakesink)
 {
-  LOG_INFO("ENTER - on_new_pad");
+  LOG_INFO("ENTER");
   GstPad *sinkpad;
 
   sinkpad = gst_element_get_static_pad(fakesink, "sink");
@@ -96,7 +96,7 @@ static void on_new_pad(GstElement *dec,
 // -----------------------------------------------------------------------------------------
 void gst_meta_info(const gchar *uri)
 {
-  LOG_INFO("ENTER - gst_meta_info");
+  LOG_INFO("ENTER");
   
   GstElement *pipe = NULL;
   GstElement *dec = NULL;
@@ -155,7 +155,7 @@ void gst_meta_info(const gchar *uri)
   gst_object_unref(pipe);
 //  g_free(uri);
 
-  LOG_INFO("EXIT - gst_meta_info");
+  LOG_INFO("EXIT");
 }
 // -----------------------------------------------------------------------------------------
 
@@ -168,7 +168,7 @@ void gst_meta_info(const gchar *uri)
 // -----------------------------------------------------------------------------------------
 gboolean cb_print_position(gst_info_t *info)
 {
-  LOG_INFO("ENTER - cb_print_position");
+//  LOG_INFO("ENTER - cb_print_position");
   gint64 pos = 0, len = 0;
   
   if (gst_element_query_position(info->pipeline, GST_FORMAT_TIME, &pos)
@@ -186,7 +186,7 @@ gboolean cb_print_position(gst_info_t *info)
 	    GST_TIME_ARGS(pos), GST_TIME_ARGS(len), percent);
   }
 
-  LOG_INFO("EXIT - cb_print_position");
+//  LOG_INFO("EXIT - cb_print_position");
   
   return TRUE; // call me again
 }
@@ -203,7 +203,7 @@ static gboolean bus_call(GstBus *bus,
 			 GstMessage *msg,
 			 gpointer data)
 {
-  LOG_INFO("ENTER - bus_call");
+//  LOG_INFO("ENTER - bus_call");
 
   stream_info *stream_data = (stream_info *) data;
 
@@ -237,7 +237,7 @@ static gboolean bus_call(GstBus *bus,
     break;
   }
   
-  LOG_INFO("EXIT - bus_call");
+//  LOG_INFO("EXIT - bus_call");
 
   return TRUE;
 }
@@ -282,14 +282,14 @@ void gst_player_stop(gst_info_t *info)
 // -----------------------------------------------------------------------------------------
 void gst_player_pause(gst_info_t *info)
 {
-  LOG_INFO("ENTER - gst_player_pause");
+  LOG_INFO("ENTER");
   
   LOG_INFO("pipeline = %p", info->pipeline);
   gst_player_dump_info(info);
     
   gst_element_set_state(info->pipeline, GST_STATE_PAUSED);
 
-  LOG_INFO("EXIT - gst_player_pause");
+  LOG_INFO("EXIT");
 }
 // -----------------------------------------------------------------------------------------
 
@@ -297,7 +297,7 @@ void gst_player_pause(gst_info_t *info)
 // -----------------------------------------------------------------------------------------
 void gst_player_play(gst_info_t *info, gchar *filename)
 {
-  LOG_INFO("ENTER - gst_player_play");
+  LOG_INFO("ENTER");
 
   LOG_INFO("About to set timeout");
   guint timeout_ret = g_timeout_add(200, (GSourceFunc) cb_print_position,
@@ -314,7 +314,7 @@ void gst_player_play(gst_info_t *info, gchar *filename)
   gst_element_set_state(info->pipeline, GST_STATE_PLAYING);
   LOG_INFO("Started");
 
-  LOG_INFO("EXIT - gst_player_play");
+  LOG_INFO("EXIT");
 }
 // -----------------------------------------------------------------------------------------
 
@@ -327,7 +327,7 @@ void gst_player_play(gst_info_t *info, gchar *filename)
 // -----------------------------------------------------------------------------------------
 gst_info_t *gst_player_init()
 {
-  LOG_INFO("ENTER - gst_player_init");
+  LOG_INFO("ENTER");
   GstBus *bus;
 //  guint bus_watch_id;
 
@@ -389,7 +389,7 @@ gst_info_t *gst_player_init()
 //				    pipeline);
 //  g_print("timeout_ret = %d\n", timeout_ret);
   
-  LOG_INFO("EXIT - gst_player_init");
+  LOG_INFO("EXIT");
 
   return return_data;
 }
@@ -397,11 +397,11 @@ gst_info_t *gst_player_init()
 
 void gst_player_deinit(gst_info_t *info)
 {
-  LOG_INFO("ENTER - gst_player_deinit");
+  LOG_INFO("ENTER");
 
   free(info);
 
-  LOG_INFO("EXIT - gst_player_deinit");
+  LOG_INFO("EXIT");
 }
 
 // gst_player --------------------------------------------------------------
