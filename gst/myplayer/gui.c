@@ -6,7 +6,8 @@
 #include "gui.h"
 #include "gst.h"
 
-enum {
+enum
+{
   LIST_ITEM = 0,
   N_COLUMNS
 };
@@ -55,7 +56,7 @@ void init_list(GtkWidget *list)
 }
 
 void play_button_click(GtkWidget *widget,
-		  gpointer data)
+		       gpointer data)
 {
   g_info("ENTER");
   
@@ -135,8 +136,7 @@ static void file_open_btn_click(GtkWidget *widget,
     strcat(temp, filename);
     g_print("temp = %s\n", temp);
     gst_meta_info(temp);
-    free(temp);
-    
+//    free(temp);
     if (ui->current_file != NULL)
     {
       free(ui->current_file);

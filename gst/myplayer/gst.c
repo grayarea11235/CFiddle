@@ -13,12 +13,12 @@ static void print_one_tag(const GstTagList * list,
 			  const gchar * tag,
 			  gpointer user_data)
 {
-  int i, num;
+  int i = 0, num = 0;
 
   num = gst_tag_list_get_tag_size(list, tag);
   for (i = 0; i < num; ++i)
   {
-    const GValue *val;
+    const GValue *val = NULL;
 
     /* Note: when looking for specific tags, use the gst_tag_list_get_xyz() API,
      * we only use the GValue approach here because it is more generic */
@@ -87,10 +87,11 @@ static void on_new_pad(GstElement *dec,
 // -----------------------------------------------------------------------------------------
 void gst_meta_info(const gchar *uri)
 {
-  GstElement *pipe;
-  GstElement *dec;
-  GstElement *sink;
-  GstMessage *msg;
+  GstElement *pipe = NULL;
+  GstElement *dec = NULL;
+  GstElement *sink = NULL;
+  GstMessage *msg = NULL;
+  
   pipe = gst_pipeline_new("pipeline");
   
   dec = gst_element_factory_make("uridecodebin", NULL);
@@ -155,7 +156,7 @@ void gst_meta_info(const gchar *uri)
 // -----------------------------------------------------------------------------------------
 gboolean cb_print_position(gst_info_t *info)
 {
-  gint64 pos, len;
+  gint64 pos = 0, len = 0;
   
   if (gst_element_query_position(info->pipeline, GST_FORMAT_TIME, &pos)
       && gst_element_query_duration(info->pipeline, GST_FORMAT_TIME, &len))
@@ -275,6 +276,7 @@ void gst_player_pause(gst_info_t *info)
 // -----------------------------------------------------------------------------------------
 void gst_player_play(gst_info_t *info, gchar *filename)
 {
+  g_info("ENTER - gst_player_play");
   g_print("About to set timeout\n");
   
   guint timeout_ret = g_timeout_add(200, (GSourceFunc) cb_print_position,
@@ -284,12 +286,13 @@ void gst_player_play(gst_info_t *info, gchar *filename)
   // Set the filename - Should be in play
   g_object_set(G_OBJECT(info->source), "location", filename, NULL);
 
-  g_print("Now playing: %s\n", filename);
-  g_print("pipeline = %p\n", info->pipeline);
+  g_info("Now playing: %s\n", filename);
+  g_info("pipeline = %p\n", info->pipeline);
   gst_player_dump_info(info);
 
   gst_element_set_state(info->pipeline, GST_STATE_PLAYING);
   g_print("Started\n");
+  g_info("EXIT - gst_player_play");
 }
 // -----------------------------------------------------------------------------------------
 
@@ -302,12 +305,7 @@ void gst_player_play(gst_info_t *info, gchar *filename)
 // -----------------------------------------------------------------------------------------
 gst_info_t *gst_player_init()
 {
-  GstElement *source, 
-//    *pipeline, 
-    *decoder, 
-    *conv, 
-    *sink,
-    *volume;
+  g_info("ENTER - gst_player_init");
   GstBus *bus;
   guint bus_watch_id;
 
@@ -322,14 +320,20 @@ gst_info_t *gst_player_init()
   
   // Create elements
   return_data->pipeline = gst_pipeline_new("audio-player");
-  source = gst_element_factory_make("filesrc", "file-source");
-  decoder = gst_element_factory_make("flump3dec", "fluendo-decoder");
-  conv = gst_element_factory_make("audioconvert", "converter");
-  volume = gst_element_factory_make("volume", "volume-name");
-  sink = gst_element_factory_make("autoaudiosink", "audio-output");
+  return_data->source = gst_element_factory_make("filesrc", "file-source");
+  return_data->decoder = gst_element_factory_make("flump3dec", "fluendo-decoder");
+  return_data->conv = gst_element_factory_make("audioconvert", "converter");
+  return_data->volume = gst_element_factory_make("volume", "volume-name");
+  return_data->sink = gst_element_factory_make("autoaudiosink", "audio-output");
 
-  if (!return_data->pipeline || !source || !decoder || !conv || !volume || !sink) 
+  if (!return_data->pipeline ||
+      !return_data->source ||
+      !return_data->decoder ||
+      !return_data->conv ||
+      !return_data->volume ||
+      !return_data->sink) 
   {
+    // TODO : This is terrible error checking
     g_printerr("One element could not be created. Exiting.\n");
 
     return NULL;
@@ -345,14 +349,17 @@ gst_info_t *gst_player_init()
   gst_object_unref(bus);
 
   gst_bin_add_many(GST_BIN(return_data->pipeline),
-		   source, decoder, volume, conv, sink, NULL);
+		   return_data->source, return_data->decoder,
+		   return_data->volume, return_data->conv,
+		   return_data->sink, NULL);
 
   // Link em up
-  gst_element_link_many(source, decoder, volume, conv, sink, NULL);
+  gst_element_link_many(return_data->source,
+			return_data->decoder,
+			return_data->volume,
+			return_data->conv, return_data->sink,
+			NULL);
 
-//  return_data->pipeline = pipeline;
-  return_data->volume = volume;
-  return_data->source = source;
   return_data->bus_watch_id = bus_watch_id; // Why??
 
   gst_player_dump_info(return_data);
@@ -362,6 +369,7 @@ gst_info_t *gst_player_init()
 //				    pipeline);
 //  g_print("timeout_ret = %d\n", timeout_ret);
   
+  g_info("ENTER - gst_player_init");
   return return_data;
 }
 // -----------------------------------------------------------------------------------------

@@ -16,6 +16,9 @@ typedef struct _stream_info
 // Contains the main pipeline for the player
 typedef struct _gst_info_t
 {
+  GstElement *decoder;
+  GstElement *conv;
+  GstElement *sink;
   GstElement *pipeline;
   GstElement *volume;
   GstElement *source;
