@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
   close_datastore(ds);
 
-  g_info("%s Exiting app", __func__);
+  LOG_INFO("Exiting app");
   
   return status;
 }
