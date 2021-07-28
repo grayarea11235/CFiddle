@@ -193,7 +193,7 @@ void gst_progress_callback(gint64 pos, gint64 len)
 void mainwindow_activate(GtkApplication* app,
 			 gpointer user_data)
 {
-  g_print("In activate\n");
+  LOG_INFO("ENTER");
   
   GtkWidget *window;
 //  GtkWidget *file_open_btn;
@@ -302,4 +302,6 @@ void mainwindow_activate(GtkApplication* app,
   gtk_grid_attach(GTK_GRID(grid), button_box, 0, 3, 1, 1);
   
   gtk_widget_show_all(window);
+
+  LOG_INFO("EXIT");
 }
