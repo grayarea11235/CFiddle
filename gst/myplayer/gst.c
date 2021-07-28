@@ -4,17 +4,17 @@
 // gst.c
 static void dump_info(stream_info *data)
 {
-  g_print("\n-----------------------------------------------------------------------------\n");
-  g_print("pipline      = %p\n", data->pipeline);
-  g_print("bus_watch_id = %d\n", data->bus_watch_id);
-  g_print("-----------------------------------------------------------------------------\n");
+  LOG_INFO("\n-----------------------------------------------------------------------------");
+  LOG_INFO("pipline      = %p", data->pipeline);
+  LOG_INFO("bus_watch_id  = %d", data->bus_watch_id);
+  LOG_INFO("-----------------------------------------------------------------------------");
 }
 
 static void print_one_tag(const GstTagList* list,
 			  const gchar* tag,
 			  gpointer user_data)
 {
-  LOG_INFO("ENTER");
+//  LOG_INFO("ENTER");
   int i = 0,
     num = 0;
 
@@ -65,7 +65,7 @@ static void print_one_tag(const GstTagList* list,
     }
   }
 
-  LOG_INFO("EXIT");
+//  LOG_INFO("EXIT");
 }
 
 static void on_new_pad(GstElement *dec,

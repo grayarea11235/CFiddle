@@ -295,7 +295,7 @@ void mainwindow_activate(GtkApplication* app,
   gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->stop_button);
   gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->file_open_btn);
 
-  g_print("Attaching...\n");
+  LOG_INFO("Attaching...");
   gtk_grid_attach(GTK_GRID(grid), tree_view, 0, 0, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), ui_info_cb->file_label, 0, 1, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), volume_scale, 0, 2, 1, 1);
