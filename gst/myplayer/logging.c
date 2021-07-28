@@ -96,13 +96,13 @@ static void log_handler_cb(const gchar *log_domain,
 
 void init_logging()
 {
-  g_info("init_logging - ENTER");
+  LOG_INFO("init_logging - ENTER");
 
   guint res = g_log_set_handler(G_LOG_DOMAIN,
 				G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,
 				log_handler_cb, NULL);
 
-  printf("\t ***res = %d\n", res);
+  LOG_INFO("\t ***res = %d\n", res);
 
-  g_info("init_logging - EXIT");
+  LOG_INFO("init_logging - EXIT");
 }

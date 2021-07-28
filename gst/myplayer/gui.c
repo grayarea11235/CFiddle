@@ -172,9 +172,11 @@ static void volume_scale_changed(GtkWidget *widget,
 static void stop_button_click(GtkWidget *widget,
 			       gpointer data)
 {
+  LOG_INFO("ENTER");
   ui_info *ui = (ui_info *) data;
   
   gst_player_stop(ui->gst_info);  
+  LOG_INFO("EXIT");
 }
 
 static void pause_button_click(GtkWidget *widget,
