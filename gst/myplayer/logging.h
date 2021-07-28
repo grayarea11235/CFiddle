@@ -8,8 +8,8 @@ static char *msg_buff;
   buff_size = snprintf(NULL, 0, format, ##__VA_ARGS__);		\
   msg_buff = malloc(buff_size + 1);				\
   snprintf(msg_buff, buff_size + 1, format, ##__VA_ARGS__);	\
-  g_##level("%s(%s) %d : %s", __func__, __FILE__,		\
-	 __LINE__, msg_buff);					\
+  g_##level("%s:%d(%s) : %s", __func__, __LINE__,		\
+	 __FILE__, msg_buff);					\
   free(msg_buff);						\
 
 #define LOG_DEBUG(format, ...)			\
@@ -17,19 +17,6 @@ static char *msg_buff;
 
 #define LOG_INFO(format, ...)			\
   LOG_(format, info, ##__VA_ARGS__)
-
-// Temp
-#define LOG_INFO1(format, ...)					\
-  buff_size = snprintf(NULL, 0, format, ##__VA_ARGS__);		\
-  msg_buff = malloc(buff_size + 1);				\
-  snprintf(msg_buff, buff_size + 1, format, ##__VA_ARGS__);	\
-  g_info("%s(%s) %d : %s", __func__, __FILE__,			\
-	 __LINE__, msg_buff);					\
-  free(msg_buff);						\
-  
-#define eprintf(format, ...) \
-  fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__)
-
 
 #define DEBUG(x) g_debug(x)
 
