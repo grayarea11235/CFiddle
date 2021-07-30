@@ -18,6 +18,18 @@ static char *msg_buff;
 #define LOG_INFO(format, ...)			\
   LOG_(format, info, ##__VA_ARGS__)
 
+#define LOG_ERROR(format, ...)			\
+  LOG_(format, error, ##__VA_ARGS__)
+
+#define LOG_CRITICAL(format, ...)		\
+  LOG_(format, critical, ##__VA_ARGS__)
+
+#define LOG_WARNING(format, ...)		\
+  LOG_(format, warning, ##__VA_ARGS__)
+
+#define LOG_MESSAGE(format, ...)		\
+  LOG_(format, message, ##__VA_ARGS__)
+
 #define DEBUG(x) g_debug(x)
 
 extern void init_logging();

@@ -16,7 +16,6 @@ void log_info(const char *format, ...)
   size_t buff_size = snprintf(NULL, 0, format, argptr);
   char *msg_buff = malloc(buff_size + 1);
   snprintf(msg_buff, buff_size + 1, format, argptr);
-
   
   g_info("%s(%s) %d : %s", __func__, __FILE__,
 	 __LINE__, msg_buff);
