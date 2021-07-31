@@ -79,7 +79,7 @@ static void log_handler_cb(const gchar *log_domain,
   g_print("%s: %s\n", log_level_str, message);
 
   char temp[4096]; // Use snprintf to dynamically create buffer
-  sprintf(temp, "%s: %s", log_level_str, message);
+  sprintf(temp, "%s:%s", log_level_str, message);
   dirty_log(temp);
   
   /* Use g_printerr() for warnings and g_print() otherwise. */

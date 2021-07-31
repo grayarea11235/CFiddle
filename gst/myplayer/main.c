@@ -16,15 +16,12 @@ int main(int argc, char **argv)
   int status;
   datastore_t *ds;
 
-//  dirty_log("Starting up...\n");
   init_logging();
 
   LOG_INFO("Starting main...");
   
   const gchar *home_dir = g_getenv("HOME");
 
-  log_info("Testing");
-  
   ds = open_datastore("/home/cpd/testdb.db");
   
   // Initialisation
@@ -38,15 +35,15 @@ int main(int argc, char **argv)
     
   init_config();
   
-  g_info("GST is init");
+  LOG_INFO("GST is init");
 
   app = gtk_application_new("org.gtk.myplayer", G_APPLICATION_FLAGS_NONE);
 
-  g_info("Application created");
+  LOG_INFO("Application created");
 
   g_signal_connect(app, "activate", G_CALLBACK(mainwindow_activate), NULL);
   
-  g_info("activate signal connected... about to run\n");
+  LOG_INFO("activate signal connected... about to run\n");
 
   status = g_application_run(G_APPLICATION (app), argc, argv);
   g_object_unref(app);
