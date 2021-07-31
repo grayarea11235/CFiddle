@@ -329,7 +329,6 @@ gst_info_t *gst_player_init()
 {
   LOG_INFO("ENTER");
   GstBus *bus;
-//  guint bus_watch_id;
 
   gst_info_t *return_data = malloc(sizeof(stream_info));
 
