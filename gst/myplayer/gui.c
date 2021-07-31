@@ -5,8 +5,10 @@
 
 #include "gui.h"
 #include "gst.h"
+#include "logging.h"
 
-enum {
+enum
+{
   LIST_ITEM = 0,
   N_COLUMNS
 };
@@ -55,24 +57,24 @@ void init_list(GtkWidget *list)
 }
 
 void play_button_click(GtkWidget *widget,
-		  gpointer data)
+		       gpointer data)
 {
-  g_info("ENTER");
+  LOG_INFO("ENTER");
   
-  g_print("Play button push\n");
+  LOG_INFO("Play button push\n");
 
   ui_info *ui = (ui_info *) data;
   
   // Get the file name from the GtkLabel
   const gchar *name = gtk_label_get_text(GTK_LABEL(ui->file_label));  
 
-  g_print("About the play file %s\n", name);
+  LOG_INFO("About the play file %s\n", name);
   
   // TODO : Check if the file exists and get file info
   gst_player_play(ui->gst_info, ui->current_file);
   //gst_start((char *)name);
 
-  g_info("EXIT");
+  LOG_INFO("EXIT");
 }
 
 void configure_callback(GtkWindow *window, 
@@ -135,8 +137,7 @@ static void file_open_btn_click(GtkWidget *widget,
     strcat(temp, filename);
     g_print("temp = %s\n", temp);
     gst_meta_info(temp);
-    free(temp);
-    
+//    free(temp);
     if (ui->current_file != NULL)
     {
       free(ui->current_file);
@@ -171,9 +172,11 @@ static void volume_scale_changed(GtkWidget *widget,
 static void stop_button_click(GtkWidget *widget,
 			       gpointer data)
 {
+  LOG_INFO("ENTER");
   ui_info *ui = (ui_info *) data;
   
   gst_player_stop(ui->gst_info);  
+  LOG_INFO("EXIT");
 }
 
 static void pause_button_click(GtkWidget *widget,
@@ -192,7 +195,7 @@ void gst_progress_callback(gint64 pos, gint64 len)
 void mainwindow_activate(GtkApplication* app,
 			 gpointer user_data)
 {
-  g_print("In activate\n");
+  LOG_INFO("ENTER");
   
   GtkWidget *window;
 //  GtkWidget *file_open_btn;
@@ -294,11 +297,13 @@ void mainwindow_activate(GtkApplication* app,
   gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->stop_button);
   gtk_container_add(GTK_CONTAINER(button_box), ui_info_cb->file_open_btn);
 
-  g_print("Attaching...\n");
+  LOG_INFO("Attaching...");
   gtk_grid_attach(GTK_GRID(grid), tree_view, 0, 0, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), ui_info_cb->file_label, 0, 1, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), volume_scale, 0, 2, 1, 1);
   gtk_grid_attach(GTK_GRID(grid), button_box, 0, 3, 1, 1);
   
   gtk_widget_show_all(window);
+
+  LOG_INFO("EXIT");
 }

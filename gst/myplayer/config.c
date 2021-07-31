@@ -7,9 +7,11 @@
 #include <apr_file_info.h>
 
 #include "config.h"
+#include "logging.h"
 
 config_info_t *init_config()
 {
+  LOG_INFO("ENTER");
   struct stat st = { 0 };
   config_info_t *ret = malloc(sizeof(config_info_t));
   
@@ -20,18 +22,18 @@ config_info_t *init_config()
 			   
   const char *home_dir = getenv("HOME");
   
-  g_info("In init_config... home dir is %s\n", home_dir);
+  LOG_INFO("In init_config... home dir is %s", home_dir);
 
   char *path_test;
 
   if ((rv = apr_filepath_merge(&path_test, home_dir, ".config", 0, mp)) == APR_SUCCESS)
   {
-    g_info("path_test = %s\n", path_test);
+    LOG_INFO("path_test = %s\n", path_test);
   }
   
   if (stat(path_test, &st) == -1)
   {
-    g_info("Creating config dir\n");
+    LOG_INFO("Creating config dir\n");
     assert(mkdir("~/.config", 0700) != -1);
   }
 
@@ -39,9 +41,10 @@ config_info_t *init_config()
   
   if (stat("/home/cpd/.config/mply", &st) == -1)
   {
-    g_info("Creating mply dir\n");
+    LOG_INFO("Creating mply dir\n");
     assert(mkdir("/home/cpd/.config/mply", 0700) != -1);
   }
 
+  LOG_INFO("EXIT");
   return ret;
 }

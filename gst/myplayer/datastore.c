@@ -6,6 +6,7 @@
 #include <glib/gstdio.h>
  
 #include "datastore.h"
+#include "logging.h"
 
 // DB Structure
 
@@ -26,14 +27,15 @@ int add_track(const datastore_t *ds,
 	      sqlite3 *db,
 	      const tracks_t *track)
 {
+  LOG_INFO("ENTER"); 
   sqlite3_stmt *stmt;
   char *err_msg = 0;
   
-  g_info("Adding new track to store\n");
-  g_info("track_name   = %s\n", track->track_name);
-  g_info("track_number = %d\n", track->track_number);
-  g_info("directory    = %s\n", track->directory);
-  g_info("album        = %s\n", track->album);
+  LOG_INFO("Adding new track to store\n");
+  LOG_INFO("track_name   = %s\n", track->track_name);
+  LOG_INFO("track_number = %d\n", track->track_number);
+  LOG_INFO("directory    = %s\n", track->directory);
+  LOG_INFO("album        = %s\n", track->album);
 
   const char *sql = "INSERT INTO tracks(track_name, track_number, directory, album) VALUES (?, ?, ?, ?)";
   int rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);    
@@ -68,6 +70,7 @@ int add_track(const datastore_t *ds,
     return 1;
   } 
   
+  LOG_INFO("EXIT"); 
   return 0;
 }
 

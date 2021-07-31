@@ -5,6 +5,24 @@
 
 #include "logging.h"
 
+
+// This has to be a macro stupid
+void log_info(const char *format, ...)
+{
+  va_list argptr;
+  va_start(argptr, format);
+
+  // Call snprintf with NULL to get required string size
+  size_t buff_size = snprintf(NULL, 0, format, argptr);
+  char *msg_buff = malloc(buff_size + 1);
+  snprintf(msg_buff, buff_size + 1, format, argptr);
+  
+  g_info("%s(%s) %d : %s", __func__, __FILE__,
+	 __LINE__, msg_buff);
+
+  va_end(argptr);
+}
+
 void dirty_log(const char *msg)
 {
   FILE *f = fopen("dirty_log.txt", "at");
@@ -50,8 +68,6 @@ static void log_handler_cb(const gchar *log_domain,
   const gchar *log_level_str;
   bool debug_enabled = true;
 
-  dirty_log("In log_handler_cb\n");
-  
   /* Ignore debug messages if disabled. */
   /* if (!debug_enabled && (log_level & G_LOG_LEVEL_DEBUG)) */
   /* { */
@@ -59,10 +75,11 @@ static void log_handler_cb(const gchar *log_domain,
   /* } */
    
   log_level_str = log_level_to_string(log_level & G_LOG_LEVEL_MASK);
-  g_print("%s: %s: %s\n", log_domain, log_level_str, message);
+//  g_print("%s: %s: %s\n", log_domain, log_level_str, message);
+  g_print("%s: %s\n", log_level_str, message);
 
-  char temp[4096];
-  sprintf(temp, "F %s: %s: %s\n", log_domain, log_level_str, message);
+  char temp[4096]; // Use snprintf to dynamically create buffer
+  sprintf(temp, "%s:%s", log_level_str, message);
   dirty_log(temp);
   
   /* Use g_printerr() for warnings and g_print() otherwise. */
@@ -78,13 +95,13 @@ static void log_handler_cb(const gchar *log_domain,
 
 void init_logging()
 {
-  dirty_log("init_logging - ENTER");
+  LOG_INFO("init_logging - ENTER");
 
   guint res = g_log_set_handler(G_LOG_DOMAIN,
 				G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,
 				log_handler_cb, NULL);
 
-  printf("\t ***res = %d\n", res);
+  LOG_INFO("\t ***res = %d\n", res);
 
-  dirty_log("init_logging - EXIT");
+  LOG_INFO("init_logging - EXIT");
 }
