@@ -29,6 +29,7 @@ void dirty_log(const char *msg)
   time_t rawtime;
   struct tm * timeinfo;
   char time_str[32];
+  gint64 curr_time = g_get_real_time();
   
   time(&rawtime);
   timeinfo = localtime(&rawtime);

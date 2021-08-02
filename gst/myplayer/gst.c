@@ -42,13 +42,13 @@ static void print_one_tag(const GstTagList* list,
     else if(G_VALUE_HOLDS_BOOLEAN(val))
     {
       LOG_INFO("\t%20s : %s", tag,
-	      (g_value_get_boolean(val)) ? "true" : "false");
+	       (g_value_get_boolean(val)) ? "true" : "false");
     }
     else if(GST_VALUE_HOLDS_BUFFER(val))
     {
       GstBuffer *buf = gst_value_get_buffer(val);
       guint buffer_size = gst_buffer_get_size (buf);
-
+      
       LOG_INFO("\t%20s : buffer of size %u", tag, buffer_size);
     }
     else if(GST_VALUE_HOLDS_DATE_TIME(val))
@@ -84,7 +84,7 @@ static void on_new_pad(GstElement *dec,
     }
   }
 
-  LOG_INFO("EXIT - on_new_pad");
+  LOG_INFO("EXIT");
 }
 
 // -----------------------------------------------------------------------------------------

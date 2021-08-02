@@ -12,6 +12,7 @@
 config_info_t *init_config()
 {
   LOG_INFO("ENTER");
+
   struct stat st = { 0 };
   config_info_t *ret = malloc(sizeof(config_info_t));
   
