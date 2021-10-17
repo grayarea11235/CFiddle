@@ -6,6 +6,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+
+void file_info(const char *file_name)
+{
+  printf("Filename = %s\n", file_name);
+}
+
 void scan_dir(const char *directory, int depth)
 {
   printf("Directory is %s\n", directory);
@@ -50,7 +56,8 @@ void scan_dir(const char *directory, int depth)
 
 int main(int argc, char *argv[])
 {
-  scan_dir("/media/cpd/TOSHIBA/Audiobooks/Gregory Benford - Galactic Center - 01 - In The Ocean Of Night", 0);
+  //  scan_dir("/media/cpd/TOSHIBA/Audiobooks/Gregory Benford - Galactic Center - 01 - In The Ocean Of Night", 0);
+  scan_dir("/media/cpd/TOSHIBA/Audiobooks", 0);
 
   
   return 0;
