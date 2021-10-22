@@ -20,7 +20,7 @@
   int rc = sqlite3_##X;							\
   if (rc != SQLITE_OK)							\
   { \
-fprintf(stderr, "Call to %s failed. Statis %d : %s\n", #X, rc, sqlite3_errmsg(db)); \
+fprintf(stderr, "Call to %s failed. Status %d : %s\n", #X, rc, sqlite3_errmsg(db)); \
 sqlite3_close(db); \
 exit(1);								\
 }									\
@@ -70,6 +70,7 @@ void add_track_record(struct tag_info *taginfo)
   sqlite3_stmt *res;
 
   SQLITE_CALL(open("/home/cpd/Devel/CFiddle/gst/tracks.db", &db));
+//  SQLITE_CALL(open(":memory:", &db));
   
   char *sql = "INSERT INTO tracks VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
   sqlite3_stmt *stmt;
@@ -92,6 +93,13 @@ void add_track_record(struct tag_info *taginfo)
 
 
   int s = sqlite3_step(stmt);
+
+//  SQLITE_CALL(reset(stmt));
+  SQLITE_CALL(clear_bindings(stmt));
+
+  sqlite3_finalize(stmt);
+
+  SQLITE_CALL(close(db));
 }
 
 void file_info(const char *full_name)
@@ -100,13 +108,13 @@ void file_info(const char *full_name)
   TagLib_Tag *tag;
   const TagLib_AudioProperties *properties;
 
-//  printf("full_name=%s\n", full_name);
+  printf("full_name=%s\n", full_name);
    
   file = taglib_file_new(full_name);
 
   if (file == NULL)
   {
-    printf("file is NULL\n");
+//    printf("file is NULL\n");
     return;
   }
 
@@ -124,7 +132,7 @@ void file_info(const char *full_name)
     taginfo.track = taglib_tag_track(tag);
     taginfo.genre = strdup(taglib_tag_genre(tag));
 
-//    dump_tag_info(&taginfo);
+    dump_tag_info(&taginfo);
 
     add_track_record(&taginfo);
     
@@ -193,11 +201,9 @@ void scan_dir(const char *directory, int depth)
 
 int main(int argc, char *argv[])
 {
+//  char *dir_name = "/media/cpd/6333-3135/Rage Against the Machine -Discography/";
+//  char *dir_name = "/media/cpd/1233-621A/Audiobooks/HH3 - Short Victorious War";
   char *dir_name = "/media/cpd/1233-621A/Audiobooks/";
-  //  scan_dir("/media/cpd/TOSHIBA/Audiobooks/Gregory Benford - Galactic Center - 01 - In The Ocean Of Night", 0);
-//  scan_dir("/media/cpd/TOSHIBA/Audiobooks", 0);
-
-  printf("%s\n", sqlite3_libversion()); 
 
   scan_dir(dir_name, 0);
 
