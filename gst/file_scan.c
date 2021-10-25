@@ -17,14 +17,14 @@
 
 #define SQLITE_CALL(X)							\
   {									\
-  int rc = sqlite3_##X;							\
-  if (rc != SQLITE_OK)							\
-  { \
-fprintf(stderr, "Call to %s failed. Status %d : %s\n", #X, rc, sqlite3_errmsg(db)); \
-sqlite3_close(db); \
-exit(1);								\
-}									\
-}									\
+    int rc = sqlite3_##X;						\
+    if (rc != SQLITE_OK)						\
+    {									\
+      fprintf(stderr, "Call to %s failed. Status %d : %s\n", #X, rc, sqlite3_errmsg(db)); \
+      sqlite3_close(db);						\
+      exit(1);								\
+    }									\
+  }									\
 
 
 struct tag_info
@@ -68,9 +68,10 @@ void add_track_record(struct tag_info *taginfo)
 {
   sqlite3 *db;
   sqlite3_stmt *res;
-
+//  char *db_name = "/media/cpd/1233-621A/tracks.db";
+  
   SQLITE_CALL(open("/home/cpd/Devel/CFiddle/gst/tracks.db", &db));
-//  SQLITE_CALL(open(":memory:", &db));
+//  SQLITE_CALL(open(db_name, &db));
   
   char *sql = "INSERT INTO tracks VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
   sqlite3_stmt *stmt;
@@ -91,13 +92,12 @@ void add_track_record(struct tag_info *taginfo)
   SQLITE_CALL(bind_text(stmt, 8, taginfo->genre, strlen(taginfo->genre),
 			0 /* The callback. */));
 
+  SQLITE_CALL(step(stmt));
 
-  int s = sqlite3_step(stmt);
+  SQLITE_CALL(reset(stmt));
+//  SQLITE_CALL(clear_bindings(stmt));
 
-//  SQLITE_CALL(reset(stmt));
-  SQLITE_CALL(clear_bindings(stmt));
-
-  sqlite3_finalize(stmt);
+  SQLITE_CALL(finalize(stmt));
 
   SQLITE_CALL(close(db));
 }
@@ -145,8 +145,6 @@ void file_info(const char *full_name)
     /* printf("track   - \"%i\"\n", taglib_tag_track(tag)); */
     /* printf("genre   - \"%s\"\n", taglib_tag_genre(tag)); */
   }
-
-  // Store tag data in a database
 }
 
 
