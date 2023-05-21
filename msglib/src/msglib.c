@@ -4,6 +4,14 @@
 
 #include "msglib.h"
 
+int send_msg(msg_queue *queue, void *msg, long msg_length)
+{
+
+
+}
+
+
+
 
 msg_queue *init_msg_queue()
 {

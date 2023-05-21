@@ -41,7 +41,7 @@ int main(int argc,
   {
     puts("connect error");
     return 1;
-  }
+ }
   
   puts("Connected\n");
   
