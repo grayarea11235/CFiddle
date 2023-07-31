@@ -10,8 +10,10 @@ int send_msg(msg_queue *queue, void *msg, long msg_length)
 
 }
 
+int recv_msg()
+{
 
-
+}
 
 msg_queue *init_msg_queue()
 {
