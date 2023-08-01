@@ -1,5 +1,7 @@
 # Makefile for lkm template
 #
+# Author : cpd
+#
 obj-m += hello.o
 
 all:
